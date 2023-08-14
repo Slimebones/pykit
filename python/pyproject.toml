@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "antievil"
+version = "0.1.0"
+description = "Collection of Custom Errors for different programming languages."
+authors = ["ryzhovalex <thed4rkof@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+orwynn = "^1.0.0rc3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
