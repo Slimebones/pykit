@@ -3,12 +3,8 @@ from http import HTTPStatus
 from pathlib import Path
 from typing import Any, Self
 
-from fastapi import WebSocketDisconnect
-
 from antievil.codes import ErrorCode
 from antievil.utils import get_titled_value, stringify
-
-WebsocketDisconnectException = WebSocketDisconnect
 
 
 class NotFoundError(Exception):
@@ -407,7 +403,7 @@ class LockError(Exception):
 
         formatted_explanation: str = ""
         if explanation:
-            explanation = f": {explanation}"
+            formatted_explanation = f": {explanation}"
 
         message: str = f"{titled_value} locked{formatted_explanation}"
         super().__init__(message)

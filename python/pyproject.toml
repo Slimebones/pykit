@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "antievil"
-version = "0.1.3"
+version = "0.1.4"
 description = "Custom Errors for different programming languages."
 authors = ["ryzhovalex <thed4rkof@gmail.com>"]
 license = "MIT"
