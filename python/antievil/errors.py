@@ -4,8 +4,6 @@ from pathlib import Path
 from typing import Any, Self
 
 from fastapi import WebSocketDisconnect
-from orwynn.app import AppMode
-from orwynn.base import Model
 
 from antievil.codes import ErrorCode
 from antievil.utils import get_titled_value, stringify
@@ -186,7 +184,7 @@ class IncorrectModelCompositionError(Exception):
     def __init__(
         self,
         *,
-        model: Model,
+        model: Any,
     ) -> None:
         message: str = \
             f"model={model} has an incorrect composition for it's type"
@@ -274,8 +272,8 @@ class ModeFeatureError(Exception):
         self,
         *,
         feature: str,
-        available_modes: list[AppMode] | AppMode,
-        this_mode: AppMode | None = None,
+        available_modes: list[Any] | Any,
+        this_mode: Any | None = None,
     ):
         available_modes_text: str
         if isinstance(available_modes, list):
