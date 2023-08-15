@@ -8,7 +8,7 @@ from orwynn.app import AppMode
 from orwynn.base import Model
 
 from antievil.codes import ErrorCode
-from python.antievil.utils import get_titled_value, stringify
+from antievil.utils import get_titled_value, stringify
 
 WebsocketDisconnectException = WebSocketDisconnect
 

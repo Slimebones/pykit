@@ -1,7 +1,6 @@
 """
 Additional utils for error handling.
 """
-import re
 from typing import Any
 
 
