@@ -36,4 +36,5 @@ from antievil._expect import (
     DirectoryExpectError,
     FileExpectError
 )
+from antievil.utils import ObjectInfo
 from antievil._codes import ErrorCode

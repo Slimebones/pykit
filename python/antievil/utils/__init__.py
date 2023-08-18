@@ -3,6 +3,7 @@ Additional utils for error handling.
 """
 from typing import Any, Never, NoReturn
 from antievil._main import LogicError
+from antievil.utils._info import ObjectInfo
 
 
 def stringify(value: dict, separator: str = ", ") -> str:

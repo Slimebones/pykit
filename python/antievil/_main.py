@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import Any, Self
 
 from antievil._codes import ErrorCode
-from antievil._utils import get_titled_value, stringify
+from antievil.utils import get_titled_value, stringify
 
 
 class NotFoundError(Exception):

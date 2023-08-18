@@ -1,8 +1,8 @@
 from enum import Enum
 import inspect
 from pathlib import Path
-from antievil._utils import never
-from typing import Any, Literal
+from antievil.utils import never
+from typing import Any, Iterable, Literal
 
 ExpectedInheritanceLiteral = \
     Literal["strict"] | Literal["instance"] | Literal["subclass"]
@@ -126,3 +126,44 @@ class FileExpectError(ExpectError):
     ) -> None:
         message: str = f"path <{path}> shouldn't be directory"
         super().__init__(message)
+
+
+class NameExpectError(ExpectError):
+    """
+    Some literal name of an object is expected.
+    """
+    def __init__(
+        self,
+        name: str
+    ) -> None:
+        super().__init__(
+            f""
+        )
+
+
+class LengthExpectError(ExpectError):
+    """
+    Some length of an iterable is expected.
+
+    Args:
+        iterable:
+            Iterable that violated a length expectation.
+        expected_length:
+            Length expected.
+        actual_length(optional):
+            Actual length received. If None, it will be calculated out of the
+            given iterable. Defaults to None.
+    """
+    def __init__(
+        self,
+        iterable: Iterable[Any],
+        expected_length: int,
+        actual_length: int | None = None
+    ) -> None:
+        if actual_length is None:
+            actual_length = len(list(iterable))
+
+        super().__init__(
+            f"iterable <{iterable}> expected to be of"
+            f" length <{expected_length}>, got length <{actual_length}>"
+        )
