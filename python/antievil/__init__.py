@@ -1,4 +1,4 @@
-from antievil._errors import (
+from antievil._main import (
     NotFoundError,
     PleaseDefineError,
     CannotBeNoneError,

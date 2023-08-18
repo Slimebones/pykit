@@ -1,7 +1,8 @@
 """
 Additional utils for error handling.
 """
-from typing import Any
+from typing import Any, Never, NoReturn
+from antievil._main import LogicError
 
 
 def stringify(value: dict, separator: str = ", ") -> str:
@@ -25,3 +26,8 @@ def get_titled_value(
         titled_value = f"{title} <{value!s}>"
 
     return titled_value
+
+
+def never(_: Never) -> NoReturn:
+    error_message: str = "unhandled case"
+    raise LogicError(error_message)
