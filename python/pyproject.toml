@@ -4,7 +4,7 @@ version = "0.1.4"
 description = "Custom Errors for different programming languages."
 authors = ["ryzhovalex <thed4rkof@gmail.com>"]
 license = "MIT"
-readme = "README.md"
+readme = "../README.md"
 
 [tool.poetry.dependencies]
 python = "^3.11"
