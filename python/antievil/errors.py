@@ -576,7 +576,16 @@ class UnmatchedZipComposition(Exception):
         )
 
 
-class ExpectedTypeError(Exception):
+
+class ExpectError(Exception):
+    """
+    Some value is expected given some object.
+
+    @abstract
+    """
+
+
+class TypeExpectError(ExpectError):
     """
     Some object should have type or by instance of expected type.
 
@@ -613,7 +622,7 @@ class ExpectedTypeError(Exception):
         super().__init__(message)
 
 
-class DirectoryExpectedError(Exception):
+class DirectoryExpectError(ExpectError):
     """
     When some path is expected to lead to directory.
     """
@@ -626,7 +635,7 @@ class DirectoryExpectedError(Exception):
         super().__init__(message)
 
 
-class NonDirectoryExpectedError(Exception):
+class FileExpectError(ExpectError):
     """
     When some path is expected to lead to non-directory (plain file).
     """

@@ -29,8 +29,9 @@ from antievil.errors import (
     WrongGenericTypeError,
     UnsetValueError,
     UnmatchedZipComposition,
-    ExpectedTypeError,
-    DirectoryExpectedError,
-    NonDirectoryExpectedError
+    ExpectError,
+    TypeExpectError,
+    DirectoryExpectError,
+    FileExpectError
 )
 from antievil.codes import ErrorCode
