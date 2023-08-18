@@ -1,4 +1,4 @@
-from antievil.errors import (
+from antievil._errors import (
     NotFoundError,
     PleaseDefineError,
     CannotBeNoneError,
@@ -29,9 +29,11 @@ from antievil.errors import (
     WrongGenericTypeError,
     UnsetValueError,
     UnmatchedZipComposition,
+)
+from antievil._expect import (
     ExpectError,
     TypeExpectError,
     DirectoryExpectError,
     FileExpectError
 )
-from antievil.codes import ErrorCode
+from antievil._codes import ErrorCode
