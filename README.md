@@ -1,4 +1,4 @@
-# Antievil
+# Antievil 😈
 
 Collection of Errors/Exceptions for different programming languages.
 
@@ -13,7 +13,7 @@ languages will have different *respective* types. For example for Python's
 ## Error Specification
 
 
-### NotFoundError (ERROR.NOT_FOUND)
+### 🔎 NotFoundError (ERROR.NOT_FOUND)
 
 #### Arguments
 
@@ -40,6 +40,6 @@ Defaults to None.
 Some object was not found.
 
 
-### PleaseDefineError
+### 😠 PleaseDefineError
 
 *...in writing*
