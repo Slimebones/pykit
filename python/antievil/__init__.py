@@ -4,6 +4,8 @@ from antievil._expect import (
     ExpectError,
     FileExpectError,
     TypeExpectError,
+    NameExpectError,
+    LengthExpectError
 )
 from antievil._main import (
     AbstractUsageError,
