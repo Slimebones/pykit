@@ -1,11 +1,12 @@
-from enum import Enum
 import inspect
+from enum import Enum
 from pathlib import Path
-from antievil.utils import never
 from typing import Any, Iterable, Literal
 
+from antievil.utils import never
+
 ExpectedInheritanceLiteral = \
-    Literal["strict"] | Literal["instance"] | Literal["subclass"]
+    Literal["strict", "instance", "subclass"]
 
 
 class ExpectedInheritance(Enum):
@@ -64,7 +65,7 @@ class TypeExpectError(ExpectError):
         final_expected_inheritance: ExpectedInheritance
         if isinstance(expected_inheritance, str):
             final_expected_inheritance = ExpectedInheritance(
-                expected_inheritance
+                expected_inheritance,
             )
         else:
             final_expected_inheritance = expected_inheritance
@@ -89,14 +90,14 @@ class TypeExpectError(ExpectError):
 
     def _check_is_class(
         self,
-        obj: Any
+        obj: Any,
     ) -> None:
         if not inspect.isclass(obj):
             raise TypeError
 
     def _check_is_regular(
         self,
-        obj: Any
+        obj: Any,
     ) -> None:
         if inspect.isclass(obj):
             raise TypeError
@@ -134,10 +135,10 @@ class NameExpectError(ExpectError):
     """
     def __init__(
         self,
-        name: str
+        name: str,
     ) -> None:
         super().__init__(
-            f""
+            "",
         )
 
 
@@ -158,12 +159,12 @@ class LengthExpectError(ExpectError):
         self,
         iterable: Iterable[Any],
         expected_length: int,
-        actual_length: int | None = None
+        actual_length: int | None = None,
     ) -> None:
         if actual_length is None:
             actual_length = len(list(iterable))
 
         super().__init__(
             f"iterable <{iterable}> expected to be of"
-            f" length <{expected_length}>, got length <{actual_length}>"
+            f" length <{expected_length}>, got length <{actual_length}>",
         )

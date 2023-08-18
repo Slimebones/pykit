@@ -1,6 +1,5 @@
 from collections.abc import Collection
 from http import HTTPStatus
-from pathlib import Path
 from typing import Any, Self
 
 from antievil._codes import ErrorCode
@@ -110,7 +109,7 @@ class StatusChangeError(Exception):
     """
     CODE = ErrorCode.STATUS_CHANGE
 
-    def __init__(
+    def __init__(  # noqa: PLR0913
         self,
         *,
         title: str,

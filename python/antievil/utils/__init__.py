@@ -2,7 +2,7 @@
 Additional utils for error handling.
 """
 from typing import Any, Never, NoReturn
-from antievil._main import LogicError
+
 from antievil.utils._info import ObjectInfo
 
 
@@ -31,4 +31,4 @@ def get_titled_value(
 
 def never(_: Never) -> NoReturn:
     error_message: str = "unhandled case"
-    raise LogicError(error_message)
+    raise NotImplementedError(error_message)
