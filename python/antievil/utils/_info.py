@@ -14,12 +14,14 @@ class ObjectInfo(tuple, Generic[ObjectType]):
     # types i need within my iterable argument without setting it to tuple
     def __new__(
         cls,
-        data: tuple[str, ObjectType] | str = ...,
+        data: Self | tuple[str, ObjectType] | str = ...,
     ) -> Self:
 
         final_input: tuple[str, ObjectType | None]
 
-        if isinstance(data, tuple):
+        if isinstance(data, cls):
+            return data
+        elif isinstance(data, tuple):
             tuple_length: int = len(list(data))
 
             if not cls._MIN_LENGTH <= tuple_length <= cls._MAX_LENGTH:

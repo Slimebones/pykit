@@ -3,7 +3,7 @@ from enum import Enum
 from pathlib import Path
 from typing import Any, Iterable, Literal
 
-from antievil.utils import never
+from antievil.utils import ObjectInfo, never
 
 ExpectedInheritanceLiteral = \
     Literal["strict", "instance", "subclass"]
@@ -135,10 +135,11 @@ class NameExpectError(ExpectError):
     """
     def __init__(
         self,
+        objinfo: ObjectInfo | tuple[str, Any] | str,
         name: str,
     ) -> None:
         super().__init__(
-            "",
+            f"{ObjectInfo(objinfo)} expected to have name <{name}>",
         )
 
 
