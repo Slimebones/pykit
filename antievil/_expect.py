@@ -41,13 +41,9 @@ class TypeExpectError(ExpectError):
     Args:
         obj:
             Object that failed the expectation.
-        ExpectedType:
-            The type of object (or parent type) is expected.
-        expected_inheritance:
-            Which inheritance type is expected between object's type and
-            ExpectedType. Can be given as an instance of ExpectedInheritance
-            enum or as a plain string. If expected inheritance is Subclass,
-            the given object should be Class.
+        expected:
+            Tuple or tuples (expected to be an any type of it) of expected
+            types and chosen type check.
         ActualType(optional):
             Actual type of the object shown in error message. Defaults to None,
             i.e. no actual type will be shown.
@@ -56,37 +52,71 @@ class TypeExpectError(ExpectError):
         self,
         *,
         obj: Any,
-        ExpectedType: type,
-        expected_inheritance: ExpectedInheritance | ExpectedInheritanceLiteral,
+        expected:
+            tuple[type, ExpectedInheritance | ExpectedInheritanceLiteral]
+            | list[
+                tuple[type, ExpectedInheritance | ExpectedInheritanceLiteral]
+            ],
         ActualType: type | None = None,
     ) -> None:
-        message: str = f"object <{obj}> expected to"
+        message: str = f"object <{obj}> is expected to"
 
-        final_expected_inheritance: ExpectedInheritance
-        if isinstance(expected_inheritance, str):
-            final_expected_inheritance = ExpectedInheritance(
-                expected_inheritance,
+        parsed_expected_list: list[tuple[type, ExpectedInheritance]] = []
+
+        if isinstance(expected, tuple):
+            parsed_expected_list.append(
+                (expected[0], self._convert_expected_inheritance(expected[1])),
             )
         else:
-            final_expected_inheritance = expected_inheritance
+            parsed_expected_list = [
+                (e[0], self._convert_expected_inheritance(e[1]))
+                for e in expected
+            ]
 
-        match final_expected_inheritance:
-            case ExpectedInheritance.Strict:
-                self._check_is_regular(obj)
-                message += f" strictly have type <{ExpectedType}>"
-            case ExpectedInheritance.Instance:
-                self._check_is_regular(obj)
-                message += f" be instance of type <{ExpectedType}>"
-            case ExpectedInheritance.Subclass:
-                self._check_is_class(obj)
-                message += f" be subclass of type <{ExpectedType}>"
-            case _:
-                never(final_expected_inheritance)
+        is_first_part: bool = True
+        for parsed_expected in parsed_expected_list:
+            part_prefix: str = " " if is_first_part else " or "
+
+            if is_first_part:
+                is_first_part = False
+
+            message += \
+                part_prefix \
+                + self._get_message_part(obj, parsed_expected) \
+                + ","
+
+        # remove last comma
+        message = message[:-1]
 
         if ActualType is not None:
             message += f": got <{ActualType}> instead"
 
         super().__init__(message)
+
+    def _convert_expected_inheritance(
+        self, raw: ExpectedInheritance | ExpectedInheritanceLiteral,
+    ) -> ExpectedInheritance:
+        if isinstance(raw, str):
+            return ExpectedInheritance(raw)
+        else:
+            return raw
+
+    def _get_message_part(
+        self, obj: Any, expected: tuple[type, ExpectedInheritance],
+    ) -> str:
+        match expected[1]:
+            case ExpectedInheritance.Strict:
+                self._check_is_regular(obj)
+                return f"to strictly have type <{expected[0]}>"
+            case ExpectedInheritance.Instance:
+                self._check_is_regular(obj)
+                return f"be instance of type <{expected[0]}>"
+            case ExpectedInheritance.Subclass:
+                self._check_is_class(obj)
+                return  f"be subclass of type <{expected[0]}>"
+            case _:
+                never(expected[1])
+                return None
 
     def _check_is_class(
         self,

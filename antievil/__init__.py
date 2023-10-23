@@ -1,12 +1,12 @@
 import importlib.metadata
-from antievil._codes import ErrorCode
+
 from antievil._expect import (
     DirectoryExpectError,
     ExpectError,
     FileExpectError,
-    TypeExpectError,
+    LengthExpectError,
     NameExpectError,
-    LengthExpectError
+    TypeExpectError,
 )
 from antievil._main import (
     AbstractUsageError,
@@ -41,6 +41,5 @@ from antievil._main import (
     WrongUsernameError,
 )
 from antievil.utils import ObjectInfo
-
 
 __version__ = importlib.metadata.version("antievil")
