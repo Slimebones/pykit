@@ -2,7 +2,6 @@ from collections.abc import Collection
 from http import HTTPStatus
 from typing import Any, Self
 
-from antievil._codes import ErrorCode
 from antievil.utils import get_titled_value, stringify
 
 
@@ -10,7 +9,7 @@ class NotFoundError(Exception):
     """
     Some entity was not found.
     """
-    CODE = ErrorCode.NOT_FOUND
+    Code = "error.not-found"
 
     def __init__(
         self,
@@ -107,7 +106,7 @@ class StatusChangeError(Exception):
     """
     Wrong origin status on a new status set instruction.
     """
-    CODE = ErrorCode.STATUS_CHANGE
+    Code = "error.status-change"
 
     def __init__(  # noqa: PLR0913
         self,
@@ -153,7 +152,7 @@ class DuplicateNameError(Exception):
     """
     Not unique constraint failed for name.
     """
-    CODE = ErrorCode.DUPLICATE_NAME
+    Code = "error.duplicate-name"
 
     def __init__(
         self,
@@ -220,7 +219,7 @@ class RequiredClassAttributeError(Exception):
 
 
 class ExpiredTokenError(Exception):
-    CODE =  ErrorCode.EXPIRED_TOKEN
+    Code =  "error.expired-token"
 
     def __init__(
         self,
@@ -240,7 +239,7 @@ class AuthError(Exception):
 
 
 class UnauthorizedError(AuthError):
-    CODE = ErrorCode.UNAUTHORIZED
+    Code = "error.unauthorized"
 
     def __init__(
         self,
@@ -290,7 +289,7 @@ class ForbiddenResourceError(AuthError):
     """
     Resource defined by method and route is forbidden for some user.
     """
-    CODE = ErrorCode.FORBIDDEN
+    Code = "error.forbidden"
 
     def __init__(
         self,
@@ -306,7 +305,7 @@ class ForbiddenResourceError(AuthError):
 
 
 class DisabledAccessTokenError(AuthError):
-    CODE = ErrorCode.DISABLED_TOKEN
+    Code = "error.disabled-access-token"
 
     def __init__(
         self,
@@ -409,7 +408,7 @@ class LockError(Exception):
 
 
 class WrongUsernameError(AuthError):
-    CODE = ErrorCode.WRONG_USERNAME
+    Code = "error.wrong-username"
 
     def __init__(
         self,
@@ -421,7 +420,7 @@ class WrongUsernameError(AuthError):
 
 
 class WrongPasswordError(AuthError):
-    CODE = ErrorCode.WRONG_PASSWORD
+    Code = "error.wrong-password"
 
     def __init__(
         self,
