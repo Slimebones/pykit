@@ -4,7 +4,7 @@ version = "0.1.5"
 description = "Custom Errors for different programming languages."
 authors = ["ryzhovalex <thed4rkof@gmail.com>"]
 license = "MIT"
-readme = ".readme.md"
+readme = "README.md"
 include = [
     "**/.readme.md"
 ]

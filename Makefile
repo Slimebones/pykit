@@ -16,9 +16,8 @@ coverage:
 coverage.html:
 	poetry run coverage html --show-contexts && python -m http.server -d htmlcov 8000
 
-publish:
+release:
 	rm -f .readme.md
-	cp ../README.md .readme.md
 	git add .
 	git commit -m "$(version)"
 	git tag $(version)
