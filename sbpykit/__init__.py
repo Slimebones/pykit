@@ -1,6 +1,6 @@
 import importlib.metadata
 
-from pykit._expect import (
+from sbpykit._expect import (
     DirectoryExpectError,
     ExpectError,
     FileExpectError,
@@ -8,7 +8,7 @@ from pykit._expect import (
     NameExpectError,
     TypeExpectError,
 )
-from pykit._main import (
+from sbpykit._main import (
     AbstractUsageError,
     AlreadyEventError,
     AuthError,
@@ -40,6 +40,6 @@ from pykit._main import (
     WrongPasswordError,
     WrongUsernameError,
 )
-from pykit.utils import ObjectInfo
+from sbpykit.utils import ObjectInfo
 
-__version__ = importlib.metadata.version("pykit")
+__version__ = importlib.metadata.version("sbpykit")

@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.3.0
+
+### Refactor
+
+- Merged to pykit.
+
 ## 0.2.0
 
 ### Features

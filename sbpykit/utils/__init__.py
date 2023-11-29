@@ -3,7 +3,7 @@ Additional utils for error handling.
 """
 from typing import Any, Never, NoReturn
 
-from pykit.utils._info import ObjectInfo
+from sbpykit.utils._info import ObjectInfo
 
 
 def stringify(value: dict, separator: str = ", ") -> str:
