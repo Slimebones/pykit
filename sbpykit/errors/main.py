@@ -2,18 +2,17 @@ from collections.abc import Collection
 from http import HTTPStatus
 from typing import Any, Self
 
-from sbpykit.utils import get_titled_value, stringify
+from sbpykit.objinfo import get_titled_value, stringify
 
 
 class NotFoundError(Exception):
     """
     Some entity was not found.
     """
-    Code = "error.not-found"
+    Code = "slimebones.pykit.error.not-found"
 
     def __init__(
         self,
-        *,
         title: str,
         value: Any | None = None,
         options: dict | None = None,
@@ -106,7 +105,7 @@ class StatusChangeError(Exception):
     """
     Wrong origin status on a new status set instruction.
     """
-    Code = "error.status-change"
+    Code = "slimebones.pykit.error.status-change"
 
     def __init__(  # noqa: PLR0913
         self,
@@ -152,7 +151,7 @@ class DuplicateNameError(Exception):
     """
     Not unique constraint failed for name.
     """
-    Code = "error.duplicate-name"
+    Code = "slimebones.pykit.error.duplicate-name"
 
     def __init__(
         self,
@@ -239,7 +238,7 @@ class AuthError(Exception):
 
 
 class UnauthorizedError(AuthError):
-    Code = "error.unauthorized"
+    Code = "slimebones.pykit.error.unauthorized"
 
     def __init__(
         self,
@@ -289,7 +288,7 @@ class ForbiddenResourceError(AuthError):
     """
     Resource defined by method and route is forbidden for some user.
     """
-    Code = "error.forbidden"
+    Code = "slimebones.pykit.error.forbidden"
 
     def __init__(
         self,
@@ -305,7 +304,7 @@ class ForbiddenResourceError(AuthError):
 
 
 class DisabledAccessTokenError(AuthError):
-    Code = "error.disabled-access-token"
+    Code = "slimebones.pykit.error.disabled-access-token"
 
     def __init__(
         self,
@@ -408,7 +407,7 @@ class LockError(Exception):
 
 
 class WrongUsernameError(AuthError):
-    Code = "error.wrong-username"
+    Code = "slimebones.pykit.error.wrong-username"
 
     def __init__(
         self,
@@ -420,7 +419,7 @@ class WrongUsernameError(AuthError):
 
 
 class WrongPasswordError(AuthError):
-    Code = "error.wrong-password"
+    Code = "slimebones.pykit.error.wrong-password"
 
     def __init__(
         self,

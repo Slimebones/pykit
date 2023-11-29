@@ -3,7 +3,7 @@ from enum import Enum
 from pathlib import Path
 from typing import Any, Iterable, Literal
 
-from sbpykit.utils import ObjectInfo, never
+from sbpykit.objinfo import ObjectInfo, never
 
 ExpectedInheritanceLiteral = \
     Literal["strict", "instance", "subclass"]

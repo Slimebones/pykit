@@ -3,7 +3,12 @@ Additional utils for error handling.
 """
 from typing import Any, Never, NoReturn
 
-from sbpykit.utils._info import ObjectInfo
+from sbpykit.objinfo._info import ObjectInfo
+
+
+__all__ = [
+    "ObjectInfo"
+]
 
 
 def stringify(value: dict, separator: str = ", ") -> str:
@@ -27,8 +32,3 @@ def get_titled_value(
         titled_value = f"{title} <{value!s}>"
 
     return titled_value
-
-
-def never(_: Never) -> NoReturn:
-    error_message: str = "unhandled case"
-    raise NotImplementedError(error_message)

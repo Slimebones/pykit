@@ -1,5 +1,6 @@
 from typing import Generic, Self, TypeVar
 
+
 ObjectType = TypeVar("ObjectType")
 class ObjectInfo(tuple, Generic[ObjectType]):
     """
@@ -14,7 +15,7 @@ class ObjectInfo(tuple, Generic[ObjectType]):
     # types i need within my iterable argument without setting it to tuple
     def __new__(
         cls,
-        data: Self | tuple[str, ObjectType] | str = ...,
+        data: Self | tuple[str, ObjectType] | str = ...,  # type: ignore
     ) -> Self:
 
         final_input: tuple[str, ObjectType | None]

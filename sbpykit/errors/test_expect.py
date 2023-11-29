@@ -1,4 +1,4 @@
-from sbpykit._expect import (
+from sbpykit.errors.expect import (
     LengthExpectError,
     NameExpectError,
     TypeExpectError,

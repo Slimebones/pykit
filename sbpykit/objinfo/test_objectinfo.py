@@ -1,4 +1,4 @@
-from sbpykit.utils._info import ObjectInfo
+from sbpykit.objinfo._info import ObjectInfo
 
 
 def test_main():
