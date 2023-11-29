@@ -1,1 +1,3 @@
-# 😈 py-antievil
+# ⚙️ pykit
+
+Python toolkit.

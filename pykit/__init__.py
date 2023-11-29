@@ -1,6 +1,6 @@
 import importlib.metadata
 
-from antievil._expect import (
+from pykit._expect import (
     DirectoryExpectError,
     ExpectError,
     FileExpectError,
@@ -8,7 +8,7 @@ from antievil._expect import (
     NameExpectError,
     TypeExpectError,
 )
-from antievil._main import (
+from pykit._main import (
     AbstractUsageError,
     AlreadyEventError,
     AuthError,
@@ -40,6 +40,6 @@ from antievil._main import (
     WrongPasswordError,
     WrongUsernameError,
 )
-from antievil.utils import ObjectInfo
+from pykit.utils import ObjectInfo
 
-__version__ = importlib.metadata.version("antievil")
+__version__ = importlib.metadata.version("pykit")

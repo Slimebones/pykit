@@ -1,4 +1,4 @@
-from antievil._expect import (
+from pykit._expect import (
     LengthExpectError,
     NameExpectError,
     TypeExpectError,

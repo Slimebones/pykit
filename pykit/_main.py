@@ -2,7 +2,7 @@ from collections.abc import Collection
 from http import HTTPStatus
 from typing import Any, Self
 
-from antievil.utils import get_titled_value, stringify
+from pykit.utils import get_titled_value, stringify
 
 
 class NotFoundError(Exception):

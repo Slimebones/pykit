@@ -1,4 +1,4 @@
-from antievil.utils._info import ObjectInfo
+from pykit.utils._info import ObjectInfo
 
 
 def test_main():
