@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## 0.4.0 - UNRELEASED
+## 0.4.0
 
 ## Features
 
