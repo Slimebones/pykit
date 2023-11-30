@@ -1,8 +1,8 @@
 from datetime import datetime, timedelta, timezone
 
 from sbpykit import validation
-from sbpykit.types import Delta, Timestamp
 from sbpykit.klass import Static
+from sbpykit.types import Delta, Timestamp
 
 
 class DTUtils(Static):

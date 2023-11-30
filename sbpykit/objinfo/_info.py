@@ -1,6 +1,5 @@
 from typing import Generic, Self, TypeVar
 
-
 ObjectType = TypeVar("ObjectType")
 class ObjectInfo(tuple, Generic[ObjectType]):
     """
@@ -26,7 +25,7 @@ class ObjectInfo(tuple, Generic[ObjectType]):
             tuple_length: int = len(list(data))
 
             if not cls._MIN_LENGTH <= tuple_length <= cls._MAX_LENGTH:
-                raise ValueError(  # noqa: TRY003
+                raise ValueError(
                     f"unexpected length <{tuple_length}>",
                 )
 

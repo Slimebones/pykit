@@ -1,4 +1,4 @@
-from sbpykit.mp import dictpp, MapUtils
+from sbpykit.mp import MapUtils, dictpp
 
 
 def test_patch():
@@ -9,18 +9,18 @@ def test_patch():
             "menu": {
                 "standard_burger": 1.25,
                 "big_burger": 2.3,
-                "cola": 1.5
-            }
-        }
+                "cola": 1.5,
+            },
+        },
     })
     b = dictpp({
         "BurgerShot": {
             "menu": {
                 "cola": 1.8,
                 "pizza": 4.1,
-                "donut": 1.3
-            }
-        }
+                "donut": 1.3,
+            },
+        },
     })
 
     result = MapUtils.patch(a, b)
@@ -34,9 +34,9 @@ def test_patch():
                 "big_burger": 2.3,
                 "cola": 1.8,
                 "pizza": 4.1,
-                "donut": 1.3
-            }
-        }
+                "donut": 1.3,
+            },
+        },
     }
 
 
@@ -48,18 +48,18 @@ def test_patch_no_deepcopy():
             "menu": {
                 "standard_burger": 1.25,
                 "big_burger": 2.3,
-                "cola": 1.5
-            }
-        }
+                "cola": 1.5,
+            },
+        },
     })
     b = dictpp({
         "BurgerShot": {
             "menu": {
                 "cola": 1.8,
                 "pizza": 4.1,
-                "donut": 1.3
-            }
-        }
+                "donut": 1.3,
+            },
+        },
     })
 
     MapUtils.patch(a, b, should_deepcopy=False)
@@ -73,7 +73,7 @@ def test_patch_no_deepcopy():
                 "big_burger": 2.3,
                 "cola": 1.8,
                 "pizza": 4.1,
-                "donut": 1.3
-            }
-        }
+                "donut": 1.3,
+            },
+        },
     }

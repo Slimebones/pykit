@@ -5,8 +5,8 @@ from pathlib import Path
 from typing import Any
 
 import yaml
-from sbpykit.klass import Static
 
+from sbpykit.klass import Static
 from sbpykit.validation import validate
 
 
@@ -31,7 +31,7 @@ class NotValidYMLFileSuffixError(Exception):
 class YMLUtils(Static):
     @staticmethod
     def load_yml(
-        p: Path, *, loader: YMLLoader = YMLLoader.SAFE
+        p: Path, *, loader: YMLLoader = YMLLoader.SAFE,
     ) -> dict[str, Any]:
         """Loads yaml from file.
 
@@ -55,18 +55,20 @@ class YMLUtils(Static):
         validate(p, Path)
 
         if p.suffix.lower() not in [".yaml", ".yml"]:
-            raise NotValidYMLFileSuffixError(f"suffix {p.suffix} is not valid suffix")
+            raise NotValidYMLFileSuffixError(
+                f"suffix {p.suffix} is not valid suffix",
+            )
 
-        with open(p) as file:
+        with Path.open(p) as file:
             data = yaml.load(file, Loader=loader.value)  # noqa: S506
             if data is None:
                 # Empty files should return empty dicts
                 data = {}
             # Is it necessary? Does pyyaml allow loading not-valid yaml files?
-            elif type(data) is not dict:
+            elif isinstance(data, dict):
                 raise NotValidYMLError(
                     "Yaml file should contain any map-like structure,"
-                    " not plain types"
+                    " not plain types",
                 )
 
         return data

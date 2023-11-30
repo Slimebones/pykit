@@ -1,10 +1,10 @@
 from typing import Generic
 
+from pydantic.generics import GenericModel
+
 from sbpykit.errors import (
     NotFoundError,
 )
-from pydantic.generics import GenericModel
-
 from sbpykit.expectation import Expectation
 from sbpykit.types import T
 

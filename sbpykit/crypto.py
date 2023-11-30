@@ -16,14 +16,14 @@ def hash_password(plain_password: str, encoding: str = "utf-8") -> str:
 
     return bcrypt.hashpw(
         plain_password.encode(encoding),
-        bcrypt.gensalt()
+        bcrypt.gensalt(),
     ).decode(encoding)
 
 
 def check_password(
     plain_password: str,
     hashed_password: str,
-    encoding: str = "utf-8"
+    encoding: str = "utf-8",
 ) -> bool:
     validation.validate(plain_password, str)
     validation.validate(hashed_password, str)
@@ -31,5 +31,5 @@ def check_password(
 
     return bcrypt.checkpw(
         plain_password.encode(encoding),
-        hashed_password.encode(encoding)
+        hashed_password.encode(encoding),
     )

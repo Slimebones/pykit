@@ -5,9 +5,8 @@ from typing import Any, Never, NoReturn
 
 from sbpykit.objinfo._info import ObjectInfo
 
-
 __all__ = [
-    "ObjectInfo"
+    "ObjectInfo",
 ]
 
 

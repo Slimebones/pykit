@@ -10,6 +10,9 @@ exclude = [
 ]
 
 ignore = [
+    # implied creating too specific exception classes
+    "TRY003",
+
     # not convenient for inherited classes setup
     "RUF012",
 

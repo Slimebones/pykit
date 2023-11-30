@@ -1,8 +1,8 @@
-from sbpykit.errors import WrongGenericTypeError
 from sbpykit import validation
 from sbpykit.condition import ComparisonCondition
 from sbpykit.condition._mark import ComparisonMark
 from sbpykit.condition.errors import UnsupportedComparisonError
+from sbpykit.errors import WrongGenericTypeError
 
 
 def test_int_equal():

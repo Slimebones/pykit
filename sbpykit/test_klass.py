@@ -20,5 +20,5 @@ async def test_bind_first_arg_async():
 
     a = A()
     assert await ClassUtils.bind_first_arg_async(a)(A.hello)(
-        "wow", 4
+        "wow", 4,
     ) == "wowwowwowwow"

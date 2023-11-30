@@ -1,12 +1,13 @@
-import dictdiffer
-
 from copy import deepcopy
 from typing import Any
 
+import dictdiffer
+from benedict import benedict
+
 from sbpykit import validation
 from sbpykit.errors import NotFoundError
+from sbpykit.errors.main import EmptyInputError
 from sbpykit.klass import Static
-from benedict import benedict
 
 """
 Dict++ - improved dictionary based on benedict.
@@ -38,7 +39,7 @@ class MapUtils(Static):
     def patch(
         to_be_patched: dict,
         source: dict,
-        should_deepcopy: bool = True
+        should_deepcopy: bool = True,
     ) -> dict:
         """Patch one dictionary by another.
 
@@ -64,7 +65,7 @@ class MapUtils(Static):
         # Cast to dictpp to operation with locations. At return it's important
         # to cast it back to normal dict.
         patched = dictpp(
-            deepcopy(to_be_patched) if should_deepcopy else to_be_patched
+            deepcopy(to_be_patched) if should_deepcopy else to_be_patched,
         )
 
         diff = dictdiffer.diff(to_be_patched, source)
@@ -87,14 +88,14 @@ class MapUtils(Static):
                 for addition in change:
                     # Calculate final location in patched dict
                     final_location = ".".join(
-                        [location, addition[0]]
+                        [location, addition[0]],
                     ) if location else addition[0]
                     patched[final_location] = addition[1]
 
             elif event_name == "change":
                 if location == "":
-                    raise ValueError(
-                        "on change events location shouldn't be empty"
+                    raise EmptyInputError(
+                        "on change event location",
                     )
                 patched[location] = change[1]
 
@@ -113,7 +114,8 @@ class MapUtils(Static):
                 Dictionary to search in. All keys should be parseable to str.
 
         Returns:
-            Location of field in form "key1.key2.key3" relative to dictionary root.
+            Location of field in form "key1.key2.key3" relative to dictionary
+            root.
 
         Raises:
             FieldNotFoundError:
@@ -122,12 +124,12 @@ class MapUtils(Static):
         key_chain: list[str] = []
 
         is_found: bool = MapUtils._traverse_comparing_field_location(
-            field, mp, key_chain
+            field, mp, key_chain,
         )
 
         if not is_found:
             raise NotFoundError(
-                title=f"key with field {field} in given map {mp}"
+                title=f"key with field {field} in given map {mp}",
             )
 
         key_chain.reverse()
@@ -151,12 +153,12 @@ class MapUtils(Static):
         keys.reverse()
 
         while keys:
-            try:
-                result = result[keys.pop()]
-            except KeyError as err:
+            popped_key: str = keys.pop()
+            if popped_key not in result:
                 raise NotFoundError(
-                    f"field for location \"{location}\" in map {mp}"
-                ) from err
+                    f"field for location \"{location}\" in map {mp}",
+                )
+            result = result[keys.pop()]
 
         return result
 
@@ -169,7 +171,7 @@ class MapUtils(Static):
 
         if keys == []:
             raise ValueError(
-                f"malformed location {location}"
+                f"malformed location {location}",
             )
 
         return keys
@@ -178,7 +180,7 @@ class MapUtils(Static):
     def _traverse_comparing_field_location(
         field: Any,
         mp: dict,
-        key_chain: list[str]
+        key_chain: list[str],
     ) -> bool:
         # Returns flag signifies whether a key was appended.
 
@@ -187,7 +189,7 @@ class MapUtils(Static):
                 (
                     isinstance(v, dict)
                     and MapUtils._traverse_comparing_field_location(
-                        field, v, key_chain
+                        field, v, key_chain,
                     )
                 )
                 or v == field

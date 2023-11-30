@@ -98,7 +98,7 @@ class ComparisonCondition(Generic[T]):
                 )
 
     def _check_target_type(self, target: T) -> None:
-        if type(target) is not type(self._value):
+        if type(target) is not type(self._value):  # noqa: E721
             raise WrongGenericTypeError(
                 GenericClass=type(self),
                 ExpectedType=type(self._value),

@@ -66,17 +66,16 @@ class FormatUtils(Static):
                     result += char
                 else:
                     result += char.upper()
+            elif char != "_":
+                result += char
             else:
-                if char != "_":
+                try:
+                    next_char: str = name[i + 1]
+                except IndexError:
                     result += char
                 else:
-                    try:
-                        next_char: str = name[i + 1]
-                    except IndexError:
+                    if next_char == "_":
                         result += char
-                    else:
-                        if next_char == "_":
-                            result += char
             is_previous_underscore = char == "_"
 
         return result

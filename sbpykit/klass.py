@@ -1,8 +1,8 @@
 import functools
 from typing import Any, Callable
 
-from sbpykit.types import TClass
 from sbpykit.errors import NotFoundError
+from sbpykit.types import TClass
 
 
 class Static:
@@ -54,13 +54,13 @@ class ClassUtils(Static):
             return BaseClass
 
         out: TClass | None = cls._traverse_subclasses_checking_name(
-            name, BaseClass
+            name, BaseClass,
         )
 
         if out is None:
             raise NotFoundError(
                 title=f"class of supertype {BaseClass} with name",
-                value=name
+                value=name,
             )
         else:
             return out
@@ -101,7 +101,7 @@ class ClassUtils(Static):
     def _traverse_subclasses_checking_name(
         cls,
         name: str,
-        C: TClass
+        C: TClass,
     ) -> TClass | None:
         for SubClass in C.__subclasses__():
             if SubClass.__name__ == name:

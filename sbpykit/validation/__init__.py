@@ -1,6 +1,8 @@
 """
 Collection of validation functions.
 """
+from __future__ import annotations
+
 import re
 import typing
 from inspect import isclass
@@ -10,10 +12,17 @@ from typing import Any, Callable, Optional, Sized, TypeVar
 from pydantic import ValidationError as _PydanticValidationError
 from pydantic import validator as _pydantic_validator
 
-from sbpykit.types import AnyCoro
-from sbpykit.validation.errors import (ExpectationError, ReValidationError,
-                                       UnknownValidatorError, ValidationError)
+from sbpykit.errors.main import LogicError
+from sbpykit.validation.errors import (
+    ExpectationError,
+    ReValidationError,
+    UnknownValidatorError,
+    ValidationError,
+)
 from sbpykit.validation.validator import Validator
+
+if typing.TYPE_CHECKING:
+    from sbpykit.types import AnyCoro
 
 # WARNING: typing aliases are not currently supported so passing types like
 #   "dict[str, Any]" to check will produce ValidationError in any case since
@@ -28,7 +37,7 @@ def validate(
     obj: Any,
     expected_type: ValidationExpectedType,
     *,
-    is_strict: bool = False
+    is_strict: bool = False,
 ) -> None:
     """Validates given object against expected type.
 
@@ -45,31 +54,43 @@ def validate(
         ValidationError:
             Object did not pass validation.
     """
+    err = try_validate(obj, expected_type, is_strict=is_strict)
+    if err is not None:
+        raise err
+
+
+def try_validate(
+    obj: Any,
+    expected_type: ValidationExpectedType,
+    *,
+    is_strict: bool = False,
+) -> ValidationError | None:
     if isinstance(expected_type, Validator):
-        __check_validator(obj, expected_type)
+        return __check_validator(obj, expected_type)
     elif expected_type is Callable:
-        __check_callable(obj, typing.cast(Callable, expected_type), is_strict)
+        return __check_callable(
+            obj, typing.cast(Callable, expected_type), is_strict,
+        )
     elif isinstance(expected_type, type):
-        __check_type(obj, expected_type, is_strict)
-    elif type(expected_type) is list:
+        return __check_type(obj, expected_type, is_strict)
+    elif isinstance(expected_type, list):
         is_matched_type_found: bool = False
 
         for type_ in expected_type:
-            try:
-                validate(obj, type_, is_strict=is_strict)
-            except ValidationError:
+            err = try_validate(obj, type_, is_strict=is_strict)
+            if err is not None:
                 continue
-            else:
-                is_matched_type_found = True
+            is_matched_type_found = True
 
         if not is_matched_type_found:
-            raise ValidationError(
-                failed_obj=obj, expected_type=expected_type
+            return ValidationError(
+                failed_obj=obj, expected_type=expected_type,
             )
+        return None
     else:
-        raise ValidationError(
+        return ValidationError(
             f"{expected_type} should be Type, an instance of list or"
-            " Validator"
+            " Validator",
         )
 
 
@@ -79,7 +100,7 @@ def validate_each(
     *,
     is_strict: bool = False,
     expected_sequence_type: type | None = None,
-    should_check_if_empty: bool = False
+    should_check_if_empty: bool = False,
 ) -> None:
     """Validates each object in given array against expected type.
 
@@ -105,7 +126,7 @@ def validate_each(
         if expected_sequence_type not in [list, tuple, set, frozenset]:
             raise ValidationError(
                 f"expected object type {expected_sequence_type} is neither"
-                " list, tuple, set or frozen set"
+                " list, tuple, set or frozen set",
             )
         validate(obj, expected_sequence_type)
 
@@ -122,7 +143,7 @@ def validate_dict(
     obj: dict,
     expected_types: tuple[ValidationExpectedType, ValidationExpectedType],
     *,
-    strict_flags: tuple[bool, bool] | None = None
+    strict_flags: tuple[bool, bool] | None = None,
 ) -> None:
     """Validates each key and each value in given dict.
 
@@ -188,14 +209,14 @@ def validate_length(obj: Sized, expected_length: int) -> None:
     """
     if not hasattr(obj, "__len__"):
         raise ValidationError(
-            f"object {obj} should implement \"__len__\" method"
+            f"object {obj} should implement \"__len__\" method",
         )
 
     obj_len: int = len(obj)
     if not obj_len == expected_length:
         raise ValidationError(
             f"sized object {obj} length {obj_len} != "
-            f" expected length {expected_length}"
+            f" expected length {expected_length}",
         )
 
 
@@ -214,7 +235,7 @@ def validate_route(route: str) -> None:
 
 
 def apply(
-    obj: Any, expected_type: type[ApplyExpectedType]
+    obj: Any, expected_type: type[ApplyExpectedType],
 ) -> ApplyExpectedType:
     """Validates given object against given expected type.
 
@@ -239,7 +260,7 @@ def expect(
     fn: Callable,
     ErrorToExpect: type[Exception],
     *args,
-    **kwargs
+    **kwargs,
 ) -> None:
     """
     Expects given function to raise given error if function is called with
@@ -265,13 +286,13 @@ def expect(
         pass
     else:
         raise ExpectationError(
-            f"error {ErrorToExpect} expected on call of function {fn}"
+            f"error {ErrorToExpect} expected on call of function {fn}",
         )
 
 
 async def expect_async(
     coro: AnyCoro,
-    ErrorToExpect: type[Exception]
+    ErrorToExpect: type[Exception],
 ) -> None:
     """
     Works same as validation.expect, but with async coroutine being tested.
@@ -282,12 +303,12 @@ async def expect_async(
         pass
     else:
         raise ExpectationError(
-            f"error {ErrorToExpect} expected on call of coro {coro}"
+            f"error {ErrorToExpect} expected on call of coro {coro}",
         )
 
 
 CheckedObj = TypeVar("CheckedObj")
-def check(obj: Optional[CheckedObj]) -> CheckedObj:
+def check(obj: CheckedObj | None) -> CheckedObj:
     """Checks if given object is not None.
 
     Raises:
@@ -295,7 +316,7 @@ def check(obj: Optional[CheckedObj]) -> CheckedObj:
             If given object is None.
     """
     if obj is None:
-        raise ValidationError(f"shouldn't be None")
+        raise ValidationError("shouldn't be None")
     return obj
 
 
@@ -305,30 +326,32 @@ def __check_validator(obj: Any, validator: Validator) -> None:
             return
         case _:
             raise UnknownValidatorError(
-                f"unknown validator {validator}"
+                f"unknown validator {validator}",
             )
 
 
-def __check_callable(obj: Any, c: Callable, is_strict: bool) -> None:
+def __check_callable(
+    obj: Any, c: Callable, is_strict: bool,
+) -> ValidationError | None:
     if is_strict:
-        raise ValueError(
-            "expected type is Callable and strict flag is true"
-            " which is not logical"
+        raise LogicError(
+            "expected type is Callable and strict flag is true",
         )
     elif not callable(obj):
-        raise ValidationError(
-            f"{obj} is not Callable"
+        return ValidationError(
+            f"{obj} is not Callable",
         )
+    return None
 
 
-def __check_type(obj: Any, t: type, is_strict: bool) -> None:
-    if is_strict and type(obj) is t:
-        return
-    elif isinstance(obj, t):
-        return
-    elif isclass(obj) and issubclass(obj, t):
-        return
+def __check_type(obj: Any, t: type, is_strict: bool) -> ValidationError | None:
+    if (
+        is_strict and type(obj) is t
+        or isinstance(obj, t)
+        or isclass(obj) and issubclass(obj, t)
+    ):
+        return None
 
-    raise ValidationError(
-        failed_obj=obj, expected_type=t
+    return ValidationError(
+        failed_obj=obj, expected_type=t,
     )

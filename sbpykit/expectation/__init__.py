@@ -1,9 +1,9 @@
 from typing import Any, ClassVar, Generic
 
-from sbpykit.errors import AbstractUsageError
 from pydantic.generics import GenericModel
 
 from sbpykit.condition import ComparisonCondition as _ComparisonCondition
+from sbpykit.errors import AbstractUsageError
 from sbpykit.expectation.errors import (
     ExpectationError,
     UnsupportedExpectationTypeError,

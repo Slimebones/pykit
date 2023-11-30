@@ -341,7 +341,6 @@ class EmptyInputError(Exception):
     """
     def __init__(
         self,
-        *,
         title: str,
     ):
         message: str = f"{title} input is empty"
