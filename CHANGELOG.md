@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.4.1
+
+## Fixes
+
+- Move pytest-asyncio to dev deps
+
 ## 0.4.0
 
 ## Features
