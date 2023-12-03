@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.4.5
+
+## Fixes
+
+- Fixed YML type checking.
+
 ## 0.4.4
 
 ## Refactor

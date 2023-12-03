@@ -65,7 +65,7 @@ class YMLUtils(Static):
                 # Empty files should return empty dicts
                 data = {}
             # Is it necessary? Does pyyaml allow loading not-valid yaml files?
-            elif isinstance(data, dict):
+            elif not isinstance(data, dict):
                 raise NotValidYMLError(
                     "Yaml file should contain any map-like structure,"
                     " not plain types",
