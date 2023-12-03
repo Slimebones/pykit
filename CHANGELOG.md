@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.4.4
+
+## Refactor
+
+- Renamed mp module to map.
+
 ## 0.4.3
 
 ## Fixes
