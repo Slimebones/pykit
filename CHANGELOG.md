@@ -5,12 +5,12 @@
 ## Features
 
 - StringUtils
+- Codes added to all active errors.
 
 ## Fixes
 
 - Installed bcrypt to support `crypto.py`
 - Codes are renamed to proper KeyCode format.
-- Codes added to all active errors.
 
 ## Refactor
 
