@@ -1,4 +1,4 @@
-from pykit.mp import MapUtils, dictpp
+from pykit.map import MapUtils, dictpp
 
 
 def test_patch():
