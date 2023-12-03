@@ -3,9 +3,9 @@ from enum import Enum
 from pathlib import Path
 from typing import Any, Iterable, Literal
 
+from pykit.errors._internals import InternalStringUtils
 from pykit.never import never
 from pykit.objinfo import ObjectInfo
-from pykit.str import StringUtils
 
 ExpectedInheritanceLiteral = \
     Literal["strict", "instance", "subclass"]
@@ -223,5 +223,5 @@ class OneObjectExpectError(ExpectError):
         message: str = \
             f"only one {title} object is expected, but got" \
             f" count={found_count} instead for options:" \
-            f" {StringUtils.stringify(options)}"
+            f" {InternalStringUtils.stringify(options)}"
         super().__init__(message)

@@ -5,9 +5,9 @@ import dictdiffer
 from benedict import benedict
 
 from pykit import validation
+from pykit.cls import Static
 from pykit.errors import NotFoundError
 from pykit.errors.main import EmptyInputError
-from pykit.klass import Static
 
 """
 Dict++ - improved dictionary based on benedict.

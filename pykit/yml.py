@@ -6,7 +6,7 @@ from typing import Any
 
 import yaml
 
-from pykit.klass import Static
+from pykit.cls import Static
 from pykit.validation import validate
 
 

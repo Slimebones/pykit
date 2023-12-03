@@ -1,10 +1,17 @@
 # CHANGELOG
 
+## 0.4.3
+
+## Fixes
+
+- Corrected by tests.
+- API fixes.
+
 ## 0.4.2
 
 ## Features
 
-- StringUtils
+- Added StringUtils.
 - Codes added to all active errors.
 
 ## Fixes

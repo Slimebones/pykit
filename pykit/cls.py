@@ -1,7 +1,7 @@
 import functools
 from typing import Any, Callable
 
-from pykit.errors import NotFoundError
+from pykit.errors.main import NotFoundError
 from pykit.types import TClass
 
 

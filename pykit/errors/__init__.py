@@ -4,6 +4,7 @@ from pykit.errors.expect import (
     FileExpectError,
     LengthExpectError,
     NameExpectError,
+    OneObjectExpectError,
     TypeExpectError,
 )
 from pykit.errors.main import (
@@ -24,7 +25,6 @@ from pykit.errors.main import (
     ModeFeatureError,
     NotFoundError,
     NoWebsocketConnectionError,
-    OneObjectExpectedError,
     PleaseDefineError,
     RequestError,
     RequiredClassAttributeError,
@@ -57,7 +57,7 @@ __all__ = [
     "ModeFeatureError",
     "NotFoundError",
     "NoWebsocketConnectionError",
-    "OneObjectExpectedError",
+    "OneObjectExpectError",
     "PleaseDefineError",
     "RequestError",
     "RequiredClassAttributeError",

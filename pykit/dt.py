@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta, timezone
 
 from pykit import validation
-from pykit.klass import Static
+from pykit.cls import Static
 from pykit.types import Delta, Timestamp
 
 

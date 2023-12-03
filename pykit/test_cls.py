@@ -1,6 +1,6 @@
 import pytest
 
-from pykit.klass import ClassUtils
+from pykit.cls import ClassUtils
 
 
 def test_bind_first_arg():

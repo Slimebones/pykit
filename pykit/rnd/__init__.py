@@ -1,6 +1,6 @@
 import uuid
 
-from pykit.klass import Static
+from pykit.cls import Static
 
 
 class RandomUtils(Static):

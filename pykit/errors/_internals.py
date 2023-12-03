@@ -1,9 +1,10 @@
 from typing import Any
 
-from pykit.cls import Static
 
-
-class StringUtils(Static):
+class InternalStringUtils:
+    """
+    Internal for errors version of string utils to avoid circular imports.
+    """
     @staticmethod
     def stringify(value: dict, separator: str = ", ") -> str:
         """

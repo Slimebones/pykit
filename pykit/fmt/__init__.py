@@ -5,7 +5,7 @@ Typically here collected functions which return string.
 import re
 from typing import Any
 
-from pykit.klass import Static
+from pykit.cls import Static
 
 
 class FormatUtils(Static):

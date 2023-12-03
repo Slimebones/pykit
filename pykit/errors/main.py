@@ -2,7 +2,7 @@ from collections.abc import Collection
 from http import HTTPStatus
 from typing import Any, Self
 
-from pykit.str import StringUtils
+from pykit.errors._internals import InternalStringUtils
 
 
 class NotFoundError(Exception):
@@ -30,7 +30,7 @@ class NotFoundError(Exception):
         else:
             message = \
                 f"{titled_value} not found for" \
-                f" options: {StringUtils.stringify(options)}"
+                f" options: {InternalStringUtils.stringify(options)}"
         super().__init__(message)
 
 
@@ -122,7 +122,7 @@ class StatusChangeError(Exception):
         in_order_to_be: str | None = None,
         actual_status: Any | None = None,
     ):
-        titled_value: str = StringUtils.get_titled_value(title, value)
+        titled_value: str = InternalStringUtils.get_titled_value(title, value)
 
         formatted_in_order: str = ""
         if in_order_to_be:
@@ -376,7 +376,7 @@ class AlreadyEventError(Exception):
         value: Any | None = None,
         event: str,
     ):
-        titled_value: str = StringUtils.get_titled_value(title, value)
+        titled_value: str = InternalStringUtils.get_titled_value(title, value)
         message: str = f"{titled_value} already {event}"
         super().__init__(message)
 
@@ -493,8 +493,8 @@ class UnmatchedZipComposition(Exception):
         exhausted_value: Any,
         other_titles: list[str],
     ) -> None:
-        exhausted: str = StringUtils.get_titled_value(
-            exhausted_title, exhausted_value
+        exhausted: str = InternalStringUtils.get_titled_value(
+            exhausted_title, exhausted_value,
         )
         other_titles_str: str = ",".join(other_titles)
         message: str = \
