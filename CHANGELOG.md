@@ -1,49 +1,56 @@
 # CHANGELOG
 
+## 0.4.6
+
+### Fixes
+
+- Fixed MapUtils location search bug.
+
+
 ## 0.4.5
 
-## Fixes
+### Fixes
 
 - Fixed YML type checking.
 
 ## 0.4.4
 
-## Refactor
+### Refactor
 
 - Renamed mp module to map.
 
 ## 0.4.3
 
-## Fixes
+### Fixes
 
 - Corrected by tests.
 - API fixes.
 
 ## 0.4.2
 
-## Features
+### Features
 
 - Added StringUtils.
 - Codes added to all active errors.
 
-## Fixes
+### Fixes
 
 - Installed bcrypt to support `crypto.py`
 - Codes are renamed to proper KeyCode format.
 
-## Refactor
+### Refactor
 
 - Renamed inner package to `pykit` (instead of old `sbpykit`).
 
 ## 0.4.1
 
-## Fixes
+### Fixes
 
 - Move pytest-asyncio to dev deps
 
 ## 0.4.0
 
-## Features
+### Features
 
 - Integrate Orwynn utils.
 
