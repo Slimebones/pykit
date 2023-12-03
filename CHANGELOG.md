@@ -1,5 +1,21 @@
 # CHANGELOG
 
+## 0.4.2
+
+## Features
+
+- StringUtils
+
+## Fixes
+
+- Installed bcrypt to support `crypto.py`
+- Codes are renamed to proper KeyCode format.
+- Codes added to all active errors.
+
+## Refactor
+
+- Renamed inner package to `pykit` (instead of old `sbpykit`).
+
 ## 0.4.1
 
 ## Fixes

@@ -5,6 +5,7 @@ from typing import Any, Iterable, Literal
 
 from pykit.never import never
 from pykit.objinfo import ObjectInfo
+from pykit.str import StringUtils
 
 ExpectedInheritanceLiteral = \
     Literal["strict", "instance", "subclass"]
@@ -49,6 +50,7 @@ class TypeExpectError(ExpectError):
             Actual type of the object shown in error message. Defaults to None,
             i.e. no actual type will be shown.
     """
+    Code = "slimebones.pykit.errors.type-expect-error"
     def __init__(
         self,
         *,
@@ -138,6 +140,7 @@ class DirectoryExpectError(ExpectError):
     """
     When some path is expected to lead to directory.
     """
+    Code = "slimebones.pykit.errors.directory-expect-error"
     def __init__(
         self,
         *,
@@ -151,6 +154,7 @@ class FileExpectError(ExpectError):
     """
     When some path is expected to lead to non-directory (plain file).
     """
+    Code = "slimebones.pykit.errors.file-expect-error"
     def __init__(
         self,
         *,
@@ -164,6 +168,7 @@ class NameExpectError(ExpectError):
     """
     Some literal name of an object is expected.
     """
+    Code = "slimebones.pykit.errors.name-expect-error"
     def __init__(
         self,
         objinfo: ObjectInfo | tuple[str, Any] | str,
@@ -187,6 +192,7 @@ class LengthExpectError(ExpectError):
             Actual length received. If None, it will be calculated out of the
             given iterable. Defaults to None.
     """
+    Code = "slimebones.pykit.errors.length-expect-error"
     def __init__(
         self,
         iterable: Iterable[Any],
@@ -200,3 +206,22 @@ class LengthExpectError(ExpectError):
             f"iterable <{iterable}> expected to be of"
             f" length <{expected_length}>, got length <{actual_length}>",
         )
+
+
+class OneObjectExpectError(ExpectError):
+    """
+    When only one object is expected to be found after the search.
+    """
+    Code = "slimebones.pykit.errors.one-object-expect-error"
+    def __init__(
+        self,
+        *,
+        title: str,
+        found_count: int,
+        options: dict,
+    ) -> None:
+        message: str = \
+            f"only one {title} object is expected, but got" \
+            f" count={found_count} instead for options:" \
+            f" {StringUtils.stringify(options)}"
+        super().__init__(message)
