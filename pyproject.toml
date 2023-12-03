@@ -5,6 +5,9 @@ description = "Python toolkit."
 authors = ["ryzhovalex <thed4rkof@gmail.com>"]
 license = "MIT"
 readme = "README.md"
+packages = [
+    { include = "pykit" }
+]
 include = [
     "**/.readme.md"
 ]
