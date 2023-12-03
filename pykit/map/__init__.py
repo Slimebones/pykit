@@ -158,7 +158,7 @@ class MapUtils(Static):
                 raise NotFoundError(
                     f"field for location \"{location}\" in map {mp}",
                 )
-            result = result[keys.pop()]
+            result = result[popped_key]
 
         return result
 
