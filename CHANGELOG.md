@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.4.7
+
+### Refactor
+
+- New keycode format
+
 ## 0.4.6
 
 ### Fixes
