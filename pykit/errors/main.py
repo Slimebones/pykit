@@ -9,7 +9,7 @@ class NotFoundError(Exception):
     """
     Some entity was not found.
     """
-    Code = "slimebones.pykit.errors.not-found-error"
+    Code = "slimebones.pykit.errors.error.not-found"
 
     def __init__(
         self,
@@ -40,7 +40,7 @@ class PleaseDefineError(Exception):
 
     Usually such value is class attribute in confgurable classes.
     """
-    Code = "slimebones.pykit.errors.please-define-error"
+    Code = "slimebones.pykit.errors.error.please-define"
 
     def __init__(
         self,
@@ -56,7 +56,7 @@ class CannotBeNoneError(Exception):
     """
     Some value shouldn't be None.
     """
-    Code = "slimebones.pykit.errors.cannot-be-none-error"
+    Code = "slimebones.pykit.errors.error.cannot-be-none"
     def __init__(
         self,
         *,
@@ -70,7 +70,7 @@ class UnsupportedError(Exception):
     """
     Some value is not recozniged/supported by the system.
     """
-    Code = "slimebones.pykit.errors.unsupported-error"
+    Code = "slimebones.pykit.errors.error.unsupported"
     def __init__(
         self,
         *,
@@ -92,7 +92,7 @@ class LogicError(Exception):
     """
     Something out of expected logic happened.
     """
-    Code = "slimebones.pykit.errors.logic-error"
+    Code = "slimebones.pykit.errors.error.logic"
     def __init__(
         self,
         message: str,
@@ -104,14 +104,14 @@ class NoWebsocketConnectionError(Exception):
     """
     When some websocket connection is not found.
     """
-    Code = "slimebones.pykit.errors.no-websocket-connection-error"
+    Code = "slimebones.pykit.errors.error.no-websocket-connection"
 
 
 class StatusChangeError(Exception):
     """
     Wrong origin status on a new status set instruction.
     """
-    Code = "slimebones.pykit.errors.status-change-error"
+    Code = "slimebones.pykit.errors.error.status-change"
 
     def __init__(  # noqa: PLR0913
         self,
@@ -143,7 +143,7 @@ class FinalStatusError(Exception):
     """
     Status if final and cannot be changed to anything else.
     """
-    Code = "slimebones.pykit.errors.final-status-error"
+    Code = "slimebones.pykit.errors.error.final-status"
     def __init__(
         self,
         *,
@@ -158,7 +158,7 @@ class DuplicateNameError(Exception):
     """
     Not unique constraint failed for name.
     """
-    Code = "slimebones.pykit.errors.duplicate-name-error"
+    Code = "slimebones.pykit.errors.error.duplicate-name"
 
     def __init__(
         self,
@@ -181,7 +181,7 @@ class IncorrectModelCompositionError(Exception):
     """
     When a model have an incorrect composition of fields for it's type.
     """
-    Code = "slimebones.pykit.errors.incorrect-model-composition-error"
+    Code = "slimebones.pykit.errors.error.incorrect-model-composition"
     def __init__(
         self,
         *,
@@ -196,7 +196,7 @@ class RequiredClassAttributeError(Exception):
     """
     Required class attribute is not set.
     """
-    Code = "slimebones.pykit.errors.required-class-attribute-error"
+    Code = "slimebones.pykit.errors.error.required-class-attribute"
     def __init__(
         self,
         *,
@@ -209,7 +209,7 @@ class RequiredClassAttributeError(Exception):
 
 
 class ExpiredTokenError(Exception):
-    Code =  "slimebones.pykit.errors.expired-token-error"
+    Code =  "slimebones.pykit.errors.error.expired-token"
 
     def __init__(
         self,
@@ -229,7 +229,7 @@ class AuthError(Exception):
 
 
 class UnauthorizedError(AuthError):
-    Code = "slimebones.pykit.errors.unauthorized-error"
+    Code = "slimebones.pykit.errors.error.unauthorized"
 
     def __init__(
         self,
@@ -239,7 +239,7 @@ class UnauthorizedError(AuthError):
 
 
 class MalformedHeaderAuthError(AuthError):
-    Code =  "slimebones.pykit.errors.malformed-header-auth-error"
+    Code =  "slimebones.pykit.errors.error.malformed-header-auth"
     def __init__(
         self,
         *,
@@ -253,7 +253,7 @@ class ModeFeatureError(Exception):
     """
     Feature is available only for specific application modes.
     """
-    Code =  "slimebones.pykit.errors.mode-feature-error"
+    Code =  "slimebones.pykit.errors.error.mode-feature"
     def __init__(
         self,
         *,
@@ -281,7 +281,7 @@ class ForbiddenResourceError(AuthError):
     """
     Resource defined by method and route is forbidden for some user.
     """
-    Code = "slimebones.pykit.errors.forbidden-error"
+    Code = "slimebones.pykit.errors.error.forbidden"
 
     def __init__(
         self,
@@ -297,7 +297,7 @@ class ForbiddenResourceError(AuthError):
 
 
 class DisabledAccessTokenError(AuthError):
-    Code = "slimebones.pykit.errors.disabled-access-token-error"
+    Code = "slimebones.pykit.errors.error.disabled-access-token"
 
     def __init__(
         self,
@@ -315,7 +315,7 @@ class AbstractUsageError(Exception):
     """
     Attempted to use abstract things.
     """
-    Code =  "slimebones.pykit.errors.abstract-usage-error"
+    Code =  "slimebones.pykit.errors.error.abstract-usage"
     def __init__(
         self,
         *,
@@ -333,7 +333,7 @@ class EmptyInputError(Exception):
     """
     An input data is empty.
     """
-    Code =  "slimebones.pykit.errors.empty-input-error"
+    Code =  "slimebones.pykit.errors.error.empty-input"
     def __init__(
         self,
         title: str,
@@ -346,7 +346,7 @@ class RequestError(Exception):
     """
     HTTP request failed.
     """
-    Code =  "slimebones.pykit.errors.request-error"
+    Code =  "slimebones.pykit.errors.error.request"
     def __init__(
         self,
         *,
@@ -368,7 +368,7 @@ class AlreadyEventError(Exception):
     """
     Something happened to an object already.
     """
-    Code =  "slimebones.pykit.errors.already-event-error"
+    Code =  "slimebones.pykit.errors.error.already-event"
     def __init__(
         self,
         *,
@@ -383,7 +383,7 @@ class AlreadyEventError(Exception):
 
 class LockError(Exception):
     """Object cannot be changed due to active lock."""
-    Code =  "slimebones.pykit.errors.lock-error"
+    Code =  "slimebones.pykit.errors.error.lock"
     def __init__(
         self,
         *,
@@ -404,7 +404,7 @@ class LockError(Exception):
 
 
 class WrongUsernameError(AuthError):
-    Code = "slimebones.pykit.errors.wrong-username-error"
+    Code = "slimebones.pykit.errors.error.wrong-username"
 
     def __init__(
         self,
@@ -416,7 +416,7 @@ class WrongUsernameError(AuthError):
 
 
 class WrongPasswordError(AuthError):
-    Code = "slimebones.pykit.errors.wrong-password-error"
+    Code = "slimebones.pykit.errors.error.wrong-password"
 
     def __init__(
         self,
@@ -431,7 +431,7 @@ class TypeConversionError(Exception):
     """
     Cannot convert one type to another.
     """
-    Code =  "slimebones.pykit.errors.type-conversion-error"
+    Code =  "slimebones.pykit.errors.error.type-conversion"
     def __init__(
         self,
         *,
@@ -453,7 +453,7 @@ class WrongGenericTypeError(Exception):
     A generic method received a different type than one defined at the
     generic's initialization.
     """
-    Code =  "slimebones.pykit.errors.wrong-generic-type-error"
+    Code =  "slimebones.pykit.errors.error.wrong-generic-type"
     def __init__(
         self,
         *,
@@ -471,7 +471,7 @@ class UnsetValueError(Exception):
     """
     Some value is unset.
     """
-    Code =  "slimebones.pykit.errors.unset-value-error"
+    Code =  "slimebones.pykit.errors.error.unset-value"
     def __init__(
         self,
         *,
@@ -485,7 +485,7 @@ class UnmatchedZipComposition(Exception):
     """
     One of zip() arguments has been exhausted earlier.
     """
-    Code =  "slimebones.pykit.errors.unmatched-zip-composition"
+    Code =  "slimebones.pykit.errors.composition.unmatched-zip"
     def __init__(
         self,
         *,

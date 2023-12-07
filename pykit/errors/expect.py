@@ -50,7 +50,7 @@ class TypeExpectError(ExpectError):
             Actual type of the object shown in error message. Defaults to None,
             i.e. no actual type will be shown.
     """
-    Code = "slimebones.pykit.errors.type-expect-error"
+    Code = "slimebones.pykit.errors.error.type-expect"
     def __init__(
         self,
         *,
@@ -140,7 +140,7 @@ class DirectoryExpectError(ExpectError):
     """
     When some path is expected to lead to directory.
     """
-    Code = "slimebones.pykit.errors.directory-expect-error"
+    Code = "slimebones.pykit.errors.error.directory-expect"
     def __init__(
         self,
         *,
@@ -154,7 +154,7 @@ class FileExpectError(ExpectError):
     """
     When some path is expected to lead to non-directory (plain file).
     """
-    Code = "slimebones.pykit.errors.file-expect-error"
+    Code = "slimebones.pykit.errors.error.file-expect"
     def __init__(
         self,
         *,
@@ -168,7 +168,7 @@ class NameExpectError(ExpectError):
     """
     Some literal name of an object is expected.
     """
-    Code = "slimebones.pykit.errors.name-expect-error"
+    Code = "slimebones.pykit.errors.error.name-expect"
     def __init__(
         self,
         objinfo: ObjectInfo | tuple[str, Any] | str,
@@ -192,7 +192,7 @@ class LengthExpectError(ExpectError):
             Actual length received. If None, it will be calculated out of the
             given iterable. Defaults to None.
     """
-    Code = "slimebones.pykit.errors.length-expect-error"
+    Code = "slimebones.pykit.errors.error.length-expect"
     def __init__(
         self,
         iterable: Iterable[Any],
@@ -212,7 +212,7 @@ class OneObjectExpectError(ExpectError):
     """
     When only one object is expected to be found after the search.
     """
-    Code = "slimebones.pykit.errors.one-object-expect-error"
+    Code = "slimebones.pykit.errors.error.one-object-expect"
     def __init__(
         self,
         *,
