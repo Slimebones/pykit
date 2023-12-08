@@ -1,16 +1,20 @@
 from collections.abc import Callable
 from typing import Any
 
-from orwynn.base import Model
 
-
-class FuncSpec(Model):
+class FuncSpec:
     """
     Holds information about some function.
     """
-    fn: Callable
-    args: tuple | None = None
-    kwargs: dict | None = None
+    def __init__(
+        self,
+        func: Callable,
+        args: tuple | None = None,
+        kwargs: dict | None = None,
+    ) -> None:
+        self.func = func
+        self.args = args
+        self.kwargs = kwargs
 
     def call(
         self,
@@ -47,4 +51,4 @@ class FuncSpec(Model):
             **appended_extra_kwargs,
         }
 
-        return self.fn(*final_args, **final_kwargs)
+        return self.func(*final_args, **final_kwargs)

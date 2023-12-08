@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.4.8 - UNRELEASED
+
+-
+
 ## 0.4.7
 
 ### Refactor
