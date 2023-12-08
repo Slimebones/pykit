@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## 0.4.8 - UNRELEASED
+## 0.4.8
 
 - Refactored FuncSpec, fn -> func.
 
