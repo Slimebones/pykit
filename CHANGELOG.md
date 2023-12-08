@@ -2,7 +2,7 @@
 
 ## 0.4.8 - UNRELEASED
 
--
+- Refactored FuncSpec, fn -> func.
 
 ## 0.4.7
 
