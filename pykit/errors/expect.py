@@ -62,7 +62,7 @@ class TypeExpectError(ExpectError):
             ],
         ActualType: type | None = None,
     ) -> None:
-        message: str = f"object <{obj}> is expected to"
+        message: str = f"object {obj} is expected to"
 
         parsed_expected_list: list[tuple[type, ExpectedInheritance]] = []
 
@@ -92,7 +92,7 @@ class TypeExpectError(ExpectError):
         message = message[:-1]
 
         if ActualType is not None:
-            message += f": got <{ActualType}> instead"
+            message += f": got {ActualType} instead"
 
         super().__init__(message)
 
@@ -110,13 +110,13 @@ class TypeExpectError(ExpectError):
         match expected[1]:
             case ExpectedInheritance.Strict:
                 self._check_is_regular(obj)
-                return f"to strictly have type <{expected[0]}>"
+                return f"to strictly have type {expected[0]}"
             case ExpectedInheritance.Instance:
                 self._check_is_regular(obj)
-                return f"be instance of type <{expected[0]}>"
+                return f"be instance of type {expected[0]}"
             case ExpectedInheritance.Subclass:
                 self._check_is_class(obj)
-                return  f"be subclass of type <{expected[0]}>"
+                return  f"be subclass of type {expected[0]}"
             case _:
                 never(expected[1])
                 return None
@@ -146,7 +146,7 @@ class DirectoryExpectError(ExpectError):
         *,
         path: Path,
     ) -> None:
-        message: str = f"path <{path}> expected to be directory"
+        message: str = f"path {path} expected to be directory"
         super().__init__(message)
 
 
@@ -160,23 +160,30 @@ class FileExpectError(ExpectError):
         *,
         path: Path,
     ) -> None:
-        message: str = f"path <{path}> shouldn't be directory"
+        message: str = f"path {path} shouldn't be directory"
         super().__init__(message)
 
 
-class NameExpectError(ExpectError):
+class StrExpectError(ExpectError):
     """
-    Some literal name of an object is expected.
+    Some string is expected.
     """
-    Code = "slimebones.pykit.errors.error.name-expect"
+    Code = "slimebones.pykit.errors.error.str-expect"
     def __init__(
         self,
         objinfo: ObjectInfo | tuple[str, Any] | str,
         name: str,
     ) -> None:
         super().__init__(
-            f"{ObjectInfo(objinfo)} expected to have name <{name}>",
+            f"{ObjectInfo(objinfo)} expected to have name {name}",
         )
+
+
+class NameExpectError(StrExpectError):
+    """
+    Some literal name of an object is expected.
+    """
+    Code = "slimebones.pykit.errors.error.name-expect"
 
 
 class LengthExpectError(ExpectError):
@@ -203,8 +210,8 @@ class LengthExpectError(ExpectError):
             actual_length = len(list(iterable))
 
         super().__init__(
-            f"iterable <{iterable}> expected to be of"
-            f" length <{expected_length}>, got length <{actual_length}>",
+            f"iterable {iterable} expected to be of"
+            f" length {expected_length}, got length {actual_length}",
         )
 
 
@@ -222,6 +229,6 @@ class OneObjectExpectError(ExpectError):
     ) -> None:
         message: str = \
             f"only one {title} object is expected, but got" \
-            f" count={found_count} instead for options:" \
+            f" count {found_count} instead for options:" \
             f" {InternalStringUtils.stringify(options)}"
         super().__init__(message)

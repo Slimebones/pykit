@@ -26,7 +26,7 @@ class ObjectInfo(tuple, Generic[ObjectType]):
 
             if not cls._MIN_LENGTH <= tuple_length <= cls._MAX_LENGTH:
                 raise ValueError(
-                    f"unexpected length <{tuple_length}>",
+                    f"unexpected length {tuple_length}",
                 )
 
             final_input = data
@@ -44,4 +44,4 @@ class ObjectInfo(tuple, Generic[ObjectType]):
     def __repr__(self) -> str:
         if self[1] is None:
             return f"{self[0]}"
-        return f"{self[0]}=<{self[1]}>"
+        return f"{self[0]} {self[1]}"

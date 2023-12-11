@@ -13,7 +13,7 @@ class InternalStringUtils:
         option_strs: list[str] = []
 
         for k, v in value.items():
-            option_strs.append(f"{k}={v}")
+            option_strs.append(f"{k} {v}")
 
         return separator.join(option_strs)
 

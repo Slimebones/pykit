@@ -11,7 +11,7 @@ def test_name():
         "hello",
     )
 
-    assert error.args[0] == "goodbye=<1> expected to have name <hello>"
+    assert error.args[0] == "goodbye 1 expected to have name hello"
 
 
 def test_length():
@@ -22,8 +22,8 @@ def test_length():
     )
 
     assertion_message: str = \
-        f"iterable <{input_iterable}> expected to be of" \
-        f" length <5>, got length <3>"
+        f"iterable {input_iterable} expected to be of" \
+        f" length 5, got length 3"
 
     assert error.args[0] == assertion_message
 
@@ -35,8 +35,8 @@ def test_type():
         ActualType=int,
     )
     assertion_message: str = \
-        f"object <{10}> is expected to be instance of type <{str}>" \
-        f": got <{int}> instead"
+        f"object 10 is expected to be instance of type {str}" \
+        f": got {int} instead"
     assert error.args[0] == assertion_message
 
 
@@ -47,8 +47,8 @@ def test_type_class():
         ActualType=int,
     )
     assertion_message: str = \
-        f"object <{int}> is expected to be subclass of type <{str}>" \
-        f": got <{int}> instead"
+        f"object {int} is expected to be subclass of type {str}" \
+        f": got {int} instead"
     assert error.args[0] == assertion_message
 
 
@@ -59,7 +59,7 @@ def test_type_multiple():
         ActualType=int,
     )
     assertion_message: str = \
-        f"object <{10}> is expected to be instance of type <{str}>," \
-        f" or to strictly have type <{bool}>" \
-        f": got <{int}> instead"
+        f"object 10 is expected to be instance of type {str}," \
+        f" or to strictly have type {bool}" \
+        f": got {int} instead"
     assert error.args[0] == assertion_message

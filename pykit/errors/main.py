@@ -393,7 +393,7 @@ class LockError(Exception):
     ):
         titled_value: str = title
         if value:
-            titled_value = f"{title}={value!s}"
+            titled_value = f"{title} {value!s}"
 
         formatted_explanation: str = ""
         if explanation:
@@ -411,7 +411,7 @@ class WrongUsernameError(AuthError):
         *,
         username: str,
     ):
-        message: str = f"no user with such username={username}"
+        message: str = f"no user with such username {username}"
         super().__init__(message)
 
 
@@ -423,7 +423,7 @@ class WrongPasswordError(AuthError):
         *,
         username: str,
     ):
-        message: str = f"no username={username} with such password"
+        message: str = f"no username {username} with such password"
         super().__init__(message)
 
 
@@ -441,10 +441,10 @@ class TypeConversionError(Exception):
     ):
         second_type_message: str = ""
         if t2 is not None:
-            second_type_message = f" to type <{t2}>"
+            second_type_message = f" to type {t2}"
 
         message: str = \
-            f"cannot convert type <{t1}>{second_type_message}: {reason}"
+            f"cannot convert type {t1}{second_type_message}: {reason}"
         super().__init__(message)
 
 
@@ -462,8 +462,8 @@ class WrongGenericTypeError(Exception):
         ReceivedType: type,
     ) -> None:
         message: str = \
-            f"generic class <{GenericClass}> expected a type" \
-            f"<{ExpectedType}>, but got type <{ReceivedType}> instead"
+            f"generic class {GenericClass} expected a type" \
+            f"{ExpectedType}, but got type {ReceivedType} instead"
         super().__init__(message)
 
 

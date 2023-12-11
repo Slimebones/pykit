@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.4.9
+
+- Added StrExpectError, NameExpectError now inherits this class.
+- Made error strings less polluted with symbols.
+
 ## 0.4.8
 
 - Refactored FuncSpec, fn -> func.
