@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.4.12
+
+- Added env.py.
+
 ## 0.4.11
 
 - Removed ObjectInfo in favor of simple strings.

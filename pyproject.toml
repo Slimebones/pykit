@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "sbpykit"
-version = "0.4.11"
+version = "0.4.12"
 description = "Python toolkit."
 authors = ["ryzhovalex <thed4rkof@gmail.com>"]
 license = "MIT"
