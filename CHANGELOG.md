@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.4.10
+
+- Added missing imports.
+
 ## 0.4.9
 
 - Added StrExpectError, NameExpectError now inherits this class.

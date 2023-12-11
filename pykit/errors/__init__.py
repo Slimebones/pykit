@@ -5,6 +5,7 @@ from pykit.errors.expect import (
     LengthExpectError,
     NameExpectError,
     OneObjectExpectError,
+    StrExpectError,
     TypeExpectError,
 )
 from pykit.errors.main import (
@@ -76,4 +77,5 @@ __all__ = [
     "LengthExpectError",
     "NameExpectError",
     "TypeExpectError",
+    "StrExpectError",
 ]
