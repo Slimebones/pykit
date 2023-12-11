@@ -5,7 +5,6 @@ from typing import Any, Iterable, Literal
 
 from pykit.errors._internals import InternalStringUtils
 from pykit.never import never
-from pykit.objinfo import ObjectInfo
 
 ExpectedInheritanceLiteral = \
     Literal["strict", "instance", "subclass"]
@@ -171,11 +170,11 @@ class StrExpectError(ExpectError):
     Code = "slimebones.pykit.errors.error.str-expect"
     def __init__(
         self,
-        objinfo: ObjectInfo | tuple[str, Any] | str,
-        name: str,
+        s: str,
+        expected_str: str,
     ) -> None:
         super().__init__(
-            f"{ObjectInfo(objinfo)} expected to have name {name}",
+            f"{s} expected to have name {expected_str}",
         )
 
 

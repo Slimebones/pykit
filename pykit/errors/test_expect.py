@@ -7,11 +7,11 @@ from pykit.errors.expect import (
 
 def test_name():
     error: NameExpectError = NameExpectError(
-        ("goodbye", 1),
+        "goodbye",
         "hello",
     )
 
-    assert error.args[0] == "goodbye 1 expected to have name hello"
+    assert error.args[0] == "goodbye expected to have name hello"
 
 
 def test_length():
