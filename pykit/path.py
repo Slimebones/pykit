@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+
 from pykit.cls import Static
 
 
@@ -24,4 +25,4 @@ class PathUtils(Static):
             filedunder:
                 __file__ dunder taking from the target script.
         """
-        return Path(os.path.dirname(PathUtils.get_script_path(filedunder)))
+        return PathUtils.get_script_path(filedunder).parent
