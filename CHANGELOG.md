@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.4.13
+
+- Rename package to slimebones-pykit.
+
 ## 0.4.12
 
 - Added env.py.

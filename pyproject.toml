@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "slimebones-pykit"
-version = "0.4.12"
+version = "0.4.13"
 description = "Python toolkit."
 authors = ["ryzhovalex <thed4rkof@gmail.com>"]
 license = "MIT"
