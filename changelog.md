@@ -1,107 +1,105 @@
-# CHANGELOG
-
-## 0.4.14
+# 0.4.14
 
 - Add Log.
 
-## 0.4.13
+# 0.4.13
 
 - Rename package to slimebones-pykit.
 
-## 0.4.12
+# 0.4.12
 
 - Added env.py.
 
-## 0.4.11
+# 0.4.11
 
 - Removed ObjectInfo in favor of simple strings.
 
-## 0.4.10
+# 0.4.10
 
 - Added missing imports.
 
-## 0.4.9
+# 0.4.9
 
 - Added StrExpectError, NameExpectError now inherits this class.
 - Made error strings less polluted with symbols.
 
-## 0.4.8
+# 0.4.8
 
 - Refactored FuncSpec, fn -> func.
 
-## 0.4.7
+# 0.4.7
 
-### Refactor
+## Refactor
 
 - New keycode format
 
-## 0.4.6
+# 0.4.6
 
-### Fixes
+## Fixes
 
 - Fixed MapUtils location search bug.
 
 
-## 0.4.5
+# 0.4.5
 
-### Fixes
+## Fixes
 
 - Fixed YML type checking.
 
-## 0.4.4
+# 0.4.4
 
-### Refactor
+## Refactor
 
 - Renamed mp module to map.
 
-## 0.4.3
+# 0.4.3
 
-### Fixes
+## Fixes
 
 - Corrected by tests.
 - API fixes.
 
-## 0.4.2
+# 0.4.2
 
-### Features
+## Features
 
 - Added StringUtils.
 - Codes added to all active errors.
 
-### Fixes
+## Fixes
 
 - Installed bcrypt to support `crypto.py`
 - Codes are renamed to proper KeyCode format.
 
-### Refactor
+## Refactor
 
 - Renamed inner package to `pykit` (instead of old `sbpykit`).
 
-## 0.4.1
+# 0.4.1
 
-### Fixes
+## Fixes
 
 - Move pytest-asyncio to dev deps
 
-## 0.4.0
+# 0.4.0
 
-### Features
+## Features
 
 - Integrate Orwynn utils.
 
-## 0.3.0
+# 0.3.0
 
-### Refactor
+## Refactor
 
 - Merged to pykit.
 
-## 0.2.0
+# 0.2.0
 
-### Features
+## Features
 
 - TypeExpectError now accepts multiple expectations.
 
-### Refactor
+## Refactor
 
 - Restructured project to the normal python-project view.
 - Removed enum codes, replaced to string ones.
