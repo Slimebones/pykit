@@ -1,9 +1,4 @@
-import importlib.metadata
+import importlib.metadata as _import_meta
 
-from pykit.log import Log, LogMessage
-
-__version__ = importlib.metadata.version("slimebones-pykit")
-__all__ = [
-    "Log",
-    "LogMessage",
-]
+__version__ = _import_meta.version("pykit")
+__all__ = []
