@@ -5,7 +5,6 @@ from typing import Any, TypeVar
 
 SingletonInstance = TypeVar("SingletonInstance")
 
-
 class SingletonMeta(type):
     """Singleton metaclass for implementing singleton patterns.
 
@@ -19,18 +18,12 @@ class SingletonMeta(type):
             cls.__instances[cls] = super().__call__(*args, **kwargs)
         return cls.__instances[cls]
 
-    def __validate_in_instances(cls, cannot_message: str) -> None:
-        if cls not in cls.__instances.keys():
-            raise ValueError(
-                f"{cannot_message} - class {cls} not initialized"
-            )
-
-    def discard(cls, should_validate: bool = True) -> None:
-        if should_validate:
-            cls.__validate_in_instances("cannot discard")
-        with contextlib.suppress(KeyError):
+    def try_discard(cls) -> bool:
+        try:
             del cls.__instances[cls]
-
+        except KeyError:
+            return False
+        return True
 
 class Singleton(metaclass=SingletonMeta):
     """Singleton base class."""

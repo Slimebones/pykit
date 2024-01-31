@@ -14,7 +14,7 @@ python-benedict = "^0.33.0"
 pyyaml = "^6.0.1"
 bcrypt = "^4.1.1"
 loguru = "^0.7.2"
-
+fcode = { path = "../fcode/lib/pyfcode", develop = true }
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.0.285"
