@@ -1,8 +1,9 @@
+from typing import Any
 from fcode import code
 
 @code("pykit.not-found-err")
 class NotFoundErr(Exception):
-    def __init__(self, s: str, used_search_opts: dict | None = None):
+    def __init__(self, s: Any, used_search_opts: dict | None = None):
         msg = f"{s} is not found"
         if used_search_opts:
             msg += f", for opts: {used_search_opts}"
@@ -10,7 +11,7 @@ class NotFoundErr(Exception):
 
 @code("pykit.already-processed-err")
 class AlreadyProcessedErr(Exception):
-    def __init__(self, s: str):
+    def __init__(self, s: Any):
         super().__init__(f"{s} is already processed")
 
 @code("pykit.unsupported-err")
@@ -20,13 +21,13 @@ class UnsupportedErr(Exception):
     """
     def __init__(
         self,
-        s: str
+        s: Any
     ) -> None:
         msg = f"{s} is unsupported"
         super().__init__(msg)
 
 @code("pykit.inp-err")
 class InpErr(Exception):
-    def __init__(self, s: str):
+    def __init__(self, s: Any):
         super().__init__(f"{s} is invalid input")
 

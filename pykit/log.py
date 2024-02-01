@@ -1,13 +1,14 @@
-from typing import Any
+from typing import Any, NoReturn
 from loguru import logger as _logger
 
 class log:
+    is_debug: bool = False
     verbosity: int = 0
     """
     Verbosity level.
 
     Levels:
-        0. silent
+        0. talks only about important (but not silent)
         1. cozy chatter
         2. rap god
 
@@ -21,7 +22,8 @@ class log:
 
     @classmethod
     def debug(cls, *args, sep: str = ", "):
-        _logger.debug(sep.join(args))
+        if cls.is_debug:
+            _logger.debug(sep.join(args))
 
     @classmethod
     def info(cls, msg: Any, v: int = 0):
@@ -49,4 +51,9 @@ class log:
             cls.catch(err)
             return
         cls.err(err)
+
+    @classmethod
+    def fatal(cls, msg: Any, *, exit_code: int = 1) -> NoReturn:
+        log.err("FATAL :: " + msg + f" :: exit with code {exit_code}")
+        exit(exit_code)
 
