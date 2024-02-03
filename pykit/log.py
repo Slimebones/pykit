@@ -3,12 +3,16 @@ from loguru import logger as _logger
 
 class log:
     is_debug: bool = False
-    verbosity: int = 0
+    std_verbosity: int = 1
     """
-    Verbosity level.
+    Verbosity level for stdout/stderr.
+
+    For all other targets verbosity is not applied - all msgs are passed to
+    the sink as it is (yet then it can be blocked there according to the
+    sink's configuration).
 
     Levels:
-        0. talks only about important (but not silent)
+        0. silent
         1. cozy chatter
         2. rap god
 
@@ -23,37 +27,45 @@ class log:
     @classmethod
     def debug(cls, *args, sep: str = ", "):
         if cls.is_debug:
-            _logger.debug(sep.join(args))
+            _logger.debug(sep.join([str(arg) for arg in args]))
 
     @classmethod
-    def info(cls, msg: Any, v: int = 0):
-        if cls.verbosity >= v:
+    def info(cls, msg: Any, v: int = 1):
+        if v < 1:
+            return
+        if cls.std_verbosity >= v:
             _logger.info(msg)
 
     @classmethod
-    def warn(cls, msg: Any, v: int = 0):
-        if cls.verbosity >= v:
+    def warn(cls, msg: Any, v: int = 1):
+        if v < 1:
+            return
+        if cls.std_verbosity >= v:
             _logger.warning(msg)
 
     @classmethod
-    def err(cls, msg: Any, v: int = 0):
-        if cls.verbosity >= v:
+    def err(cls, msg: Any, v: int = 1):
+        if v < 1:
+            return
+        if cls.std_verbosity >= v:
             _logger.error(msg)
 
     @classmethod
-    def catch(cls, err: Exception, v: int = 0):
-        if cls.verbosity >= v:
+    def catch(cls, err: Exception, v: int = 1):
+        if v < 1:
+            return
+        if cls.std_verbosity >= v:
             _logger.exception(err)
 
     @classmethod
     def err_or_catch(cls, err: Exception, catch_if_v_equal_or_more: int):
-        if cls.verbosity >= catch_if_v_equal_or_more:
+        if cls.std_verbosity >= catch_if_v_equal_or_more:
             cls.catch(err)
             return
         cls.err(err)
 
     @classmethod
     def fatal(cls, msg: Any, *, exit_code: int = 1) -> NoReturn:
-        log.err("FATAL :: " + msg + f" :: exit with code {exit_code}")
+        log.err(f"FATAL({exit_code}) :: {msg}")
         exit(exit_code)
 
