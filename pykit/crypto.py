@@ -1,4 +1,5 @@
-"""Cryptographic operations.
+"""
+Cryptographic operations.
 
 For password hashing uses bcrypt, which has the salt saved into the hash
 itself.
@@ -7,29 +8,24 @@ See password hashing https://stackoverflow.com/a/23768422/14748231
 """
 import bcrypt
 
-from pykit import validation
+class CryptoUtils:
+    @classmethod
+    def hash_password(
+        cls,
+        plain_password_bytes: bytes,
+    ) -> bytes:
+        return bcrypt.hashpw(
+            plain_password_bytes,
+            bcrypt.gensalt(12),
+        )
 
-
-def hash_password(plain_password: str, encoding: str = "utf-8") -> str:
-    validation.validate(plain_password, str)
-    validation.validate(encoding, str)
-
-    return bcrypt.hashpw(
-        plain_password.encode(encoding),
-        bcrypt.gensalt(),
-    ).decode(encoding)
-
-
-def check_password(
-    plain_password: str,
-    hashed_password: str,
-    encoding: str = "utf-8",
-) -> bool:
-    validation.validate(plain_password, str)
-    validation.validate(hashed_password, str)
-    validation.validate(encoding, str)
-
-    return bcrypt.checkpw(
-        plain_password.encode(encoding),
-        hashed_password.encode(encoding),
-    )
+    @classmethod
+    def check_password(
+        cls,
+        plain_password_bytes: bytes,
+        hashed_password_bytes: bytes
+    ) -> bool:
+        return bcrypt.checkpw(
+            plain_password_bytes,
+            hashed_password_bytes,
+        )
