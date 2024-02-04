@@ -7,6 +7,7 @@ Could happen and must be validated => check
 This is a new version of "validation" module.
 """
 from typing import Any
+from pykit.types import T
 from fcode import code
 
 @code("pykit.check-err")
@@ -19,6 +20,12 @@ class check:
     def run(cls, condition: bool, msg: Any = None):
         if not condition:
             raise CheckErr(f"condition failed: {msg}")
+
+    @classmethod
+    def notnone(cls, obj: T | None) -> T:
+        if obj is None:
+            raise CheckErr(f"condition failed: obj must not be None")
+        return obj
 
     @classmethod
     def instance(
