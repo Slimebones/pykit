@@ -14,13 +14,13 @@ class ClassUtils(Static):
     @classmethod
     def find_all_subclasses(
         cls,
-        Base: type[TClass],
-    ) -> list[type[TClass]]:
+        Base: TClass,
+    ) -> list[TClass]:
         """
         Recursively searches for all subclasses of the base class and returns
         it.
         """
-        Classes: list[type[TClass]] = []
+        Classes: list[TClass] = []
 
         cls._traverse_for_subclasses(Base, Classes)
 
@@ -29,8 +29,8 @@ class ClassUtils(Static):
     @classmethod
     def _traverse_for_subclasses(
         cls,
-        Start: type[TClass],
-        target_list: list[type[TClass]],
+        Start: TClass,
+        target_list: list[TClass],
     ):
         for klass in Start.__subclasses__():  # type: ignore
             target_list.append(klass)

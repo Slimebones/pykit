@@ -12,8 +12,7 @@ from fcode import code
 
 @code("pykit.check-err")
 class CheckErr(Exception):
-    def __init__(self, msg: Any):
-        super().__init__(msg)
+    pass
 
 class check:
     @classmethod
@@ -34,7 +33,7 @@ class check:
         t: type | tuple[type]
     ):
         if not isinstance(obj, t):
-            raise CheckErr(f"{obj} is not an instance of {t}")
+            raise CheckErr(f"{obj} must be an instance of {t}")
 
     @classmethod
     def subclass(
@@ -43,7 +42,7 @@ class check:
         t: type | tuple[type]
     ):
         if not issubclass(obj, t):
-            raise CheckErr(f"{obj} is not a subclass of {t}")
+            raise CheckErr(f"{obj} must be a subclass of {t}")
 
     @classmethod
     def type(
@@ -52,5 +51,5 @@ class check:
         t: type | tuple[type]
     ):
         if type(obj) is not t:
-            raise CheckErr(f"{obj} type {type(obj)} is not a {t}")
+            raise CheckErr(f"{obj} type {type(obj)} must be a {t}")
 
