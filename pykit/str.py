@@ -42,3 +42,12 @@ class StringUtils(Static):
         # https://stackoverflow.com/a/22521156
         regex = re.compile("[^a-zA-Z]")
         return regex.sub("", s)
+
+    @staticmethod
+    def remove_non_alnum(s: str) -> str:
+        """
+        Remove all non-alpha characters from string.
+        """
+        # https://stackoverflow.com/a/22521156
+        regex = re.compile("[^a-zA-Z0-9]")
+        return regex.sub("", s)
