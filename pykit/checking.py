@@ -27,6 +27,12 @@ class check:
             raise CheckErr(f"condition failed{msgf}")
 
     @classmethod
+    def evaltrue(cls, obj: T | None) -> T:
+        if not obj:
+            raise CheckErr(f"condition failed: obj must eval to true")
+        return obj
+
+    @classmethod
     def notnone(cls, obj: T | None) -> T:
         if obj is None:
             raise CheckErr(f"condition failed: obj must not be None")
