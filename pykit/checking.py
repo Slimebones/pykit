@@ -6,7 +6,7 @@ Could happen and must be validated => check
 
 This is a new version of "validation" module.
 """
-from typing import Any
+from typing import Any, NoReturn
 from pykit.types import T
 from fcode import code
 
@@ -16,9 +16,15 @@ class CheckErr(Exception):
 
 class check:
     @classmethod
+    def fail(cls, msg: Any = None) -> NoReturn:
+        msgf = ": " + msg if msg else ""
+        raise CheckErr(f"statement shouldn't be reached{msgf}")
+
+    @classmethod
     def run(cls, condition: bool, msg: Any = None):
+        msgf = ": " + msg if msg else ""
         if not condition:
-            raise CheckErr(f"condition failed: {msg}")
+            raise CheckErr(f"condition failed{msgf}")
 
     @classmethod
     def notnone(cls, obj: T | None) -> T:

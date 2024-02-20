@@ -1,7 +1,7 @@
+import re
 from typing import Any
 
 from pykit.cls import Static
-
 
 class StringUtils(Static):
     @staticmethod
@@ -26,3 +26,19 @@ class StringUtils(Static):
             titled_value = f"{title} <{value!s}>"
 
         return titled_value
+
+    @staticmethod
+    def has_cyrillic(text: str) -> bool:
+        """
+        Checks if text contains any Cyrillic characters.
+        """
+        return bool(re.search("[а-яА-Я]", text))
+
+    @staticmethod
+    def remove_non_alpha(s: str) -> str:
+        """
+        Remove all non-alpha characters from string.
+        """
+        # https://stackoverflow.com/a/22521156
+        regex = re.compile("[^a-zA-Z]")
+        return regex.sub("", s)
