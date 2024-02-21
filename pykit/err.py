@@ -1,7 +1,7 @@
 from typing import Any
 from fcode import code
 
-@code("pykit.not-found-err")
+@code("not-found-err")
 class NotFoundErr(Exception):
     def __init__(self, s: Any, used_search_opts: dict | None = None):
         msg = f"{s} is not found"
@@ -9,12 +9,12 @@ class NotFoundErr(Exception):
             msg += f", for opts: {used_search_opts}"
         super().__init__(msg)
 
-@code("pykit.already-processed-err")
+@code("already-processed-err")
 class AlreadyProcessedErr(Exception):
     def __init__(self, s: Any):
         super().__init__(f"{s} is already processed")
 
-@code("pykit.unsupported-err")
+@code("unsupported-err")
 class UnsupportedErr(Exception):
     """
     Some value is not recozniged/supported by the system.
@@ -26,8 +26,13 @@ class UnsupportedErr(Exception):
         msg = f"{s} is unsupported"
         super().__init__(msg)
 
-@code("pykit.inp-err")
+@code("inp-err")
 class InpErr(Exception):
     def __init__(self, s: Any):
         super().__init__(f"{s} is invalid input")
+
+@code("lock-err")
+class LockErr(Exception):
+    def __init__(self, s: Any):
+        super().__init__(f"{s} is locked")
 

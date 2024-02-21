@@ -58,7 +58,9 @@ class log:
             _logger.exception(err)
 
     @classmethod
-    def err_or_catch(cls, err: Exception, catch_if_v_equal_or_more: int):
+    def err_or_catch(
+        cls, err: Exception, catch_if_v_equal_or_more: int
+    ):
         if cls.std_verbosity >= catch_if_v_equal_or_more:
             cls.catch(err)
             return
