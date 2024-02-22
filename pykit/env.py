@@ -1,41 +1,26 @@
 import os
 
-from pydantic import BaseModel
-
 from pykit.cls import Static
 from pykit.errors.expect import StrExpectError
 from pykit.errors.main import PleaseDefineError
 
 
-class EnvSpec(BaseModel):
-    """
-    Specification of an environment variable.
-    """
-    key: str
-    default: str | None = None
-    """
-    Default value of env.
-
-    If None, it means that the env is required.
-    """
-
-
 class EnvUtils(Static):
     @staticmethod
-    def get(spec: EnvSpec) -> str:
-        env_value: str | None = os.environ.get(spec.key, spec.default)
+    def get(key: str, default: str | None = None) -> str:
+        env_value: str | None = os.environ.get(key, default)
 
         if (env_value is None):
             raise PleaseDefineError(
                 cannot_do="env retrieval",
-                please_define=f"env {spec.key}",
+                please_define=f"env {key}",
             )
 
         return env_value
 
     @staticmethod
-    def get_bool(spec: EnvSpec) -> bool:
-        env_value: str = EnvUtils.get(spec)
+    def get_bool(key: str, default: str | None = None) -> bool:
+        env_value: str = EnvUtils.get(key, default)
 
         if (env_value == "1"):
             return True
@@ -43,6 +28,6 @@ class EnvUtils(Static):
             return False
 
         raise StrExpectError(
-            spec.key,
+            key,
             "\"1\" or \"0\"",
         )
