@@ -1,0 +1,16 @@
+from typing import Any, Generic
+
+from pydantic.generics import GenericModel
+
+from pykit.types import T
+
+
+class Pointer(GenericModel, Generic[T]):
+    """
+    Points to some target.
+    """
+    target: T
+
+    class Config:
+        arbitrary_types_allowed = True
+
