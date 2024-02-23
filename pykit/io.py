@@ -13,7 +13,7 @@ class IoUtils(Static):
             func.call()
         return io.getvalue()
 
-    # TODO(ryzhovalex): replace with AsyncFunc
+    # todo: replace with AsyncFunc
     @staticmethod
     async def async_capture_stdout(func: FnSpec) -> str:
         io = StringIO()
