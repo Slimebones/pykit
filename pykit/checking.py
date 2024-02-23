@@ -6,11 +6,11 @@ Could happen and must be validated => check
 
 This is a new version of "validation" module.
 """
-from typing import Any, NoReturn
+from typing import Any, Iterable, NoReturn, TypeVar
 
 from fcode import code
 
-from pykit.types import T
+from pykit.types import T, TIterable
 
 
 @code("pykit.check-err")
@@ -64,7 +64,7 @@ class check:
     @classmethod
     def each_type(
         cls,
-        objs: list[Any],
+        objs: Iterable[Any],
         t: type | tuple[type]
     ):
         for o in objs:
@@ -73,9 +73,9 @@ class check:
     @classmethod
     def each_instance(
         cls,
-        objs: list[T],
+        objs: TIterable,
         t: type | tuple[type]
-    ) -> list[T]:
+    ) -> TIterable:
         for o in objs:
             check.instance(o, t)
         return objs
@@ -83,9 +83,9 @@ class check:
     @classmethod
     def each_subclass(
         cls,
-        objs: list[T],
+        objs: TIterable,
         t: type | tuple[type]
-    ) -> list[T]:
+    ) -> TIterable:
         for o in objs:
             check.subclass(o, t)
         return objs
@@ -93,8 +93,8 @@ class check:
     @classmethod
     def each_notnone(
         cls,
-        objs: list[T]
-    ) -> list[T]:
+        objs: TIterable
+    ) -> TIterable:
         for o in objs:
             check.notnone(o)
         return objs
@@ -102,8 +102,8 @@ class check:
     @classmethod
     def each_evaltrue(
         cls,
-        objs: list[T]
-    ) -> list[T]:
+        objs: TIterable
+    ) -> TIterable:
         for o in objs:
             check.evaltrue(o)
         return objs

@@ -3,6 +3,7 @@
 from typing import Any, Callable, Coroutine, TypeVar
 
 T = TypeVar("T")
+TIterable = TypeVar("TIterable", bound=Iterable)
 
 TClass = TypeVar("TClass", bound=type)
 TDecoratedCallable = TypeVar("TDecoratedCallable", bound=Callable[..., Any])
