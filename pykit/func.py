@@ -2,17 +2,17 @@ from collections.abc import Callable
 from typing import Any
 
 
-class FuncSpec:
+class FnSpec:
     """
     Holds information about some function.
     """
     def __init__(
         self,
-        func: Callable,
+        fn: Callable,
         args: tuple | None = None,
         kwargs: dict | None = None,
     ) -> None:
-        self.func = func
+        self.func = fn
         self.args = args
         self.kwargs = kwargs
 
