@@ -4,6 +4,7 @@ from io import StringIO
 from pykit.cls import Static
 from pykit.func import FuncSpec
 
+
 class IoUtils(Static):
     @staticmethod
     def capture_stdout(func: FuncSpec) -> str:
