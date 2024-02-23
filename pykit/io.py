@@ -2,12 +2,12 @@ from contextlib import redirect_stdout
 from io import StringIO
 
 from pykit.cls import Static
-from pykit.func import FuncSpec
+from pykit.fn import FnSpec
 
 
 class IoUtils(Static):
     @staticmethod
-    def capture_stdout(func: FuncSpec) -> str:
+    def capture_stdout(func: FnSpec) -> str:
         io = StringIO()
         with redirect_stdout(io):
             func.call()
@@ -15,7 +15,7 @@ class IoUtils(Static):
 
     # TODO(ryzhovalex): replace with AsyncFunc
     @staticmethod
-    async def async_capture_stdout(func: FuncSpec) -> str:
+    async def async_capture_stdout(func: FnSpec) -> str:
         io = StringIO()
         with redirect_stdout(io):
             if func.args:
