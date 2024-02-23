@@ -44,27 +44,77 @@ class check:
     @classmethod
     def instance(
         cls,
-        obj: Any,
+        obj: T,
         t: type | tuple[type],
-    ):
+    ) -> T:
         if not isinstance(obj, t):
             raise CheckErr(f"{obj} must be an instance of {t}")
+        return obj
 
     @classmethod
     def subclass(
         cls,
-        obj: Any,
+        obj: T,
         t: type | tuple[type],
-    ):
-        if not issubclass(obj, t):
+    ) -> T:
+        if not issubclass(obj, t):  # type: ignore
             raise CheckErr(f"{obj} must be a subclass of {t}")
+        return obj
+
+    @classmethod
+    def each_type(
+        cls,
+        objs: list[Any],
+        t: type | tuple[type]
+    ):
+        for o in objs:
+            check.type(o, t)
+
+    @classmethod
+    def each_instance(
+        cls,
+        objs: list[T],
+        t: type | tuple[type]
+    ) -> list[T]:
+        for o in objs:
+            check.instance(o, t)
+        return objs
+
+    @classmethod
+    def each_subclass(
+        cls,
+        objs: list[T],
+        t: type | tuple[type]
+    ) -> list[T]:
+        for o in objs:
+            check.subclass(o, t)
+        return objs
+
+    @classmethod
+    def each_notnone(
+        cls,
+        objs: list[T]
+    ) -> list[T]:
+        for o in objs:
+            check.notnone(o)
+        return objs
+
+    @classmethod
+    def each_evaltrue(
+        cls,
+        objs: list[T]
+    ) -> list[T]:
+        for o in objs:
+            check.evaltrue(o)
+        return objs
 
     @classmethod
     def type(
         cls,
-        obj: Any,
+        obj: T,
         t: type | tuple[type],
-    ):
+    ) -> T:
         if type(obj) is not t:
             raise CheckErr(f"{obj} type {type(obj)} must be a {t}")
+        return obj
 
