@@ -2,6 +2,7 @@ from typing import Callable, Generic, Self
 
 from pykit.types import T
 
+
 class TreeNode(Generic[T]):
     def __init__(self, val: T, childs: list[Self]):
         self.val = val
@@ -24,7 +25,7 @@ class TreeUtils:
         cls,
         root_node: TreeNode[T],
         *,
-        _parent_rnode: ReversedTreeNode[T] | None = None
+        _parent_rnode: ReversedTreeNode[T] | None = None,
     ) -> list[ReversedTreeNode[T]]:
         root_rnode = ReversedTreeNode(root_node.val, _parent_rnode)
         if not root_node.childs:
@@ -40,7 +41,7 @@ class TreeUtils:
     async def print(
         cls,
         root_node: TreeNode,
-        print_action: Callable[[str], None] = print
+        print_action: Callable[[str], None] = print,
     ):
         def uncover(node: TreeNode, depth: int) -> str:
             msg = ""

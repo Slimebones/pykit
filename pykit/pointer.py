@@ -1,4 +1,4 @@
-from typing import Any, Generic
+from typing import Generic
 
 from pydantic.generics import GenericModel
 

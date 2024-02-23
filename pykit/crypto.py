@@ -8,6 +8,7 @@ See password hashing https://stackoverflow.com/a/23768422/14748231
 """
 import bcrypt
 
+
 class CryptoUtils:
     @classmethod
     def hash_password(
@@ -23,7 +24,7 @@ class CryptoUtils:
     def check_password(
         cls,
         plain_password_bytes: bytes,
-        hashed_password_bytes: bytes
+        hashed_password_bytes: bytes,
     ) -> bool:
         return bcrypt.checkpw(
             plain_password_bytes,

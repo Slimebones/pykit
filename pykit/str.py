@@ -3,6 +3,7 @@ from typing import Any
 
 from pykit.cls import Static
 
+
 class StringUtils(Static):
     @staticmethod
     def stringify(value: dict, separator: str = ", ") -> str:

@@ -21,7 +21,7 @@ class QueryUtils:
         query: dict,
         disallowed_keys: list[str],
         *,
-        raise_mod: Literal["null", "warn", "err"] = "null"
+        raise_mod: Literal["null", "warn", "err"] = "null",
     ):
         """
         Process incoming query for disallowed keys.
@@ -32,7 +32,7 @@ class QueryUtils:
 
         keys_to_del: list[str] = []
 
-        for k, v in query.items():
+        for k in query:
             if k in disallowed_keys:
                 keys_to_del.append(k)
                 cls._raise_err_for_disallowed(k, raise_mod)
@@ -44,14 +44,14 @@ class QueryUtils:
     def _raise_err_for_disallowed(
         cls,
         key: str,
-        raise_mod: Literal["null", "warn", "err"]
+        raise_mod: Literal["null", "warn", "err"],
         ):
         match raise_mod:
             case "null":
                 return
             case "warn":
                 log.warn(
-                    f"{key} is not allowed in query => skip"
+                    f"{key} is not allowed in query => skip",
                 )
             case "err":
                 raise InpErr(f"{key} in query")

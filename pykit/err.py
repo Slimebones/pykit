@@ -1,5 +1,7 @@
 from typing import Any
+
 from fcode import code
+
 
 @code("not-found-err")
 class NotFoundErr(Exception):
@@ -21,7 +23,7 @@ class UnsupportedErr(Exception):
     """
     def __init__(
         self,
-        s: Any
+        s: Any,
     ) -> None:
         msg = f"{s} is unsupported"
         super().__init__(msg)

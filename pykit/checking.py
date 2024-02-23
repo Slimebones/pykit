@@ -7,8 +7,11 @@ Could happen and must be validated => check
 This is a new version of "validation" module.
 """
 from typing import Any, NoReturn
-from pykit.types import T
+
 from fcode import code
+
+from pykit.types import T
+
 
 @code("pykit.check-err")
 class CheckErr(Exception):
@@ -29,20 +32,20 @@ class check:
     @classmethod
     def evaltrue(cls, obj: T | None) -> T:
         if not obj:
-            raise CheckErr(f"condition failed: obj must eval to true")
+            raise CheckErr("condition failed: obj must eval to true")
         return obj
 
     @classmethod
     def notnone(cls, obj: T | None) -> T:
         if obj is None:
-            raise CheckErr(f"condition failed: obj must not be None")
+            raise CheckErr("condition failed: obj must not be None")
         return obj
 
     @classmethod
     def instance(
         cls,
         obj: Any,
-        t: type | tuple[type]
+        t: type | tuple[type],
     ):
         if not isinstance(obj, t):
             raise CheckErr(f"{obj} must be an instance of {t}")
@@ -51,7 +54,7 @@ class check:
     def subclass(
         cls,
         obj: Any,
-        t: type | tuple[type]
+        t: type | tuple[type],
     ):
         if not issubclass(obj, t):
             raise CheckErr(f"{obj} must be a subclass of {t}")
@@ -60,7 +63,7 @@ class check:
     def type(
         cls,
         obj: Any,
-        t: type | tuple[type]
+        t: type | tuple[type],
     ):
         if type(obj) is not t:
             raise CheckErr(f"{obj} type {type(obj)} must be a {t}")
