@@ -11,7 +11,7 @@ class SubprocUtils:
         cmd: str,
         fn: Callable[[subprocess.Popen], None],
         *,
-        must_raise_retcode_err: bool = True
+        must_raise_retcode_err: bool = True,
     ):
         """
         Creates popen and calls given fn with it.
@@ -28,14 +28,17 @@ class SubprocUtils:
             cmd,
             stdout=subprocess.PIPE,
             text=True,
-            shell=True
+            shell=True,  # noqa: S602
         ) as process:
             try:
                 fn(process)
             except KeyboardInterrupt:
                 log.info("receive keyboard interrupt => kill subproc")
                 process.kill()
-                raise KeyboardInterrupt()
+                raise
         if must_raise_retcode_err and process.returncode != 0:
-            raise subprocess.CalledProcessError(process.returncode, process.args)
+            raise subprocess.CalledProcessError(
+                process.returncode,
+                process.args,
+            )
 
