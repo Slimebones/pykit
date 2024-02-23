@@ -74,7 +74,7 @@ class MarkUtils:
     @classmethod
     def get_marks(cls, obj: Any) -> list[str]:
         try:
-            marks: list[str] = getattr(obj, "orwynnMarks")
+            marks: list[str] = getattr(obj, "internal_marks")
         except AttributeError as err:
             raise MarkErr(f"obj {obj} is not marked") from err
 
