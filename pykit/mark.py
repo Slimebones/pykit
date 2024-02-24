@@ -36,7 +36,7 @@ class MarkUtils:
         marks.append(mark)
 
     @classmethod
-    def delete(
+    def remove(
         cls,
         mark: str,
         obj: Any,
@@ -47,6 +47,40 @@ class MarkUtils:
                 f"cannot del: no such mark {mark} in obj {obj} marks {marks}",
             )
         marks.remove(mark)
+
+    @classmethod
+    def get_add_upd_query(
+        cls,
+        mark: str,
+        obj: Any,
+    ) -> dict:
+        marks = cls.get_marks(obj)
+        if mark in marks:
+            raise MarkErr(
+                f"mark {mark} already presented in obj {obj} marks {marks}",
+            )
+        return {
+            "$push": {
+                "internal_marks": mark
+            }
+        }
+
+    @classmethod
+    def get_remove_upd_query(
+        cls,
+        mark: str,
+        obj: Any,
+    ):
+        marks = cls.get_marks(obj)
+        if mark not in marks:
+            raise MarkErr(
+                f"cannot del: no such mark {mark} in obj {obj} marks {marks}",
+            )
+        return {
+            "$pull": {
+                "internal_marks": mark
+            }
+        }
 
     @classmethod
     async def decide(

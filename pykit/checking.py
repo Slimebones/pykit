@@ -6,7 +6,7 @@ Could happen and must be validated => check
 
 This is a new version of "validation" module.
 """
-from typing import Any, Iterable, NoReturn
+from typing import Any, Callable, Iterable, NoReturn
 
 from fcode import code
 
@@ -107,6 +107,41 @@ class check:
         for o in objs:
             check.evaltrue(o)
         return objs
+
+    @classmethod
+    def expect(
+        cls,
+        fn: Callable,
+        ErrorToExpect: type[Exception],
+        *args,
+        **kwargs,
+    ) -> None:
+        """
+        Expects given function to raise given error if function is called with
+        given args and kwargs.
+
+        Args:
+            fn:
+                Function to call.
+            ErrorToExpect:
+                Exception class to expect.
+            args:
+                Positional arguments to pass to function call.
+            kwargs:
+                Keyword arguments to pass to function call.
+
+        Raises:
+            CheckErr:
+                Given error has not been raised on function's call.
+        """
+        try:
+            fn(*args, **kwargs)
+        except ErrorToExpect:
+            pass
+        else:
+            raise CheckErr(
+                f"error {ErrorToExpect} expected on call of function {fn}",
+            )
 
     @classmethod
     def type(
