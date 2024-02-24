@@ -6,7 +6,7 @@ Could happen and must be validated => check
 
 This is a new version of "validation" module.
 """
-from typing import Any, Iterable, NoReturn, TypeVar
+from typing import Any, Iterable, NoReturn
 
 from fcode import code
 
@@ -65,7 +65,7 @@ class check:
     def each_type(
         cls,
         objs: Iterable[Any],
-        t: type | tuple[type]
+        t: type | tuple[type],
     ):
         for o in objs:
             check.type(o, t)
@@ -74,7 +74,7 @@ class check:
     def each_instance(
         cls,
         objs: TIterable,
-        t: type | tuple[type]
+        t: type | tuple[type],
     ) -> TIterable:
         for o in objs:
             check.instance(o, t)
@@ -84,7 +84,7 @@ class check:
     def each_subclass(
         cls,
         objs: TIterable,
-        t: type | tuple[type]
+        t: type | tuple[type],
     ) -> TIterable:
         for o in objs:
             check.subclass(o, t)
@@ -93,7 +93,7 @@ class check:
     @classmethod
     def each_notnone(
         cls,
-        objs: TIterable
+        objs: TIterable,
     ) -> TIterable:
         for o in objs:
             check.notnone(o)
@@ -102,7 +102,7 @@ class check:
     @classmethod
     def each_evaltrue(
         cls,
-        objs: TIterable
+        objs: TIterable,
     ) -> TIterable:
         for o in objs:
             check.evaltrue(o)

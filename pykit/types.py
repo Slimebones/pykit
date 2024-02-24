@@ -1,6 +1,6 @@
 """Common types.
 """
-from typing import Any, Callable, Coroutine, TypeVar
+from typing import Any, Callable, Coroutine, Iterable, TypeVar
 
 T = TypeVar("T")
 TIterable = TypeVar("TIterable", bound=Iterable)

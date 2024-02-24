@@ -7,9 +7,10 @@ archive.
 from typing import Any, Awaitable, Callable
 
 from fcode import code
+
+from pykit.checking import check
 from pykit.err import InpErr
 from pykit.types import T
-from pykit.checking import check
 
 
 @code("mark-err")
@@ -25,12 +26,12 @@ class MarkUtils:
     def add(
         cls,
         mark: str,
-        obj: Any
+        obj: Any,
     ):
         marks = cls.get_marks(obj)
         if mark in marks:
             raise MarkErr(
-                f"mark {mark} already presented in obj {obj} marks {marks}"
+                f"mark {mark} already presented in obj {obj} marks {marks}",
             )
         marks.append(mark)
 
@@ -38,12 +39,12 @@ class MarkUtils:
     def delete(
         cls,
         mark: str,
-        obj: Any
+        obj: Any,
     ):
         marks = cls.get_marks(obj)
         if mark not in marks:
             raise MarkErr(
-                f"cannot del: no such mark {mark} in obj {obj} marks {marks}"
+                f"cannot del: no such mark {mark} in obj {obj} marks {marks}",
             )
         marks.remove(mark)
 
@@ -54,7 +55,7 @@ class MarkUtils:
         obj: T,
         *,
         on_has: Callable[[str, T], Awaitable[None]] | None = None,
-        on_missing: Callable[[str, T], Awaitable[None]] | None = None
+        on_missing: Callable[[str, T], Awaitable[None]] | None = None,
     ):
         """
         Call on_has or on_missing depending on fact that obj has/hasnt the
@@ -74,7 +75,7 @@ class MarkUtils:
     @classmethod
     def get_marks(cls, obj: Any) -> list[str]:
         try:
-            marks: list[str] = getattr(obj, "internal_marks")
+            marks: list[str] = obj.internal_marks
         except AttributeError as err:
             raise MarkErr(f"obj {obj} is not marked") from err
 
