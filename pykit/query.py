@@ -1,30 +1,22 @@
 """
 Manage queries! Too much queries!
 """
-from typing import Literal
+from typing import Literal, Self
 
 from pykit.checking import check
 from pykit.err import InpErr
 from pykit.log import log
 
 
-class QueryUtils:
-    """
-    Note that if method name starts with "process_query" it probably means
-    that the incoming query will be changed. So consider copying it before
-    passing to the methods.
-    """
-
-    @classmethod
-    def process_for_disallowed(
-        cls,
-        query: dict,
+class Query(dict):
+    def disallow(
+        self,
         disallowed_keys: list[str],
         *,
         raise_mod: Literal["null", "warn", "err"] = "null",
-    ):
+    ) -> Self:
         """
-        Process incoming query for disallowed keys.
+        Process this query for disallowed keys.
 
         Each disallowed key will be scheduled for delete, but if raise_mod
         is not "err".
@@ -32,17 +24,18 @@ class QueryUtils:
 
         keys_to_del: list[str] = []
 
-        for k in query:
+        for k in self:
             if k in disallowed_keys:
                 keys_to_del.append(k)
-                cls._raise_err_for_disallowed(k, raise_mod)
+                self._raise_err_for_disallowed(k, raise_mod)
 
         for k in keys_to_del:
-            del query[k]
+            del self[k]
 
-    @classmethod
+        return self
+
     def _raise_err_for_disallowed(
-        cls,
+        self,
         key: str,
         raise_mod: Literal["null", "warn", "err"],
         ):
@@ -57,5 +50,4 @@ class QueryUtils:
                 raise InpErr(f"{key} in query")
             case _:
                 check.fail()
-
 
