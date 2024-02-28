@@ -1,10 +1,31 @@
+from enum import Enum
 from typing import Any, Generic, TypeVar
 
-from pykit.condition._mark import ComparisonMark
-from pykit.condition.errors import UnsupportedComparisonError
-from pykit.errors import UnsupportedError, WrongGenericTypeError
 from pykit.types import T
 
+
+class ComparisonMark(Enum):
+    Equal = "=="
+    NotEqual = "!="
+    More = ">"
+    Less = "<"
+    MoreEqual = ">="
+    LessEqual = "<="
+
+class UnsupportedComparisonError(Exception):
+    """
+    Objects of type does not support certain comparison.
+    """
+    def __init__(
+        self,
+        *,
+        Type: type,
+        compare_mark: ComparisonMark,
+    ) -> None:
+        message: str = \
+            f"objects of type <{Type}> does not support" \
+            f" comparison <{compare_mark}>"
+        super().__init__(message)
 
 class ComparisonCondition(Generic[T]):
     """

@@ -3,12 +3,42 @@ from typing import Any, ClassVar, Generic
 from pydantic.generics import GenericModel
 
 from pykit.condition import ComparisonCondition as _ComparisonCondition
-from pykit.errors import AbstractUsageError
-from pykit.expectation.errors import (
-    ExpectationError,
-    UnsupportedExpectationTypeError,
-)
 from pykit.types import T
+from typing import TYPE_CHECKING, Any
+from pykit.condition import ComparisonCondition, ComparisonMark
+from pykit.expectation import ListExpectation
+
+class ExpectationError(Exception):
+    """
+    Some expectation rule is failed.
+    """
+    def __init__(
+        self,
+        *,
+        title: str,
+        actual_value: Any,
+        expected_value: Any,
+    ) -> None:
+        message: str = \
+            f"{title} expected to have value <{expected_value}>," \
+            f" got <{actual_value}> instead"
+        super().__init__(message)
+
+
+class UnsupportedExpectationTypeError(Exception):
+    """
+    Type is not supported by the expectation.
+    """
+    def __init__(
+        self,
+        *,
+        UnsupportedType: type,
+        expectation: "Expectation",
+    ) -> None:
+        message: str = \
+            f"expectation <{expectation}> does not support" \
+            f" type <{UnsupportedType}>"
+        super().__init__(message)
 
 
 class Expectation(GenericModel, Generic[T]):
@@ -101,3 +131,10 @@ class ListExpectation(Expectation[T], Generic[T]):
                 actual_value=len(target),
                 expected_value=self.count,
             )
+
+one_item_list_expectation: ListExpectation = ListExpectation(
+    count=ComparisonCondition(
+        mark=ComparisonMark.Equal,
+        value=1,
+    ),
+)
