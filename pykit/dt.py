@@ -1,11 +1,11 @@
 from datetime import datetime, timedelta, timezone
+from pykit.checking import check
 
-from pykit import validation
 from pykit.cls import Static
 from pykit.types import Delta, Timestamp
 
 
-class DTUtils(Static):
+class DtUtils(Static):
     @staticmethod
     def get_utc_timestamp() -> Timestamp:
         return datetime.now(timezone.utc).timestamp()
@@ -16,7 +16,7 @@ class DTUtils(Static):
         Calculates delta timestamp from current moment adding given delta in
         seconds.
         """
-        validation.validate(delta, Delta)
+        check.instance(delta, Delta)
         return (
             datetime.now(timezone.utc) + timedelta(seconds=delta)
         ).timestamp()

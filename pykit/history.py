@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import Any, Generic, Literal, Self, TypeVar
 
-from pykit.dt import DTUtils
+from pykit.dt import DtUtils
 from pykit.types import Timestamp
 
 T = TypeVar("T")
@@ -47,12 +47,8 @@ class EmptyHistoryError(HistoryError):
     """
     def __init__(
         self,
-        *,
-        failed_action: str,
     ) -> None:
-        message: str = \
-            f"cannot perform action <{failed_action}>: the history is empty"
-        super().__init__(message)
+        super().__init__("history is empty")
 
 class DuplicateTimestampHistoryError(HistoryError):
     """
@@ -88,29 +84,15 @@ class History(Generic[T]):
     Tracks changes of states by the time.
 
     Args:
-        MainType:
+        main_type:
             Signifies which object's type the history is working with.
-        initial_map(optional):
-            An existing history map to initialize from. Defaults to None, i.e.
-            an empty map will be initialized.
-            Note that for the initial map the timestamps are stored in strings
-            to comply with MongoDB and spend less processing time on
-            string-float convertion. Also the timestamps cannot be stored in
-            mongo with dots, so they are replaced by letter "d". They are
-            automatically adjusted if occured in initial_map or after
-            `mongovalue` property obtaining.
-            If initial map value type is not the same, as the history's main
-            type, the convertation will be performed, if possible.
     """
     def __init__(
         self,
-        MainType: type,
-        *,
-        initial_map: dict[str, Any] | None = None,
+        main_type: type[T],
     ):
-        self._MainType: type = MainType
-        self._map: dict[str, T] = \
-            {} if initial_map is None else self._convert_map(initial_map)
+        self._main_type = main_type
+        self._data: list[tuple[float, T]] = []
 
     @property
     def latest(self) -> tuple[Timestamp, T]:
@@ -127,25 +109,12 @@ class History(Generic[T]):
         The latest item is the item with the most recent timestamp.
         """
         self._check_not_empty()
-        return self._map[str(self.latest_timestamp)]
+        return self._data[-1][1]
 
     @property
     def latest_timestamp(self) -> Timestamp:
         self._check_not_empty()
-        return sorted([float(k) for k in self._map])[-1]
-
-    @property
-    def mongovalue_latest_timestamp(self) -> str:
-        return self._adjust_timestamp_to_mongo(str(self.latest_timestamp))
-
-    @property
-    def mongovalue(self) -> dict[str, T]:
-        adjusted: dict[str, T] = {}
-
-        for k, v in self._map.items():
-            adjusted[self._adjust_timestamp_to_mongo(k)] = v
-
-        return adjusted
+        return self._data[-1][0]
 
     def add(
         self,
@@ -167,19 +136,14 @@ class History(Generic[T]):
         self,
         item: T,
     ) -> None:
-        timestamp: Timestamp = DTUtils.get_utc_timestamp()
-
+        timestamp = DtUtils.get_utc_timestamp()
         self._check_item_duplicates(item)
-
         self._check_item_type(item)
-
-        self._map[str(timestamp)] = item
+        self._data.append((timestamp, item))
 
     def _check_not_empty(self) -> None:
-        if len(self._map.values()) == 0:
-            raise EmptyHistoryError(
-                failed_action="get latest",
-            )
+        if not self._data:
+            raise EmptyHistoryError()
 
     def _check_item_duplicates(
         self,
@@ -211,43 +175,10 @@ class History(Generic[T]):
         """
         ItemType: type = type(item)
 
-        if ItemType is not self._MainType:
+        if ItemType is not self._main_type:
             raise ItemTypeHistoryError(
                 WrongType=ItemType,
-                TypeExpect=self._MainType,
+                TypeExpect=self._main_type,
             )
         else:
             return
-
-    def _convert_map(
-        self,
-        initial_map: dict[str, Any],
-    ) -> dict[str, T]:
-        result: dict[str, T] = {}
-
-        for k, v in initial_map.items():
-            result[self._adjust_timestamp_from_mongo(k)] = \
-                self._convert_item(v)
-
-        return result
-
-    def _convert_item(
-        self,
-        item: Any,
-    ) -> T:
-        if isinstance(item, self._MainType):
-            return item
-        elif issubclass(self._MainType, Enum):
-            return self._MainType(item)
-        else:
-            raise ItemConversionError(
-                ItemType=type(item),
-                MainType=self._MainType,
-            )
-
-    def _adjust_timestamp_to_mongo(self, timestamp: str) -> str:
-        return timestamp.replace(".", "d")
-
-
-    def _adjust_timestamp_from_mongo(self, timestamp: str) -> str:
-        return timestamp.replace("d", ".")
