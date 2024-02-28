@@ -61,8 +61,8 @@ class MarkUtils:
             )
         return {
             "$push": {
-                "internal_marks": mark
-            }
+                "internal_marks": mark,
+            },
         }
 
     @classmethod
@@ -78,8 +78,8 @@ class MarkUtils:
             )
         return {
             "$pull": {
-                "internal_marks": mark
-            }
+                "internal_marks": mark,
+            },
         }
 
     @classmethod

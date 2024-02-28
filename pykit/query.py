@@ -1,14 +1,14 @@
 """
 Manage queries! Too much queries!
 """
-from typing import Literal, Self
+from typing import Any, Literal, Self
 
 from pykit.checking import check
 from pykit.err import InpErr
 from pykit.log import log
 
 
-class Query(dict):
+class Query(dict[str, Any]):
     def disallow(
         self,
         disallowed_keys: list[str],
