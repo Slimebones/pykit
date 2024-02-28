@@ -8,7 +8,7 @@ from typing import Any, Awaitable, Callable
 
 from fcode import code
 
-from pykit.checking import check
+from pykit.check import check
 from pykit.err import InpErr
 from pykit.types import T
 

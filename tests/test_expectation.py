@@ -1,10 +1,6 @@
-from pykit import validation
+from pykit.check import CheckErr, check
 from pykit.condition import ComparisonCondition, ComparisonMark
-from pykit.expectation import ListExpectation
-from pykit.expectation.errors import (
-    ExpectationError,
-    UnsupportedExpectationTypeError,
-)
+from pykit.expectation import ExpectationError, ListExpectation, UnsupportedExpectationTypeError
 
 
 def test_count():
@@ -13,7 +9,7 @@ def test_count():
         value=3,
     ))
 
-    validation.expect(
+    check.expect(
         expectation.check,
         ExpectationError,
         [1, 2],
@@ -28,7 +24,7 @@ def test_unsupported_type():
         value=2,
     ))
 
-    validation.expect(
+    check.expect(
         expectation.check,
         UnsupportedExpectationTypeError,
         # only list should be expected as a target

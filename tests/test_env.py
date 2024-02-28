@@ -1,7 +1,6 @@
-from pykit import validation
+from pykit.check import check
 from pykit.env import EnvUtils
-from pykit.errors.expect import StrExpectError
-from pykit.errors.main import PleaseDefineError
+from pykit.err import InpErr, NotFoundErr
 
 
 def test_get(
@@ -47,28 +46,28 @@ def test_get_bool_default_1():
     ) is True
 
 
-def test_get_please_define_error():
-    validation.expect(
+def test_get_not_found_err():
+    check.expect(
         EnvUtils.get,
-        PleaseDefineError,
+        NotFoundErr,
         key="PYKITTEST_ENV",
     )
 
 
-def test_get_bool_str_expect_error(
+def test_get_bool_inp_err(
     setenv_pykittest_env_to_hello,
 ):
-    validation.expect(
+    check.expect(
         EnvUtils.get_bool,
-        StrExpectError,
+        InpErr,
         key="PYKITTEST_ENV",
     )
 
 
-def test_get_bool_str_expect_error_from_default():
-    validation.expect(
+def test_get_bool_inp_err_from_default():
+    check.expect(
         EnvUtils.get_bool,
-        StrExpectError,
+        InpErr,
         key="PYKITTEST_ENV",
         default="malformed",
     )

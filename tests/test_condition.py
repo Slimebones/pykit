@@ -1,8 +1,10 @@
-from pykit import validation
-from pykit.condition import ComparisonCondition
-from pykit.condition._mark import ComparisonMark
-from pykit.condition.errors import UnsupportedComparisonError
-from pykit.errors import WrongGenericTypeError
+from pykit.check import check
+from pykit.condition import (
+    ComparisonCondition,
+    ComparisonMark,
+    UnsupportedComparisonErr,
+)
+from pykit.err import InpErr
 
 
 def test_int_equal():
@@ -21,9 +23,9 @@ def test_int_wrong_type():
         value=5,
     )
 
-    validation.expect(
+    check.expect(
         condition.compare,
-        WrongGenericTypeError,
+        InpErr,
         "impostor",
     )
 
@@ -45,9 +47,9 @@ def test_unsupported_comparison():
         value={"hello": 1},
     )
 
-    validation.expect(
+    check.expect(
         condition.compare,
-        UnsupportedComparisonError,
+        UnsupportedComparisonErr,
         {
             "world": 2,
         },

@@ -1,17 +1,16 @@
-from enum import Enum
-from typing import Any, Generic, Literal, Self, TypeVar
+from typing import Any, Generic, TypeVar
 
 from pykit.dt import DtUtils
 from pykit.types import Timestamp
 
 T = TypeVar("T")
 
-class HistoryError(Exception):
+class HistoryErr(Exception):
     """
     @abstract
     """
 
-class ItemTypeHistoryError(HistoryError):
+class ItemTypeHistoryErr(HistoryErr):
     """
     Item of the wrong type is given to history object.
     """
@@ -26,7 +25,7 @@ class ItemTypeHistoryError(HistoryError):
             f" the type <{TypeExpect}> is expected"
         super().__init__(message)
 
-class ItemConversionError(HistoryError):
+class ItemConversionHistoryErr(HistoryErr):
     """
     Cannot convert initially given item to history's main type.
     """
@@ -41,7 +40,7 @@ class ItemConversionError(HistoryError):
             f"main type <{MainType}>"
         super().__init__(message)
 
-class EmptyHistoryError(HistoryError):
+class EmptyHistoryErr(HistoryErr):
     """
     No history is present.
     """
@@ -50,7 +49,7 @@ class EmptyHistoryError(HistoryError):
     ) -> None:
         super().__init__("history is empty")
 
-class DuplicateTimestampHistoryError(HistoryError):
+class DuplicateTimestampHistoryErr(HistoryErr):
     """
     An item with the same timestamp is added.
     """
@@ -65,7 +64,7 @@ class DuplicateTimestampHistoryError(HistoryError):
             f" with duplicate timestamp <{timestamp}>"
         super().__init__(message)
 
-class DuplicateItemHistoryError(HistoryError):
+class DuplicateItemHistoryErr(HistoryErr):
     """
     A new item is the same as previous one.
     """
@@ -143,7 +142,7 @@ class History(Generic[T]):
 
     def _check_not_empty(self) -> None:
         if not self._data:
-            raise EmptyHistoryError()
+            raise EmptyHistoryErr
 
     def _check_item_duplicates(
         self,
@@ -154,7 +153,7 @@ class History(Generic[T]):
         """
         try:
             self._check_not_empty()
-        except EmptyHistoryError:
+        except EmptyHistoryErr:
             # nothing to do with duplicates if the history is empty
             return
         else:
@@ -162,7 +161,7 @@ class History(Generic[T]):
 
             # check both value and reference equality
             if item is latest_item or item == latest_item:
-                raise DuplicateItemHistoryError(
+                raise DuplicateItemHistoryErr(
                     item=item,
                 )
 
@@ -176,7 +175,7 @@ class History(Generic[T]):
         ItemType: type = type(item)
 
         if ItemType is not self._main_type:
-            raise ItemTypeHistoryError(
+            raise ItemTypeHistoryErr(
                 WrongType=ItemType,
                 TypeExpect=self._main_type,
             )

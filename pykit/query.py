@@ -4,7 +4,7 @@ Manage queries! Too much queries!
 import typing
 from typing import Any, Literal, Self
 
-from pykit.checking import check
+from pykit.check import check
 from pykit.err import InpErr
 from pykit.log import log
 

@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta, timezone
-from pykit.checking import check
 
+from pykit.check import check
 from pykit.cls import Static
 from pykit.types import Delta, Timestamp
 

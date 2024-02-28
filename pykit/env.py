@@ -1,8 +1,7 @@
 import os
 
 from pykit.cls import Static
-from pykit.errors.expect import StrExpectError
-from pykit.errors.main import PleaseDefineError
+from pykit.err import InpErr, NotFoundErr
 
 
 class EnvUtils(Static):
@@ -10,10 +9,9 @@ class EnvUtils(Static):
     def get(key: str, default: str | None = None) -> str:
         env_value: str | None = os.environ.get(key, default)
 
-        if (env_value is None):
-            raise PleaseDefineError(
-                cannot_do="env retrieval",
-                please_define=f"env {key}",
+        if env_value is None:
+            raise NotFoundErr(
+                f"env {key}",
             )
 
         return env_value
@@ -27,7 +25,6 @@ class EnvUtils(Static):
         if (env_value == "0"):
             return False
 
-        raise StrExpectError(
-            key,
-            "\"1\" or \"0\"",
+        raise InpErr(
+            f"key expected to be \"1\" or \"0\", but got {key} which",
         )

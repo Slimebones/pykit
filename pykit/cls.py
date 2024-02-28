@@ -1,7 +1,7 @@
 import functools
 from typing import Any, Callable
 
-from pykit.errors.main import NotFoundError
+from pykit.err import NotFoundErr
 from pykit.types import TClass
 
 
@@ -58,9 +58,8 @@ class ClassUtils(Static):
         )
 
         if out is None:
-            raise NotFoundError(
-                title=f"class of supertype {BaseClass} with name",
-                value=name,
+            raise NotFoundErr(
+                f"class of supertype {BaseClass} with name {name}",
             )
         else:
             return out

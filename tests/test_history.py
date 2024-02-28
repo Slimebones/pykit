@@ -1,15 +1,13 @@
 from enum import Enum
 from typing import TYPE_CHECKING
-from pykit.checking import check
 
+from pykit.check import check
 from pykit.dt import DtUtils
-
-from pykit.history import History
 from pykit.history import (
-    DuplicateItemHistoryError,
-    EmptyHistoryError,
-    ItemConversionError,
-    ItemTypeHistoryError,
+    DuplicateItemHistoryErr,
+    EmptyHistoryErr,
+    History,
+    ItemTypeHistoryErr,
 )
 
 if TYPE_CHECKING:
@@ -27,7 +25,7 @@ def test_empty():
 
     check.expect(
         lambda: history.latest,
-        EmptyHistoryError,
+        EmptyHistoryErr,
     )
 
 def test_add():
@@ -50,7 +48,7 @@ def test_add_wrong_type():
 
     check.expect(
         history.add,
-        ItemTypeHistoryError,
+        ItemTypeHistoryErr,
         10,
     )
 
@@ -59,7 +57,7 @@ def test_add_item_duplicates():
 
     check.expect(
         history.add,
-        DuplicateItemHistoryError,
+        DuplicateItemHistoryErr,
         _Color.Red,
         _Color.Red,
     )

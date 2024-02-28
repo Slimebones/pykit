@@ -2,13 +2,12 @@ from typing import Any, ClassVar, Generic
 
 from pydantic.generics import GenericModel
 
+from pykit.condition import ComparisonCondition, ComparisonMark
 from pykit.condition import ComparisonCondition as _ComparisonCondition
 from pykit.types import T
-from typing import TYPE_CHECKING, Any
-from pykit.condition import ComparisonCondition, ComparisonMark
-from pykit.expectation import ListExpectation
 
-class ExpectationError(Exception):
+
+class ExpectationErr(Exception):
     """
     Some expectation rule is failed.
     """
@@ -25,7 +24,7 @@ class ExpectationError(Exception):
         super().__init__(message)
 
 
-class UnsupportedExpectationTypeError(Exception):
+class UnsupportedExpectationTypeErr(Exception):
     """
     Type is not supported by the expectation.
     """
@@ -65,10 +64,7 @@ class Expectation(GenericModel, Generic[T]):
         Checks whether the given type is supported by the class.
         """
         if cls.SUPPORTED_TYPES is None:
-            raise AbstractUsageError(
-                explanation="cannot check supported types",
-                Class=cls,
-            )
+            raise NotImplementedError
         else:
             return Type in cls.SUPPORTED_TYPES
 
@@ -96,14 +92,11 @@ class Expectation(GenericModel, Generic[T]):
         """
         Main check function. Should be redefined at children.
         """
-        raise AbstractUsageError(
-            explanation="cannot call check function",
-            Class=type(self),
-        )
+        raise NotImplementedError
 
     def _check_target_type(self, target: T) -> None:
         if not self.is_supported(type(target)):
-            raise UnsupportedExpectationTypeError(
+            raise UnsupportedExpectationTypeErr(
                 UnsupportedType=type(target),
                 expectation=self,
             )
@@ -126,7 +119,7 @@ class ListExpectation(Expectation[T], Generic[T]):
 
     def _check(self, target: list[T]):
         if self.count is not None and not self.count.compare(len(target)):
-            raise ExpectationError(
+            raise ExpectationErr(
                 title="count",
                 actual_value=len(target),
                 expected_value=self.count,
