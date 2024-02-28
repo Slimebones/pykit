@@ -16,7 +16,7 @@ class QueryUtils:
     """
 
     @classmethod
-    def process_query_for_disallowed(
+    def process_for_disallowed(
         cls,
         query: dict,
         disallowed_keys: list[str],
