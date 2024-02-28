@@ -2,6 +2,7 @@
 Manage queries! Too much queries!
 """
 from typing import Any, Literal, Self
+import typing
 
 from pykit.checking import check
 from pykit.err import InpErr
@@ -9,10 +10,12 @@ from pykit.log import log
 
 
 class Query(dict[str, Any]):
+    def copy(self) -> Self:
+        return typing.cast(Self, super().copy)
+
     def disallow(
         self,
-        disallowed_keys: list[str],
-        *,
+        *disallowed_keys: str,
         raise_mod: Literal["null", "warn", "err"] = "null",
     ) -> Self:
         """
