@@ -11,7 +11,7 @@ from pykit.log import log
 
 class Query(dict[str, Any]):
     def copy(self) -> Self:
-        return typing.cast(Self, super().copy)
+        return typing.cast(Self, super().copy())
 
     def disallow(
         self,
