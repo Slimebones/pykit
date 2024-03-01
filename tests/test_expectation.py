@@ -1,6 +1,10 @@
-from pykit.check import CheckErr, check
+from pykit.check import check
 from pykit.condition import ComparisonCondition, ComparisonMark
-from pykit.expectation import ExpectationError, ListExpectation, UnsupportedExpectationTypeError
+from pykit.expectation import (
+    ExpectationErr,
+    ListExpectation,
+    UnsupportedExpectationTypeErr,
+)
 
 
 def test_count():
@@ -11,7 +15,7 @@ def test_count():
 
     check.expect(
         expectation.check,
-        ExpectationError,
+        ExpectationErr,
         [1, 2],
     )
     expectation.check([1, 2, 3])
@@ -26,7 +30,7 @@ def test_unsupported_type():
 
     check.expect(
         expectation.check,
-        UnsupportedExpectationTypeError,
+        UnsupportedExpectationTypeErr,
         # only list should be expected as a target
         2,
     )

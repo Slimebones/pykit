@@ -1,4 +1,4 @@
-from pykit.rnd import RandomUtils
+from pykit.rand import RandomUtils
 
 
 def test_makeid():
