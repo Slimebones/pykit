@@ -11,19 +11,21 @@ from pykit.log import log
 
 class Query(dict[str, Any]):
     @classmethod
-    def as_upd(
+    def as_upd(  # noqa: PLR0913
         cls,
         *,
         set: dict[str, Any] | None = None,
         inc: dict[str, Any] | None = None,
         push: dict[str, Any] | None = None,
         pull: dict[str, Any] | None = None,
+        pop: dict[str, Any] | None = None,
     ):
         return Query({
             "$set": set or {},
             "$inc": inc or {},
             "$push": push or {},
             "$pull": pull or {},
+            "$pop": pop or {},
         })
 
     def copy(self) -> Self:

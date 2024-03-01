@@ -78,7 +78,7 @@ class DuplicateItemHistoryErr(HistoryErr):
             " latest one"
         super().__init__(message)
 
-class History(Generic[T]):
+class History(list[list[float, T]], Generic[T]):
     """
     Tracks changes of states by the time.
 
@@ -89,9 +89,11 @@ class History(Generic[T]):
     def __init__(
         self,
         main_type: type[T],
+        *items: T,
     ):
         self._main_type = main_type
-        self._data: list[tuple[float, T]] = []
+        self._data: list[list[float, T]] = []
+        self.add(*items)
 
     @property
     def latest(self) -> tuple[Timestamp, T]:
@@ -138,7 +140,7 @@ class History(Generic[T]):
         timestamp = DtUtils.get_utc_timestamp()
         self._check_item_duplicates(item)
         self._check_item_type(item)
-        self._data.append((timestamp, item))
+        self._data.append([timestamp, item])
 
     def _check_not_empty(self) -> None:
         if not self._data:
