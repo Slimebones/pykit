@@ -10,6 +10,22 @@ from pykit.log import log
 
 
 class Query(dict[str, Any]):
+    @classmethod
+    def as_upd(
+        cls,
+        *,
+        set: dict[str, Any] | None = None,
+        inc: dict[str, Any] | None = None,
+        push: dict[str, Any] | None = None,
+        pull: dict[str, Any] | None = None,
+    ):
+        return Query({
+            "$set": set or {},
+            "$inc": inc or {},
+            "$push": push or {},
+            "$pull": pull or {},
+        })
+
     def copy(self) -> Self:
         return typing.cast(Self, Query(super().copy()))
 
