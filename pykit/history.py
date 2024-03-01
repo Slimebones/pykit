@@ -1,8 +1,8 @@
-from typing import Any, Generic, Iterable, TypeVar
 import typing
+from typing import Any, Generic, Self, TypeVar
 
-from pykit.dt import DtUtils
 from pykit.check import check
+from pykit.dt import DtUtils
 from pykit.types import Timestamp
 
 T = TypeVar("T")
@@ -88,6 +88,15 @@ class History(list[list[float | T]], Generic[T]):
         main_type:
             Signifies which object's type the history is working with.
     """
+    @classmethod
+    def create(
+        cls,
+        *items: T,
+    ) -> Self:
+        h = cls()
+        h.add(*items)
+        return h
+
     @property
     def latest(self) -> tuple[Timestamp, T]:
         """

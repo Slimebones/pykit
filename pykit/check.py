@@ -56,24 +56,25 @@ class check:
         cls,
         obj: Any,
         t: type[T] | tuple[type[T]],
-    ) -> T:
-        if not issubclass(obj, t):  # type: ignore
+    ) -> type[T]:
+        if not issubclass(obj, t):
             raise CheckErr(f"{obj} must be a subclass of {t}")
         return obj
 
     @classmethod
     def each_type(
         cls,
-        obj: Iterable[Any],
+        objs: Iterable[Any],
         t: type[T] | tuple[type[T]],
     ) -> Iterable[T]:
         for o in objs:
             check.type(o, t)
+        return objs
 
     @classmethod
     def each_instance(
         cls,
-        obj: Iterable[Any],
+        objs: Iterable[Any],
         t: type[T] | tuple[type[T]],
     ) -> Iterable[T]:
         for o in objs:
@@ -83,7 +84,7 @@ class check:
     @classmethod
     def each_subclass(
         cls,
-        obj: Iterable[Any],
+        objs: Iterable[Any],
         t: type[T] | tuple[type[T]],
     ) -> Iterable[T]:
         for o in objs:
