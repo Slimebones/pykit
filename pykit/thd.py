@@ -43,11 +43,7 @@ class Thd:
                     if inspect.iscoroutinefunction(fn):
                         await fn(preresult)
                         return
-                    try:
-                        fn(preresult)
-                    except Exception as err:
-                        log.err_or_catch(err, 2)
-                        continue
+                    fn(preresult)
                 except Exception as err:  # noqa: BLE001
                     log.warn(
                         "catch err (below) during rollback, during execution"
