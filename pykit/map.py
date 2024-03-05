@@ -4,10 +4,9 @@ from typing import Any
 import dictdiffer
 from benedict import benedict
 
-from pykit import validation
+from pykit.check import check
 from pykit.cls import Static
-from pykit.errors import NotFoundError
-from pykit.errors.main import EmptyInputError
+from pykit.err import InpErr, NotFoundErr
 
 """
 Dict++ - improved dictionary based on benedict.
@@ -30,8 +29,8 @@ class MapUtils(Static):
         Returns:
             Field found.
         """
-        validation.validate(location, str)
-        validation.validate(mp, dict)
+        check.instance(location, str)
+        check.instance(mp, dict)
 
         return dictpp(mp)[location]
 
@@ -57,8 +56,8 @@ class MapUtils(Static):
         Returns:
             Patched dictionary.
         """
-        validation.validate(to_be_patched, dict)
-        validation.validate(source, dict)
+        check.instance(to_be_patched, dict)
+        check.instance(source, dict)
 
         patched: dictpp
 
@@ -94,8 +93,8 @@ class MapUtils(Static):
 
             elif event_name == "change":
                 if location == "":
-                    raise EmptyInputError(
-                        "on change event location",
+                    raise InpErr(
+                        "empty location on change event",
                     )
                 patched[location] = change[1]
 
@@ -128,8 +127,8 @@ class MapUtils(Static):
         )
 
         if not is_found:
-            raise NotFoundError(
-                title=f"key with field {field} in given map {mp}",
+            raise NotFoundErr(
+                f"key with field {field} in given map {mp}",
             )
 
         key_chain.reverse()
@@ -155,7 +154,7 @@ class MapUtils(Static):
         while keys:
             popped_key: str = keys.pop()
             if popped_key not in result:
-                raise NotFoundError(
+                raise NotFoundErr(
                     f"field for location \"{location}\" in map {mp}",
                 )
             result = result[popped_key]

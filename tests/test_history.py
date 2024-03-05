@@ -4,10 +4,8 @@ from typing import TYPE_CHECKING
 from pykit.check import check
 from pykit.dt import DtUtils
 from pykit.history import (
-    DuplicateItemHistoryErr,
     EmptyHistoryErr,
     History,
-    ItemTypeHistoryErr,
 )
 
 if TYPE_CHECKING:
@@ -21,7 +19,7 @@ class _Color(Enum):
     Yellow = "yellow"
 
 def test_empty():
-    history: History[_Color] = History(_Color)
+    history: History[_Color] = History()
 
     check.expect(
         lambda: history.latest,
@@ -29,7 +27,7 @@ def test_empty():
     )
 
 def test_add():
-    history: History[_Color] = History(_Color)
+    history: History[_Color] = History()
 
     history.add(
         _Color.Red,
@@ -40,24 +38,3 @@ def test_add():
 
     assert history.latest_timestamp < after_timestamp
     assert history.latest_item is _Color.Blue
-
-def test_add_wrong_type():
-    history: History[_Color] = History(_Color)
-
-    history.add(_Color.Red)
-
-    check.expect(
-        history.add,
-        ItemTypeHistoryErr,
-        10,
-    )
-
-def test_add_item_duplicates():
-    history: History[_Color] = History(_Color)
-
-    check.expect(
-        history.add,
-        DuplicateItemHistoryErr,
-        _Color.Red,
-        _Color.Red,
-    )

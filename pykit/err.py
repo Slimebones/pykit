@@ -2,6 +2,9 @@ from typing import Any
 
 from fcode import code
 
+@code("val-err")
+class ValErr(ValueError):
+    pass
 
 @code("err.value")
 class ValueErr(Exception):

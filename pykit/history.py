@@ -1,5 +1,7 @@
-from typing import Any, Generic, TypeVar
+import typing
+from typing import Any, Generic, Self, TypeVar
 
+from pykit.check import check
 from pykit.dt import DtUtils
 from pykit.types import Timestamp
 
@@ -78,7 +80,7 @@ class DuplicateItemHistoryErr(HistoryErr):
             " latest one"
         super().__init__(message)
 
-class History(Generic[T]):
+class History(list[list[float | T]], Generic[T]):
     """
     Tracks changes of states by the time.
 
@@ -86,12 +88,14 @@ class History(Generic[T]):
         main_type:
             Signifies which object's type the history is working with.
     """
-    def __init__(
-        self,
-        main_type: type[T],
-    ):
-        self._main_type = main_type
-        self._data: list[tuple[float, T]] = []
+    @classmethod
+    def create(
+        cls,
+        *items: T,
+    ) -> Self:
+        h = cls()
+        h.add(*items)
+        return h
 
     @property
     def latest(self) -> tuple[Timestamp, T]:
@@ -108,12 +112,12 @@ class History(Generic[T]):
         The latest item is the item with the most recent timestamp.
         """
         self._check_not_empty()
-        return self._data[-1][1]
+        return typing.cast(T, self[-1][1])
 
     @property
     def latest_timestamp(self) -> Timestamp:
         self._check_not_empty()
-        return self._data[-1][0]
+        return check.instance(self[-1][0], float)
 
     def add(
         self,
@@ -136,48 +140,8 @@ class History(Generic[T]):
         item: T,
     ) -> None:
         timestamp = DtUtils.get_utc_timestamp()
-        self._check_item_duplicates(item)
-        self._check_item_type(item)
-        self._data.append((timestamp, item))
+        self.append([timestamp, item])
 
     def _check_not_empty(self) -> None:
-        if not self._data:
+        if len(self) == 0:
             raise EmptyHistoryErr
-
-    def _check_item_duplicates(
-        self,
-        item: T,
-    ) -> None:
-        """
-        Checks that the item is not the same as the latest added one.
-        """
-        try:
-            self._check_not_empty()
-        except EmptyHistoryErr:
-            # nothing to do with duplicates if the history is empty
-            return
-        else:
-            latest_item: T = self.latest_item
-
-            # check both value and reference equality
-            if item is latest_item or item == latest_item:
-                raise DuplicateItemHistoryErr(
-                    item=item,
-                )
-
-    def _check_item_type(
-        self,
-        item: T,
-    ) -> None:
-        """
-        Checks if item type is the same as history's main type.
-        """
-        ItemType: type = type(item)
-
-        if ItemType is not self._main_type:
-            raise ItemTypeHistoryErr(
-                WrongType=ItemType,
-                TypeExpect=self._main_type,
-            )
-        else:
-            return

@@ -10,6 +10,7 @@ from fcode import code
 
 from pykit.check import check
 from pykit.err import InpErr
+from pykit.query import Query
 from pykit.types import T
 
 
@@ -53,17 +54,15 @@ class MarkUtils:
         cls,
         mark: str,
         obj: Any,
-    ) -> dict:
+    ) -> Query:
         marks = cls.get_marks(obj)
         if mark in marks:
             raise MarkErr(
                 f"mark {mark} already presented in obj {obj} marks {marks}",
             )
-        return {
-            "$push": {
-                "internal_marks": mark,
-            },
-        }
+        return Query.as_upd(push={
+            "internal_marks": mark,
+        })
 
     @classmethod
     def get_remove_upd_query(
@@ -76,11 +75,9 @@ class MarkUtils:
             raise MarkErr(
                 f"cannot del: no such mark {mark} in obj {obj} marks {marks}",
             )
-        return {
-            "$pull": {
-                "internal_marks": mark,
-            },
-        }
+        return Query.as_upd(pull={
+            "internal_marks": mark,
+        })
 
     @classmethod
     async def decide(
