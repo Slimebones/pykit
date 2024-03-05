@@ -43,7 +43,11 @@ class Thd:
                     if inspect.iscoroutinefunction(fn):
                         await fn(preresult)
                         return
-                    fn(preresult)
+                    try:
+                        fn(preresult)
+                    except Exception as err:
+                        log.err_or_catch(err, 2)
+                        continue
                 except Exception as err:  # noqa: BLE001
                     log.warn(
                         "catch err (below) during rollback, during execution"
@@ -55,18 +59,24 @@ class Thd:
         self,
         fn: Callable[[], T],
         rollback_fn: Callable[[T], None],
-    ) -> Any:
+    ) -> T:
         if self._is_queue_locked:
             raise LockErr("thd queue")
         f = fn()
         self._rollback_queue.put_nowait((rollback_fn, f))
         return f
 
+    def a_delete(
+        self,
+        fn: Callable[[], T]
+    ) -> T:
+        return self.a(fn, lambda d: getattr(d, "delete")())
+
     async def aa(
         self,
         fn: Coroutine[Any, Any, T],
         rollback_corofn: Callable[[T], Awaitable[None]],
-    ) -> Any:
+    ) -> T:
         if self._is_queue_locked:
             raise LockErr("thd queue")
         f = await fn
