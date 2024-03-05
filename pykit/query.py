@@ -11,6 +11,10 @@ from pykit.log import log
 
 class Query(dict[str, Any]):
     @classmethod
+    def as_search_sid(cls, sid: str) -> Self:
+        return typing.cast(Self, Query({"sid": sid}))
+
+    @classmethod
     def as_upd(  # noqa: PLR0913
         cls,
         *,
@@ -19,14 +23,14 @@ class Query(dict[str, Any]):
         push: dict[str, Any] | None = None,
         pull: dict[str, Any] | None = None,
         pop: dict[str, Any] | None = None,
-    ):
-        return Query({
+    ) -> Self:
+        return typing.cast(Self, Query({
             "$set": set or {},
             "$inc": inc or {},
             "$push": push or {},
             "$pull": pull or {},
             "$pop": pop or {},
-        })
+        }))
 
     def copy(self) -> Self:
         return typing.cast(Self, Query(super().copy()))
