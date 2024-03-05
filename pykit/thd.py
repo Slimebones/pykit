@@ -72,6 +72,15 @@ class Thd:
     ) -> T:
         return self.a(fn, lambda d: getattr(d, "delete")())
 
+    async def aa_delete(
+        self,
+        fn: Coroutine[Any, Any, T]
+    ) -> T:
+        async def delete(val: T):
+            getattr(val, "delete").delete()
+
+        return await self.aa(fn, delete)
+
     async def aa(
         self,
         fn: Coroutine[Any, Any, T],

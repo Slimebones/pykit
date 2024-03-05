@@ -3,6 +3,10 @@ from typing import Any
 from fcode import code
 
 
+@code("err.value")
+class ValueErr(Exception):
+    pass
+
 @code("not-found-err")
 class NotFoundErr(Exception):
     def __init__(self, s: Any, used_search_opts: dict | None = None):
