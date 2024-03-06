@@ -71,8 +71,8 @@ class Thd:
 
     def a_delete_arr_index(
         self,
-        fn: Callable[[], T],
-        index: int
+        index: int,
+        fn: Callable[[], T]
     ) -> T:
         return self.a(
             fn,
