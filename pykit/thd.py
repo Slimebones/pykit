@@ -55,7 +55,7 @@ class Thd:
     def a(
         self,
         fn: Callable[[], T],
-        rollback_fn: Callable[[T], None],
+        rollback_fn: Callable[[T], Any],
     ) -> T:
         if self._is_queue_locked:
             raise LockErr("thd queue")
@@ -91,7 +91,7 @@ class Thd:
     async def aa(
         self,
         fn: Coroutine[Any, Any, T],
-        rollback_corofn: Callable[[T], Awaitable[None]],
+        rollback_corofn: Callable[[T], Awaitable[Any]],
     ) -> T:
         if self._is_queue_locked:
             raise LockErr("thd queue")
