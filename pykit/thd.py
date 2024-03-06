@@ -23,7 +23,7 @@ class Thd:
     #           "defer" => execute only on commit
     def __init__(self):
         self._is_queue_locked = False
-        self._rollback_queue = Queue[_RollbackFnAndPreResult]()
+        self._rollback_stack: list[_RollbackFnAndPreResult] = []
 
     async def __aenter__(self) -> Self:
         return self
@@ -36,8 +36,8 @@ class Thd:
     ):
         self._is_queue_locked = True
         if err_val:
-            while not self._rollback_queue.empty():
-                fn, preresult = await self._rollback_queue.get()
+            while len(self._rollback_stack) != 0:
+                fn, preresult = self._rollback_stack.pop()
                 if inspect.iscoroutine(fn):
                     raise InpErr(f"expected corofn, but coroutine {fn}")
                 try:
@@ -60,7 +60,7 @@ class Thd:
         if self._is_queue_locked:
             raise LockErr("thd queue")
         f = fn()
-        self._rollback_queue.put_nowait((rollback_fn, f))
+        self._rollback_stack.append((rollback_fn, f))
         return f
 
     def a_delete(
@@ -96,6 +96,6 @@ class Thd:
         if self._is_queue_locked:
             raise LockErr("thd queue")
         f = await fn
-        await self._rollback_queue.put((rollback_corofn, f))
+        self._rollback_stack.append((rollback_corofn, f))
         return f
 
