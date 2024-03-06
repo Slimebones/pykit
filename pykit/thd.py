@@ -4,7 +4,8 @@ Transaction handling aka THD.
 
 import inspect
 from asyncio import Queue
-from typing import Any, Awaitable, Callable, Coroutine, Self
+from typing import Any, Awaitable, Callable, Coroutine, Iterable, Self
+import typing
 
 from pykit.err import InpErr, LockErr
 from pykit.log import log
@@ -67,6 +68,16 @@ class Thd:
         fn: Callable[[], T]
     ) -> T:
         return self.a(fn, lambda d: getattr(d, "delete")())
+
+    def a_delete_arr_index(
+        self,
+        fn: Callable[[], T],
+        index: int
+    ) -> T:
+        return self.a(
+            fn,
+            lambda arr: getattr(typing.cast(list, arr)[index], "delete")()
+        )
 
     async def aa_delete(
         self,
