@@ -9,6 +9,8 @@ from pykit.err import InpErr
 from pykit.log import log
 
 
+QueryUpdOperator = Literal["set", "inc", "pull", "pop", "push", "mul"]
+
 class Query(dict[str, Any]):
     @classmethod
     def as_search_sid(cls, sid: str) -> Self:
