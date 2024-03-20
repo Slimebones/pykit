@@ -6,7 +6,7 @@ Could happen and must be validated => check
 
 This is a new version of "validation" module.
 """
-from typing import Any, Callable, Iterable, NoReturn
+from typing import Any, Callable, Coroutine, Iterable, NoReturn
 
 from fcode import code
 
@@ -113,7 +113,7 @@ class check:
     def expect(
         cls,
         fn: Callable,
-        ErrorToExpect: type[Exception],
+        errcls: type[Exception],
         *args,
         **kwargs,
     ) -> None:
@@ -124,7 +124,7 @@ class check:
         Args:
             fn:
                 Function to call.
-            ErrorToExpect:
+            errcls:
                 Exception class to expect.
             args:
                 Positional arguments to pass to function call.
@@ -137,11 +137,26 @@ class check:
         """
         try:
             fn(*args, **kwargs)
-        except ErrorToExpect:
+        except errcls:
             pass
         else:
             raise CheckErr(
-                f"error {ErrorToExpect} expected on call of function {fn}",
+                f"error {errcls} expected on call of function {fn}",
+            )
+
+    @classmethod
+    async def aexpect(
+        cls,
+        coro: Coroutine,
+        errcls: type[Exception]
+    ) -> None:
+        try:
+            await coro
+        except errcls:
+            pass
+        else:
+            raise CheckErr(
+                f"error {errcls} expected on call of coro {coro}",
             )
 
     @classmethod
