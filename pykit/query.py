@@ -68,14 +68,25 @@ class Query(dict[str, Any]):
         """
 
         keys_to_del: list[str] = []
+        ikeys_to_del: dict[QueryUpdOperator, str] = {}
 
-        for k in self:
+        for k, v in self.items():
+            if k.replace("$", "") in QueryUpdOperators:
+                if not isinstance(v, dict):
+                    raise ValueErr(f"for operator {k}, val {v} should be dict")
+                for ik in v:
+                    if ik in disallowed_keys:
+                        ikeys_to_del[typing.cast(QueryUpdOperator, k)] = ik
+                        self._raise_err_for_disallowed(ik, raise_mod)
+                continue
             if k in disallowed_keys:
                 keys_to_del.append(k)
                 self._raise_err_for_disallowed(k, raise_mod)
 
         for k in keys_to_del:
             del self[k]
+        for operator, ik in ikeys_to_del.items():
+            del self[operator][ik]
 
         return self
 
@@ -89,10 +100,10 @@ class Query(dict[str, Any]):
                 return
             case "warn":
                 log.warn(
-                    f"{key} is not allowed in query => skip",
+                    f"{key} is not allowed in query {self} => skip",
                 )
             case "err":
-                raise InpErr(f"{key} in query")
+                raise InpErr(f"{key} in query {self}")
             case _:
                 check.fail()
 
