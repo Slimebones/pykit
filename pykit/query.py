@@ -5,11 +5,18 @@ import typing
 from typing import Any, Literal, Self
 
 from pykit.check import check
-from pykit.err import InpErr
+from pykit.err import InpErr, NotFoundErr, ValueErr
 from pykit.log import log
 
 
 QueryUpdOperator = Literal["set", "inc", "pull", "pop", "push", "mul"]
+QueryUpdOperators = [
+        "set",
+        "inc",
+        "pull",
+        "pop",
+        "push",
+        "mul"]
 
 class Query(dict[str, Any]):
     @classmethod
@@ -33,6 +40,17 @@ class Query(dict[str, Any]):
             "$pull": pull or {},
             "$pop": pop or {},
         }))
+
+    def get_upd_field(self, name: str) -> Any:
+        for op_k, op_val in self.items():
+            if op_k.replace("$", "") not in QueryUpdOperators:
+                raise ValueErr(f"query {self} is incorrect for upd")
+            for k, v in op_val.items():
+                if k == name:
+                    return v
+
+        raise NotFoundErr(
+                f"field with name {name} is not found in upd query {self}")
 
     def copy(self) -> Self:
         return typing.cast(Self, Query(super().copy()))
