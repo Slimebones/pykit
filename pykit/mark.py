@@ -6,10 +6,9 @@ archive.
 """
 from typing import Any, Awaitable, Callable
 
-from fcode import code
-
 from pykit.check import check
 from pykit.err import InpErr
+from pykit.fcode import code
 from pykit.query import Query
 from pykit.types import T
 

@@ -1,3 +1,7 @@
+# 0.5.1 
+
+- import fix
+
 # 0.5.0
 
 - many things happened since our last met... who knows what are they...
