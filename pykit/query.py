@@ -8,7 +8,6 @@ from pykit.check import check
 from pykit.err import InpErr, NotFoundErr, ValueErr
 from pykit.log import log
 
-
 QueryUpdOperator = Literal["set", "inc", "pull", "pop", "push", "mul"]
 QueryUpdOperators = [
         "set",

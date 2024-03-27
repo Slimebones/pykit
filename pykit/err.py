@@ -1,6 +1,7 @@
 from typing import Any
 
-from fcode import code
+from pykit.fcode import code
+
 
 @code("val-err")
 class ValErr(ValueError):

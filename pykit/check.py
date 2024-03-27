@@ -8,8 +8,7 @@ This is a new version of "validation" module.
 """
 from typing import Any, Callable, Coroutine, Iterable, NoReturn
 
-from fcode import code
-
+from pykit.fcode import code
 from pykit.types import T, TIterable
 
 
@@ -148,7 +147,7 @@ class check:
     async def aexpect(
         cls,
         coro: Coroutine,
-        errcls: type[Exception]
+        errcls: type[Exception],
     ) -> None:
         try:
             await coro

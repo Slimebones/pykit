@@ -3,9 +3,8 @@ Transaction handling aka THD.
 """
 
 import inspect
-from asyncio import Queue
-from typing import Any, Awaitable, Callable, Coroutine, Iterable, Self
 import typing
+from typing import Any, Awaitable, Callable, Coroutine, Self
 
 from pykit.err import InpErr, LockErr
 from pykit.log import log
@@ -65,26 +64,26 @@ class Thd:
 
     def a_delete(
         self,
-        fn: Callable[[], T]
+        fn: Callable[[], T],
     ) -> T:
-        return self.a(fn, lambda d: getattr(d, "delete")())
+        return self.a(fn, lambda d: d.delete())
 
     def a_delete_arr_index(
         self,
         index: int,
-        fn: Callable[[], T]
+        fn: Callable[[], T],
     ) -> T:
         return self.a(
             fn,
-            lambda arr: getattr(typing.cast(list, arr)[index], "delete")()
+            lambda arr: typing.cast(list, arr)[index].delete(),
         )
 
     async def aa_delete(
         self,
-        fn: Coroutine[Any, Any, T]
+        fn: Coroutine[Any, Any, T],
     ) -> T:
         async def delete(val: T):
-            getattr(val, "delete").delete()
+            val.delete.delete()
 
         return await self.aa(fn, delete)
 
