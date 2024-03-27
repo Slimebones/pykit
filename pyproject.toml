@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pykit"
-version = "0.4.14"
+version = "0.5.0"
 description = "Python toolkit."
 authors = ["ryzhovalex <thed4rkof@gmail.com>"]
 license = "MIT"
