@@ -4,7 +4,7 @@ version = "0.4.14"
 description = "Python toolkit."
 authors = ["ryzhovalex <thed4rkof@gmail.com>"]
 license = "MIT"
-readme = "readme.md"
+readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.11"
