@@ -12,6 +12,5 @@ release version: check
 	git add .
 	git commit -m {{version}}
 	git tag {{version}}
-	poetry publish --build
 	git push
 	git push --tags
