@@ -1,4 +1,9 @@
-# 0.5.1 
+# 0.6.0
+
+- add Result and res.py with helpers
+- add ref.py - value storage
+
+# 0.5.1
 
 - import fix
 
