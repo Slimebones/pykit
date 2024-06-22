@@ -94,7 +94,7 @@ class History(list[list[float | T]], Generic[T]):
         *items: T,
     ) -> Self:
         h = cls()
-        h.add(*items)
+        h.add_many(*items)
         return h
 
     @property
@@ -119,7 +119,7 @@ class History(list[list[float | T]], Generic[T]):
         self._check_not_empty()
         return check.instance(self[-1][0], float)
 
-    def add(
+    def add_many(
         self,
         *items: T,
     ) -> None:
@@ -133,9 +133,9 @@ class History(list[list[float | T]], Generic[T]):
                 Items to add.
         """
         for item in items:
-            self._add_one(item)
+            self.add(item)
 
-    def _add_one(
+    def add(
         self,
         item: T,
     ) -> None:

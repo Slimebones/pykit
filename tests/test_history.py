@@ -29,12 +29,13 @@ def test_empty():
 def test_add():
     history: History[_Color] = History()
 
-    history.add(
+    history.add_many(
         _Color.Red,
         _Color.Blue,
     )
 
     after_timestamp: Timestamp = DtUtils.get_utc_timestamp()
 
-    assert history.latest_timestamp < after_timestamp
+    # "<=" since sometimes timestamps are evaluated as equal
+    assert history.latest_timestamp <= after_timestamp
     assert history.latest_item is _Color.Blue
