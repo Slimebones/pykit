@@ -1,3 +1,12 @@
+# 0.7.0 - UNRELEASED
+
+- query: Query.disallow() now rejects disallowed upd operators, also fixed modifies of the
+    origin query (copy is made)
+- query: added subclasses for each query type
+- query: Query.as_search_sid -> SearchQuery.create_sid
+- query: Query.as_upd -> UpdQuery.create
+- query: added AggQuery to handle aggregation pipelines
+
 # 0.6.0
 
 - add Result and res.py with helpers
