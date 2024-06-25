@@ -1,9 +1,31 @@
 from pymongo import MongoClient
+from result import UnwrapError
 
 from pykit.check import check
-from pykit.err import ValueErr
-from pykit.query import AggQuery, Query
+from pykit.err import NotFoundErr, ValueErr
+from pykit.query import AggQuery, Query, UpdQuery
 
+def test_updq_create_err():
+    check.expect(UpdQuery, ValueErr, {"wow": 1})
+
+def test_aggq_create_err():
+    check.expect(AggQuery, ValueErr, {"wow": 1})
+
+def test_updq_get_operator():
+    q = UpdQuery({
+        "$set": {"price": 1.0},
+        "$push": {"shop_ids": 15},
+        "$unset": {"name": 1}
+    })
+    assert q.get_operator("$push").unwrap() == {"shop_ids": 15}
+    check.expect(q.get_operator, NotFoundErr, "$pull")
+    check.expect(q.get_operator, ValueErr, "hello")
+
+    incorrect_updq = UpdQuery({
+        "$set": {"price": 1.0}
+    })
+    incorrect_updq["hello"] = 1
+    check.expect(q.get_operator, ValueErr, "$set")
 
 def test_disallow():
     q = Query({"sid": "hello", "$set": {"price": 10}})

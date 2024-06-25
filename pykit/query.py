@@ -6,14 +6,18 @@ from typing import Any, Iterable, Literal, Self
 
 from pymongo.collection import Collection
 from pymongo.command_cursor import CommandCursor
+from result import Err, Ok
 
 from pykit.check import check
 from pykit.err import NotFoundErr, ValueErr
 from pykit.log import log
+from pykit.res import Res
 
-QueryUpdOperator = Literal["$set", "$inc", "$pull", "$pop", "$push", "$mul"]
+QueryUpdOperator = Literal[
+    "$set", "$unset", "$inc", "$pull", "$pop", "$push", "$mul"]
 QueryUpdOperators = [
     "$set",
+    "$unset",
     "$inc",
     "$pull",
     "$pop",
@@ -21,8 +25,18 @@ QueryUpdOperators = [
     "$mul"]
 
 class Query(dict[str, Any]):
+    def __init__(self, inp):
+        super().__init__(inp)
+        self.check().unwrap_or_else(lambda x: x)
+
     def copy(self) -> Self:
         return typing.cast(Self, Query(super().copy()))
+
+    def check(self) -> Res[None]:
+        """
+        Checks query to be valid.
+        """
+        return Ok(None)
 
     def _check_disallowed_keys(
             self,
@@ -92,6 +106,10 @@ class SearchQuery(Query):
         return typing.cast(Self, Query({"sid": sid}))
 
 class UpdQuery(Query):
+    # def __init__(self, inp):
+    #     super().__init__(inp)
+    #     self.check().unwrap_or_else(lambda x: x)
+
     @classmethod
     def create(  # noqa: PLR0913
         cls,
@@ -101,6 +119,7 @@ class UpdQuery(Query):
         push: dict[str, Any] | None = None,
         pull: dict[str, Any] | None = None,
         pop: dict[str, Any] | None = None,
+        unset: dict[str, Any] | None = None
     ) -> Self:
         return typing.cast(Self, Query({
             "$set": set or {},
@@ -108,34 +127,76 @@ class UpdQuery(Query):
             "$push": push or {},
             "$pull": pull or {},
             "$pop": pop or {},
+            "$pop": pop or {},
+            "$unset": unset or {}
         }))
 
-    def get_upd_field(self, name: str) -> Any:
+    def check(self) -> Res[None]:
+        for k in self.keys():
+            if k not in QueryUpdOperators:
+                return Err(ValueErr(f"query {self} is incorrect to be updq"))
+        return Ok(None)
+
+    def get_operator(self, key: str) -> Res[dict[str, Any]]:
+        """
+        Gets top-level upd operator.
+        """
+        if not key.startswith("$"):
+            raise ValueErr(f"invalid upd operator key: {key}")
+
         for op_k, op_val in self.items():
             if op_k not in QueryUpdOperators:
-                raise ValueErr(f"query {self} is incorrect for upd")
+                return Err(ValueErr(f"query {self} is incorrect to be updq"))
             for k, v in op_val.items():
-                if k == name:
-                    return v
-        raise NotFoundErr(
-            f"field with name {name} is not found in upd query {self}")
+                if k == key:
+                    if not isinstance(v, dict):
+                        return Err(ValueErr(
+                            f"upd operator {k} should have dict val,"
+                            f" got {v} instead"))
+                    return Ok(v)
+
+        return Err(NotFoundErr(
+            f"field with key={key} is not found in upd query {self}"))
 
 class AggQuery(Query):
+    def __init__(self, inp):
+        super().__init__(inp)
+        self.check().unwrap_or_else(lambda x: x)
+
     @classmethod
     def create(cls, *stages: dict[str, Any]) -> Self:
         return cls({
             "pipeline": list(stages),
         })
 
-    def get_pipeline(self) -> list[dict[str, Any]]:
+    def check(self) -> Res[None]:
         if "pipeline" not in self:
-            raise ValueErr("undefined pipeline for aggq")
+            self["pipeline"] = []
+        if len(self) != 1:
+            return Err(ValueErr(
+                f"query {self} is incorrect to be aggq"))
         pipeline = self["pipeline"]
-        if (
-                not isinstance(pipeline, list)
-                or not all(isinstance(item, dict) for item in pipeline)):
-            raise ValueErr(f"invalid aggq pipeline composition: {pipeline}")
-        return pipeline
+        if not isinstance(pipeline, list):
+            return Err(ValueErr(
+                f"pipeline {pipeline} must be list"))
+        for stage in pipeline:
+            if not isinstance(stage, dict):
+                return Err(ValueErr(
+                    f"stage {stage} must be dict"))
+            for k in stage.keys():
+                if not isinstance(stage, str):
+                    return Err(ValueErr(
+                        f"stage key {k} must be str"))
+                if not k.startswith("$"):
+                    return Err(ValueErr(
+                        f"query {self} is incorrect to be aggq"))
+        return Ok(None)
+
+    def get_pipeline(self, *, _has_check: bool = True) -> list[dict[str, Any]]:
+        if _has_check:
+            self.check().unwrap()
+        return self["pipeline"]
 
     def apply(self, collection: Collection) -> CommandCursor:
-        return collection.aggregate(self.get_pipeline())
+        self.check().unwrap()
+        return collection.aggregate(self.get_pipeline(_has_check=False))
