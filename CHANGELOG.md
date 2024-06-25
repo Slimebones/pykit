@@ -8,6 +8,9 @@
 - query: added AggQuery to handle aggregation pipelines
 - added proc.py::ProcGroup to manage multiprocessing
 - removed yml.py for good (using pyyaml directly is enough straightforward)
+- res: reexport Ok and Err for convenience
+- added range.py::Range
+- added keeper.py to manage smart data containers
 
 # 0.6.0
 

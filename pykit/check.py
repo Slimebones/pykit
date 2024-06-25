@@ -8,6 +8,8 @@ This is a new version of "validation" module.
 """
 from typing import Any, Callable, Coroutine, Iterable, NoReturn
 
+from result import Err, Ok
+
 from pykit.fcode import code
 from pykit.types import T, TIterable
 
@@ -111,7 +113,7 @@ class check:
     @classmethod
     def expect(
         cls,
-        fn: Callable,
+        func: Callable,
         errcls: type[Exception],
         *args,
         **kwargs,
@@ -119,6 +121,8 @@ class check:
         """
         Expects given function to raise given error if function is called with
         given args and kwargs.
+
+        Automatically retrieves result.Err.err_value if the func returns it.
 
         Args:
             fn:
@@ -135,12 +139,14 @@ class check:
                 Given error has not been raised on function's call.
         """
         try:
-            fn(*args, **kwargs)
+            res = func(*args, **kwargs)
         except errcls:
-            pass
+            return
         else:
+            if isinstance(res, Err) and isinstance(res.err_value, errcls):
+                return
             raise CheckErr(
-                f"error {errcls} expected on call of function {fn}",
+                f"error {errcls} expected on call of function {func}",
             )
 
     @classmethod
