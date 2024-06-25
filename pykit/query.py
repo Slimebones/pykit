@@ -121,6 +121,12 @@ class UpdQuery(Query):
             f"field with name {name} is not found in upd query {self}")
 
 class AggQuery(Query):
+    @classmethod
+    def create(cls, *stages: dict[str, Any]) -> Self:
+        return cls({
+            "pipeline": list(stages),
+        })
+
     def get_pipeline(self) -> list[dict[str, Any]]:
         if "pipeline" not in self:
             raise ValueErr("undefined pipeline for aggq")

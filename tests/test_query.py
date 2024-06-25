@@ -1,6 +1,8 @@
+from pymongo import MongoClient
+
 from pykit.check import check
 from pykit.err import ValueErr
-from pykit.query import Query
+from pykit.query import AggQuery, Query
 
 
 def test_disallow():
@@ -17,3 +19,47 @@ def test_disallow_upd_operator():
 def test_disallow_err_mode():
     q = Query({"sid": "hello", "$set": {"price": 10}})
     check.expect(q.disallow, ValueErr, "sid", raise_mode="err")
+
+def test_agg():
+    client = MongoClient("localhost", 9006)
+    db = client.pykit_test
+    client.drop_database(db)
+
+    collection = db.test_agg
+    collection.insert_many([
+        {
+            "name": "pizza",
+            "price": 10.0,
+        },
+        {
+            "name": "cola",
+            "price": 2.5,
+        },
+        {
+            "name": "donut",
+            "price": 3.25,
+        },
+    ])
+
+    aggq = AggQuery.create(
+        {
+            "$match": {
+                "price": {
+                    "$gte": 3.25,
+                },
+            },
+        },
+        {
+            "$sort": {
+                "price": -1,
+            },
+        },
+    )
+    cursor = aggq.apply(collection)
+    docs = list(cursor)
+
+    assert len(docs) == 2
+    assert docs[0]["name"] == "pizza"
+    assert docs[1]["name"] == "donut"
+
+    client.drop_database(db)
