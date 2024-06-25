@@ -6,6 +6,7 @@
 - query: Query.as_search_sid -> SearchQuery.create_sid
 - query: Query.as_upd -> UpdQuery.create
 - query: added AggQuery to handle aggregation pipelines
+- added proc.py::ProcGroup to manage multiprocessing
 
 # 0.6.0
 
