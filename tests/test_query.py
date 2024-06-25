@@ -16,4 +16,4 @@ def test_disallow_upd_operator():
 
 def test_disallow_err_mode():
     q = Query({"sid": "hello", "$set": {"price": 10}})
-    q.disallow("sid", "err")
+    check.expect(q.disallow, ValueErr, "sid", raise_mode="err")

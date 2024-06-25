@@ -2,13 +2,13 @@
 Manage mongo-like queries.
 """
 import typing
-from typing import Any, Literal, Self
+from typing import Any, Iterable, Literal, Self
 
 from pymongo.collection import Collection
 from pymongo.command_cursor import CommandCursor
 
 from pykit.check import check
-from pykit.err import InpErr, NotFoundErr, ValueErr
+from pykit.err import NotFoundErr, ValueErr
 from pykit.log import log
 
 QueryUpdOperator = Literal["$set", "$inc", "$pull", "$pop", "$push", "$mul"]
@@ -26,7 +26,7 @@ class Query(dict[str, Any]):
 
     def _check_disallowed_keys(
             self,
-            *disallowed_keys: str):
+            disallowed_keys: Iterable[str]):
         for disallowed_key in disallowed_keys:
             if disallowed_key.startswith("$"):
                 raise ValueErr(
@@ -35,19 +35,19 @@ class Query(dict[str, Any]):
     def disallow(
         self,
         *disallowed_keys: str,
-        raise_mod: Literal["null", "warn", "err"] = "null",
+        raise_mode: Literal["null", "warn", "err"] = "null",
     ) -> Self:
         """
         Process this query for disallowed keys.
 
-        Each disallowed key will be scheduled for delete, but if raise_mod
+        Each disallowed key will be scheduled for delete, but if raise_mode
         is not "err".
         """
         query = self.copy()
         keys_to_del: list[str] = []
         ikeys_to_del: dict[QueryUpdOperator, str] = {}
 
-        self._check_disallowed_keys()
+        self._check_disallowed_keys(disallowed_keys)
 
         for k, v in query.items():
             if k in QueryUpdOperators:
@@ -56,11 +56,11 @@ class Query(dict[str, Any]):
                 for ik in v:
                     if ik in disallowed_keys:
                         ikeys_to_del[typing.cast(QueryUpdOperator, k)] = ik
-                        self._raise_err_for_disallowed(ik, raise_mod)
+                        self._raise_err_for_disallowed(ik, raise_mode)
                 continue
             if k in disallowed_keys:
                 keys_to_del.append(k)
-                self._raise_err_for_disallowed(k, raise_mod)
+                self._raise_err_for_disallowed(k, raise_mode)
 
         for k in keys_to_del:
             del query[k]
@@ -72,9 +72,9 @@ class Query(dict[str, Any]):
     def _raise_err_for_disallowed(
         self,
         key: str,
-        raise_mod: Literal["null", "warn", "err"],
+        raise_mode: Literal["null", "warn", "err"],
         ):
-        match raise_mod:
+        match raise_mode:
             case "null":
                 return
             case "warn":
@@ -82,7 +82,7 @@ class Query(dict[str, Any]):
                     f"{key} is not allowed in query {self} => skip",
                 )
             case "err":
-                raise InpErr(f"{key} in query {self}")
+                raise ValueErr(f"{key} in query {self}")
             case _:
                 check.fail()
 
