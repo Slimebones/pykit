@@ -9,7 +9,7 @@ from typing import Any, Awaitable, Callable
 from pykit.check import check
 from pykit.err import InpErr
 from pykit.fcode import code
-from pykit.query import Query
+from pykit.query import UpdQuery
 from pykit.types import T
 
 
@@ -49,32 +49,32 @@ class MarkUtils:
         marks.remove(mark)
 
     @classmethod
-    def get_add_upd_query(
+    def get_push_uq(
         cls,
         mark: str,
         obj: Any,
-    ) -> Query:
+    ) -> UpdQuery:
         marks = cls.get_marks(obj)
         if mark in marks:
             raise MarkErr(
                 f"mark {mark} already presented in obj {obj} marks {marks}",
             )
-        return Query.as_upd(push={
+        return UpdQuery.create(push={
             "internal_marks": mark,
         })
 
     @classmethod
-    def get_remove_upd_query(
+    def get_pull_uq(
         cls,
         mark: str,
         obj: Any,
-    ):
+    ) -> UpdQuery:
         marks = cls.get_marks(obj)
         if mark not in marks:
             raise MarkErr(
                 f"cannot del: no such mark {mark} in obj {obj} marks {marks}",
             )
-        return Query.as_upd(pull={
+        return UpdQuery.create(pull={
             "internal_marks": mark,
         })
 
@@ -110,5 +110,5 @@ class MarkUtils:
             raise MarkErr(f"obj {obj} is not marked") from err
 
         check.instance(marks, list)
-        return check.each_instance(marks, str)
+        return list(check.each_instance(marks, str))
 

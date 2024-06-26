@@ -1,3 +1,7 @@
+# 0.7.1
+
+- fixed mark.py quieries
+
 # 0.7.0
 
 - query: Query.disallow() now rejects disallowed upd operators, also fixed modifies of the
