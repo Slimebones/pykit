@@ -2,6 +2,7 @@
 Manage mongo-like queries.
 """
 import typing
+from copy import deepcopy
 from typing import Any, Iterable, Literal, Self
 
 from pymongo.collection import Collection
@@ -29,7 +30,9 @@ class Query(dict[str, Any]):
         super().__init__(inp)
         raise_err_val(self.check)
 
-    def copy(self) -> Self:
+    def copy(self, *, is_deepcopy: bool = True) -> Self:
+        if is_deepcopy:
+            return deepcopy(self)
         return typing.cast(Self, Query(super().copy()))
 
     def check(self) -> Res[None]:
@@ -56,6 +59,17 @@ class Query(dict[str, Any]):
 
         Each disallowed key will be scheduled for delete, but if raise_mode
         is not "err".
+
+        Disallowed keys can be found either on top-level, or on second level,
+        no deeper (i.e. no recursion is made). If such key is found on second
+        level, and after it's clearance the parent dict now contains no items,
+        it's left as it is, i.e. left empty:
+        ```python
+        q = Query({"sid": "hello", "$set": {"price": 10}})
+        new_q = q.disallow("price")
+        print(new_q)
+        # {"sid": "hello", "$set": {}}
+        ```
         """
         query = self.copy()
         keys_to_del: list[str] = []
@@ -66,7 +80,7 @@ class Query(dict[str, Any]):
         for k, v in query.items():
             if k in QueryUpdOperators:
                 if not isinstance(v, dict):
-                    raise ValueErr(f"for operator {k}, val {v} should be dict")
+                    raise ValueErr(f"for operator {k}, val {v} must be dict")
                 for ik in v:
                     if ik in disallowed_keys:
                         ikeys_to_del[typing.cast(QueryUpdOperator, k)] = ik

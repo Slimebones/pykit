@@ -35,6 +35,13 @@ def test_disallow():
     assert new_q["$set"] == q["$set"]
     assert "sid" not in new_q
 
+def test_disallow_nested():
+    q = Query({"sid": "hello", "$set": {"price": 10}})
+    new_q = q.disallow("price")
+    assert q != new_q
+    assert "sid" in new_q
+    assert new_q["$set"] == {}
+
 def test_disallow_upd_operator():
     q = Query({"sid": "hello", "$set": {"price": 10}})
     check.expect(q.disallow, ValueErr, "$set")

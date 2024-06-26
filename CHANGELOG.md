@@ -13,6 +13,7 @@
 - restructured FnSpec into FuncSpec, with generic addition
 - added ArbitraryFunc(Protocol), accepting arbitrary number of args and kwargs
 - res: added raise_err_val(), try_or_res() helper functions
+- query: Query.copy now automatically does deepcopy
 
 # 0.6.0
 
