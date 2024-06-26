@@ -10,6 +10,9 @@
 - removed yml.py for good (using pyyaml directly is enough straightforward)
 - added range.py::Range
 - added keeper.py to manage smart data containers
+- restructured FnSpec into FuncSpec, with generic addition
+- added ArbitraryFunc(Protocol), accepting arbitrary number of args and kwargs
+- res: added raise_err_val(), try_or_res() helper functions
 
 # 0.6.0
 

@@ -1,14 +1,17 @@
-from typing import Callable, Iterable, TypeVar
+from typing import Any, Callable, Iterable, TypeVar
 
-from result import Result, Err
+from result import Ok, Result, Err
 
+from pykit.func import ArbitraryFunc
+
+T = TypeVar("T")
 T_co = TypeVar("T_co", covariant=True)
 Res = Result[T_co, Exception]
 """
 Short version of result.Result, where err value is always an Exception.
 """
 
-def raise_err_value(func: Callable):
+def raise_err_val(func: Callable):
     """
     Calls a func and raises Err.err_value if func returns it.
     """
@@ -16,11 +19,14 @@ def raise_err_value(func: Callable):
     if isinstance(res, Err):
         raise res.err_value
 
-def try_or_res(func: Callable, errs: tuple[type[Exception], ...] = (Exception,)):
+def try_or_res(
+        func: Callable[[], T_co],
+        errs: tuple[type[Exception], ...] = (Exception,)) -> Res[T_co]:
     """
-    Calls a func and wraps any raised exception
+    Calls a func and wraps raised exception, otherwise return func retval.
     """
     try:
-        func()
+        res = func()
     except errs as err:
-        return
+        return Err(err)
+    return Ok(res)

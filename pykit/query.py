@@ -11,7 +11,7 @@ from result import Err, Ok
 from pykit.check import check
 from pykit.err import NotFoundErr, ValueErr
 from pykit.log import log
-from pykit.res import Res
+from pykit.res import Res, raise_err_val, try_or_res
 
 QueryUpdOperator = Literal[
     "$set", "$unset", "$inc", "$pull", "$pop", "$push", "$mul"]
@@ -27,7 +27,7 @@ QueryUpdOperators = [
 class Query(dict[str, Any]):
     def __init__(self, inp):
         super().__init__(inp)
-        self.check().unwrap_or_else(lambda x: x)
+        raise_err_val(self.check)
 
     def copy(self) -> Self:
         return typing.cast(Self, Query(super().copy()))
@@ -106,10 +106,6 @@ class SearchQuery(Query):
         return typing.cast(Self, Query({"sid": sid}))
 
 class UpdQuery(Query):
-    # def __init__(self, inp):
-    #     super().__init__(inp)
-    #     self.check().unwrap_or_else(lambda x: x)
-
     @classmethod
     def create(  # noqa: PLR0913
         cls,
@@ -137,32 +133,29 @@ class UpdQuery(Query):
                 return Err(ValueErr(f"query {self} is incorrect to be updq"))
         return Ok(None)
 
-    def get_operator(self, key: str) -> Res[dict[str, Any]]:
+    def get_operator_val(self, key: str) -> Res[dict[str, Any]]:
         """
         Gets top-level upd operator.
         """
         if not key.startswith("$"):
             raise ValueErr(f"invalid upd operator key: {key}")
 
-        for op_k, op_val in self.items():
-            if op_k not in QueryUpdOperators:
-                return Err(ValueErr(f"query {self} is incorrect to be updq"))
-            for k, v in op_val.items():
-                if k == key:
-                    if not isinstance(v, dict):
-                        return Err(ValueErr(
-                            f"upd operator {k} should have dict val,"
-                            f" got {v} instead"))
-                    return Ok(v)
+        res_check = self.check()
+        if isinstance(res_check, Err):
+            return res_check
+
+        for k, v in self.items():
+            if k == key:
+                if not isinstance(v, dict):
+                    return Err(ValueErr(
+                        f"upd operator {k} should have dict val,"
+                        f" got {v} instead"))
+                return Ok(v)
 
         return Err(NotFoundErr(
             f"field with key={key} is not found in upd query {self}"))
 
 class AggQuery(Query):
-    def __init__(self, inp):
-        super().__init__(inp)
-        self.check().unwrap_or_else(lambda x: x)
-
     @classmethod
     def create(cls, *stages: dict[str, Any]) -> Self:
         return cls({

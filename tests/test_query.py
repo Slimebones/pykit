@@ -11,21 +11,22 @@ def test_updq_create_err():
 def test_aggq_create_err():
     check.expect(AggQuery, ValueErr, {"wow": 1})
 
-def test_updq_get_operator():
+def test_get_operator_val():
     q = UpdQuery({
         "$set": {"price": 1.0},
         "$push": {"shop_ids": 15},
         "$unset": {"name": 1}
     })
-    assert q.get_operator("$push").unwrap() == {"shop_ids": 15}
-    check.expect(q.get_operator, NotFoundErr, "$pull")
-    check.expect(q.get_operator, ValueErr, "hello")
+    assert q.get_operator_val("$push").unwrap() == {"shop_ids": 15}
+    check.expect(q.get_operator_val, NotFoundErr, "$pull")
+    check.expect(q.get_operator_val, ValueErr, "hello")
 
-    incorrect_updq = UpdQuery({
+def test_get_operator_val_incorrect_query():
+    q = UpdQuery({
         "$set": {"price": 1.0}
     })
-    incorrect_updq["hello"] = 1
-    check.expect(q.get_operator, ValueErr, "$set")
+    q["hello"] = 1
+    check.expect(q.get_operator_val, ValueErr, "$set")
 
 def test_disallow():
     q = Query({"sid": "hello", "$set": {"price": 10}})
