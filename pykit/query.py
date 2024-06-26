@@ -177,7 +177,7 @@ class AggQuery(Query):
                 return Err(ValueErr(
                     f"stage {stage} must be dict"))
             for k in stage.keys():
-                if not isinstance(stage, str):
+                if not isinstance(k, str):
                     return Err(ValueErr(
                         f"stage key {k} must be str"))
                 if not k.startswith("$"):
