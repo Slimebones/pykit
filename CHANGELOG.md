@@ -1,4 +1,4 @@
-# 0.7.0 - UNRELEASED
+# 0.7.0
 
 - query: Query.disallow() now rejects disallowed upd operators, also fixed modifies of the
     origin query (copy is made)
