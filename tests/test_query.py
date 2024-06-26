@@ -1,9 +1,9 @@
 from pymongo import MongoClient
-from result import UnwrapError
 
 from pykit.check import check
 from pykit.err import NotFoundErr, ValueErr
 from pykit.query import AggQuery, Query, UpdQuery
+
 
 def test_updq_create_err():
     check.expect(UpdQuery, ValueErr, {"wow": 1})
@@ -15,7 +15,7 @@ def test_get_operator_val():
     q = UpdQuery({
         "$set": {"price": 1.0},
         "$push": {"shop_ids": 15},
-        "$unset": {"name": 1}
+        "$unset": {"name": 1},
     })
     assert q.get_operator_val("$push").unwrap() == {"shop_ids": 15}
     check.expect(q.get_operator_val, NotFoundErr, "$pull")
@@ -23,7 +23,7 @@ def test_get_operator_val():
 
 def test_get_operator_val_incorrect_query():
     q = UpdQuery({
-        "$set": {"price": 1.0}
+        "$set": {"price": 1.0},
     })
     q["hello"] = 1
     check.expect(q.get_operator_val, ValueErr, "$set")

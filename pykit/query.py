@@ -11,7 +11,7 @@ from result import Err, Ok
 from pykit.check import check
 from pykit.err import NotFoundErr, ValueErr
 from pykit.log import log
-from pykit.res import Res, raise_err_val, try_or_res
+from pykit.res import Res, raise_err_val
 
 QueryUpdOperator = Literal[
     "$set", "$unset", "$inc", "$pull", "$pop", "$push", "$mul"]
@@ -115,7 +115,7 @@ class UpdQuery(Query):
         push: dict[str, Any] | None = None,
         pull: dict[str, Any] | None = None,
         pop: dict[str, Any] | None = None,
-        unset: dict[str, Any] | None = None
+        unset: dict[str, Any] | None = None,
     ) -> Self:
         return typing.cast(Self, Query({
             "$set": set or {},
@@ -123,8 +123,7 @@ class UpdQuery(Query):
             "$push": push or {},
             "$pull": pull or {},
             "$pop": pop or {},
-            "$pop": pop or {},
-            "$unset": unset or {}
+            "$unset": unset or {},
         }))
 
     def check(self) -> Res[None]:
@@ -176,7 +175,7 @@ class AggQuery(Query):
             if not isinstance(stage, dict):
                 return Err(ValueErr(
                     f"stage {stage} must be dict"))
-            for k in stage.keys():
+            for k in stage:
                 if not isinstance(k, str):
                     return Err(ValueErr(
                         f"stage key {k} must be str"))

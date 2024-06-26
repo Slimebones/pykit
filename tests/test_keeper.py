@@ -1,8 +1,7 @@
-from result import UnwrapError
+from pykit.check import check
 from pykit.err import ValueErr
 from pykit.keeper import IntKeeper
 from pykit.range import Range
-from pykit.check import check
 
 
 def test_int_keeper():

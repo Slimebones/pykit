@@ -1,8 +1,6 @@
-from typing import Any, Callable, Iterable, TypeVar
+from typing import Callable, TypeVar
 
-from result import Ok, Result, Err
-
-from pykit.func import ArbitraryFunc
+from result import Err, Ok, Result
 
 T = TypeVar("T")
 T_co = TypeVar("T_co", covariant=True)
