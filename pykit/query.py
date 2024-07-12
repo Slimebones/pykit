@@ -3,7 +3,7 @@ Manage mongo-like queries.
 """
 import typing
 from copy import deepcopy
-from typing import Any, Iterable, Literal, Self
+from typing import Any, Iterable, Literal, Self, TypeVar
 
 from pymongo.collection import Collection
 from pymongo.command_cursor import CommandCursor
@@ -25,14 +25,15 @@ QueryUpdOperators = [
     "$pop",
     "$push",
     "$mul"]
+T = TypeVar("T")
 
 class Query(dict[str, Any]):
     def __init__(self, inp = ()):
         super().__init__(inp)
         raise_err_val(self.check)
 
-    def get_recursive(self, key: str) -> Res[Any]:
-        return get_recursive(self, key)
+    def get_recursive(self, key: str, default: T | None = None) -> Res[T]:
+        return get_recursive(self, key, default)
 
     def copy(self, *, is_deepcopy: bool = True) -> Self:
         if is_deepcopy:

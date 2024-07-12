@@ -1,7 +1,7 @@
 """
 Tools for working with dict-like objects.
 """
-from typing import Any
+from typing import Any, TypeVar
 
 from benedict import benedict
 from result import Err, Ok
@@ -12,9 +12,10 @@ dpp = benedict
 """
 Dict++ - improved dictionary based on benedict.
 """
+T = TypeVar("T")
 
-def get_recursive(q: dict, key: str) -> Res[Any]:
-    for k, v in q.items():
+def get_recursive(d: dict, key: str, default: T | None = None) -> Res[T]:
+    for k, v in d.items():
         if key == k:
             return Ok(v)
         if isinstance(v, dict):
@@ -24,4 +25,6 @@ def get_recursive(q: dict, key: str) -> Res[Any]:
                     and isinstance(nested_res.err_value, NotFoundErr)):
                 continue
             return nested_res
-    return Err(NotFoundErr(f"val for key {key}"))
+    if default is None:
+        return Err(NotFoundErr(f"val for key {key}"))
+    return Ok(default)
