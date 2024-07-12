@@ -119,6 +119,14 @@ class SearchQuery(Query):
     def create_sid(cls, sid: str) -> Self:
         return typing.cast(Self, Query({"sid": sid}))
 
+    def check(self) -> Res[None]:
+        for k in self.keys():
+            if k.startswith("$") and k not in ["$sort", "$limit"]:
+                return Err(ValueErr(
+                    f"only $sort and $limit are allowed as top-level"
+                    f" operators, got {k}"))
+        return Ok(None)
+
 class UpdQuery(Query):
     @classmethod
     def create(  # noqa: PLR0913
@@ -211,5 +219,6 @@ class CreateQuery(Query):
     def check(self) -> Res[None]:
         for k in self.keys():
             if k.startswith("$"):
-                return Err(ValueErr(f"cannot have operators, got {k}"))
+                return Err(ValueErr(
+                    f"cannot have top-level operators, got {k}"))
         return Ok(None)
