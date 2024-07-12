@@ -6,8 +6,8 @@ from xml.dom import NotFoundErr
 
 from result import Err, Ok
 
-from pykit.log import log
 from pykit.err import ValueErr
+from pykit.log import log
 from pykit.res import Res
 
 if sys.platform == "win32":
