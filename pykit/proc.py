@@ -1,7 +1,7 @@
 import asyncio
 import sys
 from multiprocessing import Pipe, Process
-from typing import Any, Protocol
+from typing import Any, Literal, Protocol
 from xml.dom import NotFoundErr
 
 from result import Err, Ok
@@ -34,7 +34,7 @@ class ProcGroup:
         self._procs: dict[int, tuple[Process, PipeConn]] = {}
         self._key_to_pid: dict[str, int] = {}
         self._max_procs = max_procs
-        self.proc_end_method = "terminate"
+        self.proc_deregister_method: Literal["kill", "terminate"] = "terminate"
 
     def has(self, pid: int) -> bool:
         return pid in self._procs
@@ -99,13 +99,14 @@ class ProcGroup:
         return self.try_deregister(pid_res.unwrap())
 
     def _end_proc(self, proc: Process):
-        if self.proc_end_method == "kill":
+        if self.proc_deregister_method == "kill":
             proc.kill()
-        elif self.proc_end_method == "terminate":
+        elif self.proc_deregister_method == "terminate":
             proc.terminate()
         else:
             log.err(
-                f"unrecoznized {self.proc_end_method} => use \"terminate\"")
+                f"unrecoznized {self.proc_deregister_method}"
+                " => use \"terminate\"")
 
     def try_deregister(self, pid: int) -> Res[bool]:
         """
