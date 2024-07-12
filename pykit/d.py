@@ -1,10 +1,11 @@
 """
 Tools for working with dict-like objects.
 """
-from typing import Any, TypeVar
+from typing import TypeVar
 
 from benedict import benedict
 from result import Err, Ok
+
 from pykit.err import NotFoundErr
 from pykit.res import Res
 

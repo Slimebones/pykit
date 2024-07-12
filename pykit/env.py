@@ -1,6 +1,6 @@
 import os
-import typing_extensions
 
+import typing_extensions
 from result import Err, Ok
 
 from pykit.cls import Static

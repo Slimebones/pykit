@@ -1,8 +1,8 @@
 from copy import deepcopy
 from typing import Any
-import typing_extensions
 
 import dictdiffer
+import typing_extensions
 from benedict import benedict
 
 from pykit.check import check

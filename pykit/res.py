@@ -5,7 +5,7 @@ from result import Err, Ok, Result
 __all__ = [
     "Ok",
     "Err",
-    "Result"
+    "Result",
 ]
 
 T = TypeVar("T")

@@ -1,3 +1,24 @@
+# 0.8.0
+
+- added d.py - tools for working with dicts
+- added t.py - tools for working with time
+- deprecated map.py::MapUtils, use d.py instead
+- deprecated dt.py::DtUtils, use t.py instead
+
+- query: fixed call without arguments error (like Query())
+- query: added CreateQuery
+- query: added SearchQuery.check, support for $sort and $limit operators
+- query: implemented Query.get_recursive()
+- removed search.py
+
+- res: ensured re-exports Ok and Err
+- res: added eject() - alternative to unwrap if you want to raise the original error from Res object
+
+- env: deprecated EnvUtils, added module-level improved alternatives
+
+- proc: added ProcGroup.proc_deregister_method which defines how processes will be ended (kill or terminate)
+- proc: fixed register(proc_kwargs) no default state
+
 # 0.7.1
 
 - fixed mark.py quieries
