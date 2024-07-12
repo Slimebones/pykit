@@ -6,7 +6,7 @@ from pykit.cls import Static
 from pykit.types import Delta, Timestamp
 
 
-@typing_extensions.deprecated("use new module \"t\"")
+@typing_extensions.deprecated("use module \"t\"")
 class DtUtils(Static):
     @staticmethod
     def get_utc_timestamp() -> Timestamp:

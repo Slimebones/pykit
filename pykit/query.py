@@ -10,6 +10,7 @@ from pymongo.command_cursor import CommandCursor
 from result import Err, Ok
 
 from pykit.check import check
+from pykit.d import get_recursive
 from pykit.err import NotFoundErr, ValueErr
 from pykit.log import log
 from pykit.res import Res, raise_err_val
@@ -29,6 +30,9 @@ class Query(dict[str, Any]):
     def __init__(self, inp = ()):
         super().__init__(inp)
         raise_err_val(self.check)
+
+    def get_recursive(self, key: str) -> Res[Any]:
+        return get_recursive(self, key)
 
     def copy(self, *, is_deepcopy: bool = True) -> Self:
         if is_deepcopy:

@@ -1,5 +1,6 @@
 from copy import deepcopy
 from typing import Any
+import typing_extensions
 
 import dictdiffer
 from benedict import benedict
@@ -8,12 +9,13 @@ from pykit.check import check
 from pykit.cls import Static
 from pykit.err import InpErr, NotFoundErr
 
+dictpp = benedict
 """
 Dict++ - improved dictionary based on benedict.
 """
-dictpp = benedict
 
 
+@typing_extensions.deprecated("use module d.py")
 class MapUtils(Static):
     @staticmethod
     def find(location: str, mp: dict) -> Any:
