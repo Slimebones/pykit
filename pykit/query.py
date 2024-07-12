@@ -26,7 +26,7 @@ QueryUpdOperators = [
     "$mul"]
 
 class Query(dict[str, Any]):
-    def __init__(self, inp):
+    def __init__(self, inp = tuple()):
         super().__init__(inp)
         raise_err_val(self.check)
 
