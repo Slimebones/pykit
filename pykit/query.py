@@ -206,3 +206,10 @@ class AggQuery(Query):
     def apply(self, collection: Collection) -> CommandCursor:
         self.check().unwrap()
         return collection.aggregate(self.get_pipeline(_has_check=False))
+
+class CreateQuery(Query):
+    def check(self) -> Res[None]:
+        for k in self.keys():
+            if k.startswith("$"):
+                return Err(ValueErr(f"cannot have operators, got {k}"))
+        return Ok(None)
