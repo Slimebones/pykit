@@ -24,7 +24,8 @@ class log:
     if "info('hello', v=1)", the info message would only be produced on
     verbosity level 1 or 2.
 
-    For debug logs verbosity level is unavailable - doesn't make sense.
+    For debug logs verbosity level is unavailable - they must be emitted
+    always for their level.
     """
 
     @classmethod
