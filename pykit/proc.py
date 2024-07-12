@@ -6,6 +6,7 @@ from xml.dom import NotFoundErr
 
 from result import Err, Ok
 
+from pykit.log import log
 from pykit.err import ValueErr
 from pykit.res import Res
 
@@ -33,6 +34,7 @@ class ProcGroup:
         self._procs: dict[int, tuple[Process, PipeConn]] = {}
         self._key_to_pid: dict[str, int] = {}
         self._max_procs = max_procs
+        self.proc_end_method = "terminate"
 
     def has(self, pid: int) -> bool:
         return pid in self._procs
@@ -49,7 +51,7 @@ class ProcGroup:
             target: ProcTarget,
             key: str | None = None,
             *,
-            proc_kwargs: dict[str, Any]) -> Res[int]:
+            proc_kwargs: dict[str, Any] | None = None) -> Res[int]:
         """
         Registers a new process.
 
@@ -62,7 +64,10 @@ class ProcGroup:
                 f" limit {self._max_procs} is exceeded"))
 
         parent_pipe, child_pipe = Pipe()
-        proc = Process(target=target, args=(child_pipe,), kwargs=proc_kwargs)
+        proc = Process(
+            target=target,
+            args=(child_pipe,),
+            kwargs=proc_kwargs if proc_kwargs else {})
         proc.start()
 
         if proc.pid is None:
@@ -93,6 +98,15 @@ class ProcGroup:
             return pid_res
         return self.try_deregister(pid_res.unwrap())
 
+    def _end_proc(self, proc: Process):
+        if self.proc_end_method == "kill":
+            proc.kill()
+        elif self.proc_end_method == "terminate":
+            proc.terminate()
+        else:
+            log.err(
+                f"unrecoznized {self.proc_end_method} => use \"terminate\"")
+
     def try_deregister(self, pid: int) -> Res[bool]:
         """
         Deregisters a process by pid.
@@ -104,7 +118,7 @@ class ProcGroup:
 
         proc, _ = self._procs[pid]
         if proc.is_alive():
-            proc.kill()
+            self._end_proc(proc)
 
         for key, map_pid in self._key_to_pid.items():
             if map_pid == pid:
