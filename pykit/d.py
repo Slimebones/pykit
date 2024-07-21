@@ -3,16 +3,11 @@ Tools for working with dict-like objects.
 """
 from typing import TypeVar
 
-from benedict import benedict
 from result import Err, Ok
 
 from pykit.err import NotFoundErr
 from pykit.res import Res
 
-dpp = benedict
-"""
-Dict++ - improved dictionary based on benedict.
-"""
 T = TypeVar("T")
 
 def get_recursive(d: dict, key: str, default: T | None = None) -> Res[T]:
