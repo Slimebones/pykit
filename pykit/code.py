@@ -12,7 +12,9 @@ from pykit.log import log
 T = TypeVar("T")
 class Coded(BaseModel, Generic[T]):
     """
-    Msg data coupled with identification code.
+    Arbitrary data coupled with identification code.
+
+    Useful when data is type that doesn't support ``code() -> str`` signature.
     """
     code: str
     val: T
