@@ -53,7 +53,8 @@ TBE = TypeVar("TBE", bound=BaseException)
 
 class Ok(Generic[T_co]):
     """
-    A value that indicates success and which stores arbitrary data for the return value.
+    A value that indicates success and which stores arbitrary data for the
+    return value.
     """
 
     __match_args__ = ("ok_value",)
@@ -162,8 +163,8 @@ class Ok(Generic[T_co]):
 
     def map(self, op: Callable[[T_co], U]) -> Ok[U]:
         """
-        The contained result is `Ok`, so return `Ok` with original value mapped to
-        a new value using the passed in function.
+        The contained result is `Ok`, so return `Ok` with original value mapped
+        to a new value using the passed in function.
         """
         return Ok(op(self._value))
 
@@ -178,8 +179,8 @@ class Ok(Generic[T_co]):
 
     def map_or(self, default: object, op: Callable[[T_co], U]) -> U:
         """
-        The contained result is `Ok`, so return the original value mapped to a new
-        value using the passed in function.
+        The contained result is `Ok`, so return the original value mapped to a
+        new value using the passed in function.
         """
         return op(self._value)
 
@@ -220,21 +221,23 @@ class Ok(Generic[T_co]):
 
     def inspect(self, op: Callable[[T_co], Any]) -> Result[T_co, E]:
         """
-        Calls a function with the contained value if `Ok`. Returns the original result.
+        Calls a function with the contained value if `Ok`. Returns the original
+        result.
         """
         op(self._value)
         return self
 
     def inspect_err(self, op: Callable[[E], Any]) -> Result[T_co, E]:
         """
-        Calls a function with the contained value if `Err`. Returns the original result.
+        Calls a function with the contained value if `Err`. Returns the
+        original result.
         """
         return self
 
     def eject(self) -> T_co:
         """
-        Same as unwrap, but, instead of UnwrapErr, raises the original err value
-        of Res.
+        Same as unwrap, but, instead of UnwrapErr, raises the original err
+        value of Res.
         """
         return _eject(self)
 
@@ -262,7 +265,8 @@ class DoException(Exception):
 
 class Err(Generic[E]):
     """
-    A value that signifies failure and which stores arbitrary data for the error.
+    A value that signifies failure and which stores arbitrary data for the
+    error.
     """
 
     __match_args__ = ("err_value",)
@@ -270,9 +274,12 @@ class Err(Generic[E]):
 
     def __iter__(self) -> Iterator[NoReturn]:
         def _iter() -> Iterator[NoReturn]:
-            # Exception will be raised when the iterator is advanced, not when it's created
+            # Exception will be raised when the iterator is advanced, not when
+            # it's created
             raise DoException(self)
-            yield  # This yield will never be reached, but is necessary to create a generator
+            # This yield will never be reached, but is necessary to create a
+            # generator
+            yield
 
         return _iter()
 
@@ -414,8 +421,8 @@ class Err(Generic[E]):
 
     def map_err(self, op: Callable[[E], F]) -> Err[F]:
         """
-        The contained result is `Err`, so return `Err` with original error mapped to
-        a new value using the passed in function.
+        The contained result is `Err`, so return `Err` with original error
+        mapped to a new value using the passed in function.
         """
         return Err(op(self._value))
 
@@ -440,21 +447,23 @@ class Err(Generic[E]):
 
     def inspect(self, op: Callable[[T_co], Any]) -> Result[T_co, E]:
         """
-        Calls a function with the contained value if `Ok`. Returns the original result.
+        Calls a function with the contained value if `Ok`. Returns the original
+        result.
         """
         return self
 
     def inspect_err(self, op: Callable[[E], Any]) -> Result[T_co, E]:
         """
-        Calls a function with the contained value if `Err`. Returns the original result.
+        Calls a function with the contained value if `Err`. Returns the
+        original result.
         """
         op(self._value)
         return self
 
     def eject(self) -> NoReturn:
         """
-        Same as unwrap, but, instead of UnwrapErr, raises the original err value
-        of Res.
+        Same as unwrap, but, instead of UnwrapErr, raises the original err
+        value of Res.
         """
         _eject(self)
         # shouldn't get to this point
@@ -480,7 +489,8 @@ Result: TypeAlias = Union[Ok[T_co], Err[E]]
 
 """
 A type to use in `isinstance` checks.
-This is purely for convenience sake, as you could also just write `isinstance(res, (Ok, Err))
+This is purely for convenience sake, as you could also just write
+`isinstance(res, (Ok, Err))
 """
 OkErr: Final = (Ok, Err)
 
@@ -548,7 +558,8 @@ def as_result(
 
 def as_async_result(
     *exceptions: type[TBE],
-) -> Callable[[Callable[P, Awaitable[R]]], Callable[P, Awaitable[Result[R, TBE]]]]:
+) -> Callable[
+        [Callable[P, Awaitable[R]]], Callable[P, Awaitable[Result[R, TBE]]]]:
     """
     Make a decorator to turn an async function into one that returns a ``Result``.
     Regular return values are turned into ``Ok(return_value)``. Raised
@@ -568,7 +579,8 @@ def as_async_result(
         """
 
         @functools.wraps(f)
-        async def async_wrapper(*args: P.args, **kwargs: P.kwargs) -> Result[R, TBE]:
+        async def async_wrapper(
+                *args: P.args, **kwargs: P.kwargs) -> Result[R, TBE]:
             try:
                 return Ok(await f(*args, **kwargs))
             except exceptions as exc:
@@ -614,7 +626,9 @@ def is_err(result: Result[T_co, E]) -> TypeGuard[Err[E]]:
 
 
 def do(gen: Generator[Result[T_co, E], None, None]) -> Result[T_co, E]:
-    """Do notation for Result (syntactic sugar for sequence of `and_then()` calls).
+    """
+    Do notation for Result (syntactic sugar for sequence of `and_then()`
+    calls).
 
 
     Usage:
@@ -648,8 +662,9 @@ def do(gen: Generator[Result[T_co, E], None, None]) -> Result[T_co, E]:
         return out
     except TypeError as te:
         # Turn this into a more helpful error message.
-        # Python has strange rules involving turning generators involving `await`
-        # into async generators, so we want to make sure to help the user clearly.
+        # Python has strange rules involving turning generators involving
+        # `await` into async generators, so we want to make sure to help the
+        # user clearly.
         if "'async_generator' object is not an iterator" in str(te):
             raise TypeError(
                 "Got async_generator but expected generator."
@@ -659,7 +674,8 @@ def do(gen: Generator[Result[T_co, E], None, None]) -> Result[T_co, E]:
 
 
 async def do_async(
-    gen: Generator[Result[T_co, E], None, None] | AsyncGenerator[Result[T_co, E], None],
+    gen: Generator[
+        Result[T_co, E], None, None] | AsyncGenerator[Result[T_co, E], None],
 ) -> Result[T_co, E]:
     """Async version of do. Example:
 
