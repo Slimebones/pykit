@@ -1,3 +1,8 @@
+# 0.9.0
+
+- removed fcode, use code() -> str method instead
+- removed ValueErr, use ValErr instead
+
 # 0.8.0
 
 - added d.py - tools for working with dicts

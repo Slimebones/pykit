@@ -4,7 +4,7 @@ import typing_extensions
 from result import Err, Ok
 
 from pykit.cls import Static
-from pykit.err import InpErr, NotFoundErr, ValueErr
+from pykit.err import InpErr, NotFoundErr, ValErr
 from pykit.res import Res
 
 
@@ -37,7 +37,7 @@ class EnvUtils(Static):
 def getenv(key: str, default: str | None = None) -> Res[str]:
     s = os.environ.get(key, default)
     if s is None:
-        return Err(ValueErr(f"cannot find environ {key}"))
+        return Err(ValErr(f"cannot find environ {key}"))
     return Ok(s)
 
 def getenv_bool(key: str, default: str | None = None) -> Res[bool]:

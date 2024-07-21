@@ -6,7 +6,7 @@ from typing import Generic, TypeVar
 
 from result import Err, Ok
 
-from pykit.err import NotFoundErr, ValueErr
+from pykit.err import NotFoundErr, ValErr
 from pykit.range import Range
 from pykit.res import Res
 
@@ -48,7 +48,7 @@ class IntKeeper(Keeper[int]):
             if possible not in self._given:
                 self._given.add(possible)
                 return Ok(possible)
-        return Err(ValueErr("no available values"))
+        return Err(ValErr("no available values"))
 
     def free(self, val: int) -> Res[None]:
         if val not in self._given:

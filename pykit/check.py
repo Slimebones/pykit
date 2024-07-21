@@ -10,11 +10,9 @@ from typing import Any, Callable, Coroutine, Iterable, NoReturn
 
 from result import Err
 
-from pykit.fcode import code
 from pykit.types import T, TIterable
 
 
-@code("pykit.check-err")
 class CheckErr(Exception):
     pass
 

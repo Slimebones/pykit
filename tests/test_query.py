@@ -1,15 +1,15 @@
 from pymongo import MongoClient
 
 from pykit.check import check
-from pykit.err import NotFoundErr, ValueErr
+from pykit.err import NotFoundErr, ValErr
 from pykit.query import AggQuery, Query, UpdQuery
 
 
 def test_updq_create_err():
-    check.expect(UpdQuery, ValueErr, {"wow": 1})
+    check.expect(UpdQuery, ValErr, {"wow": 1})
 
 def test_aggq_create_err():
-    check.expect(AggQuery, ValueErr, {"wow": 1})
+    check.expect(AggQuery, ValErr, {"wow": 1})
 
 def test_get_operator_val():
     q = UpdQuery({
@@ -19,14 +19,14 @@ def test_get_operator_val():
     })
     assert q.get_operator_val("$push").unwrap() == {"shop_ids": 15}
     check.expect(q.get_operator_val, NotFoundErr, "$pull")
-    check.expect(q.get_operator_val, ValueErr, "hello")
+    check.expect(q.get_operator_val, ValErr, "hello")
 
 def test_get_operator_val_incorrect_query():
     q = UpdQuery({
         "$set": {"price": 1.0},
     })
     q["hello"] = 1
-    check.expect(q.get_operator_val, ValueErr, "$set")
+    check.expect(q.get_operator_val, ValErr, "$set")
 
 def test_disallow():
     q = Query({"sid": "hello", "$set": {"price": 10}})
@@ -44,11 +44,11 @@ def test_disallow_nested():
 
 def test_disallow_upd_operator():
     q = Query({"sid": "hello", "$set": {"price": 10}})
-    check.expect(q.disallow, ValueErr, "$set")
+    check.expect(q.disallow, ValErr, "$set")
 
 def test_disallow_err_mode():
     q = Query({"sid": "hello", "$set": {"price": 10}})
-    check.expect(q.disallow, ValueErr, "sid", raise_mode="err")
+    check.expect(q.disallow, ValErr, "sid", raise_mode="err")
 
 def test_agg():
     client = MongoClient("localhost", 9006)

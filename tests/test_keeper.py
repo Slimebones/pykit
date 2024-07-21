@@ -1,5 +1,5 @@
 from pykit.check import check
-from pykit.err import ValueErr
+from pykit.err import ValErr
 from pykit.keeper import IntKeeper
 from pykit.range import Range
 
@@ -13,8 +13,8 @@ def test_int_keeper():
     assert k.recv().unwrap() == 3
     assert k.recv().unwrap() == 4
     assert k.recv().unwrap() == 5
-    check.expect(k.recv, ValueErr)
+    check.expect(k.recv, ValErr)
 
     k.free(3).unwrap()
     assert k.recv().unwrap() == 3
-    check.expect(k.recv, ValueErr)
+    check.expect(k.recv, ValErr)

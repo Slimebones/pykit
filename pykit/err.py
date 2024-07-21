@@ -1,48 +1,80 @@
-from typing import Any
+import traceback
+from typing import Self
 
-from pykit.fcode import code
+from pydantic import BaseModel
+from result import Ok
+
+from pykit.obj import get_fully_qualified_name
+from pykit.res import Res
 
 
-@code("val-err")
+class ErrDto(BaseModel):
+    """
+    Represents an error as data transfer object.
+
+    "stacktrace" used to comply with other languages structures, for Python
+    it's actually a traceback.
+    """
+    name: str
+    codeid: int
+    """
+    Every err must be signed by some code id.
+    """
+    msg: str
+    stacktrace: str | None = None
+
+    @classmethod
+    def create(cls, err: Exception, codeid: int) -> Res[Self]:
+        name = get_fully_qualified_name(err)
+        msg = ", ".join([str(a) for a in err.args])
+        stacktrace = None
+        tb = err.__traceback__
+        if tb:
+            extracted_list = traceback.extract_tb(tb)
+            stacktrace = ""
+            for item in traceback.StackSummary.from_list(
+                    extracted_list).format():
+                stacktrace += item
+        return Ok(cls(
+            codeid=codeid, msg=msg, name=name, stacktrace=stacktrace))
+
+    @staticmethod
+    def code() -> str:
+        return "err"
+
 class ValErr(ValueError):
-    pass
+    @staticmethod
+    def code() -> str:
+        return "val_err"
 
-@code("err.value")
-class ValueErr(Exception):
-    pass
-
-@code("not-found-err")
 class NotFoundErr(Exception):
-    def __init__(self, s: Any, used_search_opts: dict | None = None):
-        msg = f"{s} is not found"
-        if used_search_opts:
-            msg += f", for opts: {used_search_opts}"
-        super().__init__(msg)
+    @staticmethod
+    def code() -> str:
+        return "not_found_err"
 
-@code("already-processed-err")
 class AlreadyProcessedErr(Exception):
-    def __init__(self, s: Any):
-        super().__init__(f"{s} is already processed")
+    @staticmethod
+    def code() -> str:
+        return "already_processed_err"
 
-@code("unsupported-err")
 class UnsupportedErr(Exception):
     """
     Some value is not recozniged/supported by the system.
     """
-    def __init__(
-        self,
-        s: Any,
-    ) -> None:
-        msg = f"{s} is unsupported"
-        super().__init__(msg)
+    @staticmethod
+    def code() -> str:
+        return "unsupported_err"
 
-@code("inp-err")
 class InpErr(Exception):
-    def __init__(self, s: Any):
-        super().__init__(f"{s} is invalid input")
+    """
+    A problem with received input.
+    """
+    @staticmethod
+    def code() -> str:
+        return "inp_err"
 
-@code("lock-err")
 class LockErr(Exception):
-    def __init__(self, s: Any):
-        super().__init__(f"{s} is locked")
+    @staticmethod
+    def code() -> str:
+        return "lock_err"
 

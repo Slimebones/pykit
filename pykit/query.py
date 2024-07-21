@@ -11,7 +11,7 @@ from result import Err, Ok
 
 from pykit.check import check
 from pykit.d import get_recursive
-from pykit.err import NotFoundErr, ValueErr
+from pykit.err import NotFoundErr, ValErr
 from pykit.log import log
 from pykit.res import Res, raise_err_val
 
@@ -51,7 +51,7 @@ class Query(dict[str, Any]):
             disallowed_keys: Iterable[str]):
         for disallowed_key in disallowed_keys:
             if disallowed_key.startswith("$"):
-                raise ValueErr(
+                raise ValErr(
                     f"cannot disallow upd operators (passed {disallowed_key})")
 
     def disallow(
@@ -85,7 +85,7 @@ class Query(dict[str, Any]):
         for k, v in query.items():
             if k in QueryUpdOperators:
                 if not isinstance(v, dict):
-                    raise ValueErr(f"for operator {k}, val {v} must be dict")
+                    raise ValErr(f"for operator {k}, val {v} must be dict")
                 for ik in v:
                     if ik in disallowed_keys:
                         ikeys_to_del[typing.cast(QueryUpdOperator, k)] = ik
@@ -115,7 +115,7 @@ class Query(dict[str, Any]):
                     f"{key} is not allowed in query {self} => skip",
                 )
             case "err":
-                raise ValueErr(f"{key} in query {self}")
+                raise ValErr(f"{key} in query {self}")
             case _:
                 check.fail()
 
@@ -127,7 +127,7 @@ class SearchQuery(Query):
     def check(self) -> Res[None]:
         for k in self.keys():
             if k.startswith("$") and k not in ["$sort", "$limit"]:
-                return Err(ValueErr(
+                return Err(ValErr(
                     f"only $sort and $limit are allowed as top-level"
                     f" operators, got {k}"))
         return Ok(None)
@@ -156,7 +156,7 @@ class UpdQuery(Query):
     def check(self) -> Res[None]:
         for k in self.keys():
             if k not in QueryUpdOperators:
-                return Err(ValueErr(f"query {self} is incorrect to be updq"))
+                return Err(ValErr(f"query {self} is incorrect to be updq"))
         return Ok(None)
 
     def get_operator_val(self, key: str) -> Res[dict[str, Any]]:
@@ -164,7 +164,7 @@ class UpdQuery(Query):
         Gets top-level upd operator.
         """
         if not key.startswith("$"):
-            raise ValueErr(f"invalid upd operator key: {key}")
+            raise ValErr(f"invalid upd operator key: {key}")
 
         res_check = self.check()
         if isinstance(res_check, Err):
@@ -173,7 +173,7 @@ class UpdQuery(Query):
         for k, v in self.items():
             if k == key:
                 if not isinstance(v, dict):
-                    return Err(ValueErr(
+                    return Err(ValErr(
                         f"upd operator {k} should have dict val,"
                         f" got {v} instead"))
                 return Ok(v)
@@ -192,22 +192,22 @@ class AggQuery(Query):
         if "pipeline" not in self:
             self["pipeline"] = []
         if len(self) != 1:
-            return Err(ValueErr(
+            return Err(ValErr(
                 f"query {self} is incorrect to be aggq"))
         pipeline = self["pipeline"]
         if not isinstance(pipeline, list):
-            return Err(ValueErr(
+            return Err(ValErr(
                 f"pipeline {pipeline} must be list"))
         for stage in pipeline:
             if not isinstance(stage, dict):
-                return Err(ValueErr(
+                return Err(ValErr(
                     f"stage {stage} must be dict"))
             for k in stage:
                 if not isinstance(k, str):
-                    return Err(ValueErr(
+                    return Err(ValErr(
                         f"stage key {k} must be str"))
                 if not k.startswith("$"):
-                    return Err(ValueErr(
+                    return Err(ValErr(
                         f"query {self} is incorrect to be aggq"))
         return Ok(None)
 
@@ -224,6 +224,6 @@ class CreateQuery(Query):
     def check(self) -> Res[None]:
         for k in self.keys():
             if k.startswith("$"):
-                return Err(ValueErr(
+                return Err(ValErr(
                     f"cannot have top-level operators, got {k}"))
         return Ok(None)
