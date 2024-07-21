@@ -10,6 +10,8 @@ exclude = [
 ]
 
 ignore = [
+    "S101",
+    "BLE001",
     "PERF401",
 
     "TD002",

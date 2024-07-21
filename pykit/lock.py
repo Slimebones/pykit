@@ -2,8 +2,7 @@ import asyncio
 
 from pykit.err import ValErr
 from pykit.rand import RandomUtils
-from pykit.res import Res
-from pykit.res import Ok, Err
+from pykit.res import Err, Ok, Res
 
 
 class Lock:

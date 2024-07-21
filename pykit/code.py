@@ -1,13 +1,15 @@
 from inspect import isfunction
-from pykit.err import ValErr
-from pykit.lock import Lock
 from typing import Generic, Iterable, TypeVar
+
 from pydantic import BaseModel
 
+from pykit.err import ValErr
+from pykit.lock import Lock
+from pykit.log import log
 from pykit.obj import get_fqname
 from pykit.res import Err, Ok, Res
-from pykit.log import log
 
+CODE_MAX_LEN: int = 256
 
 T = TypeVar("T")
 class Coded(BaseModel, Generic[T]):
@@ -75,7 +77,7 @@ class Code:
                 code_res = cls.get_from_type(t)
                 if isinstance(code_res, Err):
                     log.err(
-                        f"cannot get code {code}: {code_res.errval}"
+                        f"cannot get code for type {t}: {code_res.errval}"
                         " => skip")
                     continue
                 code = code_res.okval
@@ -98,6 +100,12 @@ class Code:
             return Ok(None)
 
     @classmethod
+    def destroy(cls):
+        cls._code_to_type.clear()
+        cls._codes.clear()
+        cls._lock = Lock()
+
+    @classmethod
     def _order(cls, order: list[str]) -> Res[None]:
         sorted_codes: list[str] = []
         for o in order:
@@ -106,9 +114,9 @@ class Code:
                 continue
             cls._codes.remove(o)
             sorted_codes.append(o)
+
         # bring rest of the codes
-        for c in cls._codes:
-            sorted_codes.append(c)
+        sorted_codes.extend(cls._codes)
 
         cls._codes = sorted_codes
         return Ok(None)
@@ -118,7 +126,7 @@ class Code:
         if not isinstance(code, str):
             return Err(ValErr(f"code {code} must be str"))
         if code == "":
-            return Err(ValErr(f"empty code"))
+            return Err(ValErr("empty code"))
         for i, c in enumerate(code):
             if i == 0 and not c.isalpha():
                 return Err(ValErr(
@@ -127,8 +135,8 @@ class Code:
                 return Err(ValErr(
                     f"code {code} can contain only alnum"
                     " characters or underscore"))
-        if len(code) > 256:
-            return Err(ValErr(f"code {code} exceeds maxlen 256"))
+        if len(code) > CODE_MAX_LEN:
+            return Err(ValErr(f"code {code} exceeds maxlen {CODE_MAX_LEN}"))
         return Ok(None)
 
     @classmethod

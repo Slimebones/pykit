@@ -44,7 +44,7 @@ class Thd:
                         await fn(preresult)
                         return
                     fn(preresult)
-                except Exception as err:  # noqa: BLE001
+                except Exception as err:
                     log.warn(
                         "catch err (below) during rollback, during execution"
                         f" of fn {fn} => continue",
