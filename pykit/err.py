@@ -56,4 +56,3 @@ class LockErr(Exception):
     @staticmethod
     def code() -> str:
         return "lock_err"
-
