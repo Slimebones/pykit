@@ -3,6 +3,7 @@
 - removed fcode, use code() -> str method instead
 - removed ValueErr, use ValErr instead
 - removed benedict; removed map.py
+- forked rustedpy/result into res.py; updated result API
 
 # 0.8.0
 
