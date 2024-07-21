@@ -1,3 +1,7 @@
+# 0.9.2
+
+- renamed Res._ignore -> Res.ignore
+
 # 0.9.1
 
 - removed `cls` from create_err_dto

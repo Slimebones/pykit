@@ -248,7 +248,7 @@ class Ok(Generic[T_co]):
         """
         return _eject(self)
 
-    def _ignore(self):
+    def ignore(self):
         """
         Used to signify that the result intentially ignored.
 
@@ -477,7 +477,7 @@ class Err(Generic[E_co]):
         # shouldn't get to this point
         raise AssertionError
 
-    def _ignore(self):
+    def ignore(self):
         """
         Used to signify that the result intentially ignored.
 
