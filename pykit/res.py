@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 import functools
 import inspect
 from typing import (
@@ -13,7 +14,6 @@ from typing import (
     Literal,
     NoReturn,
     ParamSpec,
-    Type,
     TypeAlias,
     TypeGuard,
     TypeVar,
@@ -381,7 +381,7 @@ class Err(Generic[E]):
         """
         return op(self._value)
 
-    def unwrap_or_raise(self, e: Type[TBE]) -> NoReturn:
+    def unwrap_or_raise(self, e: type[TBE]) -> NoReturn:
         """
         The contained result is ``Err``, so raise the exception with the value.
         """
@@ -515,7 +515,7 @@ class UnwrapErr(Exception):
 
 
 def as_result(
-    *exceptions: Type[TBE],
+    *exceptions: type[TBE],
 ) -> Callable[[Callable[P, R]], Callable[P, Result[R, TBE]]]:
     """
     Make a decorator to turn a function into one that returns a ``Result``.
@@ -547,7 +547,7 @@ def as_result(
 
 
 def as_async_result(
-    *exceptions: Type[TBE],
+    *exceptions: type[TBE],
 ) -> Callable[[Callable[P, Awaitable[R]]], Callable[P, Awaitable[Result[R, TBE]]]]:
     """
     Make a decorator to turn an async function into one that returns a ``Result``.
@@ -659,7 +659,7 @@ def do(gen: Generator[Result[T_co, E], None, None]) -> Result[T_co, E]:
 
 
 async def do_async(
-    gen: Union[Generator[Result[T_co, E], None, None], AsyncGenerator[Result[T_co, E], None]],
+    gen: Generator[Result[T_co, E], None, None] | AsyncGenerator[Result[T_co, E], None],
 ) -> Result[T_co, E]:
     """Async version of do. Example:
 

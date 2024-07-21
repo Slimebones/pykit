@@ -1,11 +1,10 @@
 import os
 
 import typing_extensions
-from pykit.res import Err, Ok
 
 from pykit.cls import Static
 from pykit.err import InpErr, NotFoundErr, ValErr
-from pykit.res import Res
+from pykit.res import Err, Ok, Res
 
 
 @typing_extensions.deprecated("use module-level functions")

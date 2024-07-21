@@ -14,7 +14,9 @@ def test_result_do_general() -> None:
 
     def _get_output(is_suc1: bool, is_suc2: bool) -> Result[float, int]:
         out: Result[float, int] = do(
-            Ok(len(x) + int(y) + 0.5) for x in resx(is_suc1) for y in resy(is_suc2)
+            Ok(len(x) + int(y) + 0.5)
+            for x in resx(is_suc1)
+            for y in resy(is_suc2)
         )
         return out
 
@@ -27,7 +29,9 @@ def test_result_do_general() -> None:
         is_suc1: bool, is_suc2: bool,
     ) -> Result[float, int]:
         return do(
-            Ok(len(x) + int(y) + 0.5) for x in resx(is_suc1) for y in resy(is_suc2)
+            Ok(len(x) + int(y) + 0.5)
+            for x in resx(is_suc1)
+            for y in resy(is_suc2)
         )
 
     assert _get_output_return_immediately(True, True) == Ok(6.5)
@@ -61,8 +65,8 @@ async def test_result_do_general_with_async_values() -> None:
 async def test_result_do_async_one_value() -> None:
     """This is a strange case where Python creates a regular
     (non async) generator despite an `await` inside the generator expression.
-    For convenience, although this works with regular `do()`, we want to support this
-    with `do_async()` as well."""
+    For convenience, although this works with regular `do()`, we want to
+    support this with `do_async()` as well."""
 
     async def aget_resx(is_suc: bool) -> Result[str, int]:
         return Ok("hello") if is_suc else Err(1)
@@ -75,7 +79,9 @@ async def test_result_do_async_one_value() -> None:
 
     async def _aget_output(is_suc1: bool, is_suc3: bool) -> Result[float, int]:
         return await do_async(
-            Ok(len(x) + z) for x in await aget_resx(is_suc1) for z in get_resz(is_suc3)
+            Ok(len(x) + z)
+            for x in await aget_resx(is_suc1)
+            for z in get_resz(is_suc3)
         )
 
     assert await _aget_output(True, True) == Ok(5.5)
@@ -195,7 +201,8 @@ async def test_result_do_general_with_async_values_inline_error() -> None:
         )
 
     assert (
-        "Got async_generator but expected generator.See the section on do notation in the README."
+        "Got async_generator but expected generator.See the section on do"
+        " notation in the README."
     ) in excinfo.value.args[0]
 
 

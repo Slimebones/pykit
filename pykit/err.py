@@ -2,10 +2,9 @@ import traceback
 from typing import Self
 
 from pydantic import BaseModel
-from pykit.res import Ok
 
 from pykit.obj import get_fully_qualified_name
-from pykit.res import Res
+from pykit.res import Ok, Res
 
 
 class ErrDto(BaseModel):

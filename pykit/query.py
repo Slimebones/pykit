@@ -7,13 +7,12 @@ from typing import Any, Iterable, Literal, Self, TypeVar
 
 from pymongo.collection import Collection
 from pymongo.command_cursor import CommandCursor
-from pykit.res import Err, Ok
 
 from pykit.check import check
 from pykit.d import get_recursive
 from pykit.err import NotFoundErr, ValErr
 from pykit.log import log
-from pykit.res import Res, throw_err_val
+from pykit.res import Err, Ok, Res, throw_err_val
 
 QueryUpdOperator = Literal[
     "$set", "$unset", "$inc", "$pull", "$pop", "$push", "$mul"]

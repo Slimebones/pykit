@@ -9,7 +9,6 @@ This is a new version of "validation" module.
 from typing import Any, Callable, Coroutine, Iterable, NoReturn
 
 from pykit.res import Err
-
 from pykit.types import T, TIterable
 
 

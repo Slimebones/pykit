@@ -4,11 +4,9 @@ Smart data containers.
 
 from typing import Generic, TypeVar
 
-from pykit.res import Err, Ok
-
 from pykit.err import NotFoundErr, ValErr
 from pykit.range import Range
-from pykit.res import Res
+from pykit.res import Err, Ok, Res
 
 T = TypeVar("T")
 
