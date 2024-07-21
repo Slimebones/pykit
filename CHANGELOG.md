@@ -1,3 +1,7 @@
+# 0.9.1
+
+- removed `cls` from create_err_dto
+
 # 0.9.0
 
 - removed fcode; added lightweight analog code.py
