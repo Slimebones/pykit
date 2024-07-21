@@ -2,6 +2,7 @@
 
 - removed fcode, use code() -> str method instead
 - removed ValueErr, use ValErr instead
+- removed benedict; removed map.py
 
 # 0.8.0
 
