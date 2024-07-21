@@ -1,5 +1,6 @@
-import typing_extensions
 import uuid
+
+import typing_extensions
 
 from pykit.cls import Static
 

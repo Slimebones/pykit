@@ -43,7 +43,7 @@ __all__ = [
     "do_async",
     "throw_err_val",
     "resultify",
-    "valerr"
+    "valerr",
 ]
 
 
