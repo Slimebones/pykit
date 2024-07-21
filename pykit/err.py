@@ -15,15 +15,15 @@ class ErrDto(BaseModel):
     it's actually a traceback.
     """
     name: str
-    codeid: int
+    errcode: str
     """
-    Every err must be signed by some code id.
+    ErrDto works only with coded errors.
     """
     msg: str
     stacktrace: str | None = None
 
     @classmethod
-    def create(cls, err: Exception, codeid: int) -> Res[Self]:
+    def create(cls, err: Exception, errcode: str) -> Res[Self]:
         name = get_fully_qualified_name(err)
         msg = ", ".join([str(a) for a in err.args])
         stacktrace = None
@@ -35,7 +35,7 @@ class ErrDto(BaseModel):
                     extracted_list).format():
                 stacktrace += item
         return Ok(cls(
-            codeid=codeid, msg=msg, name=name, stacktrace=stacktrace))
+            errcode=errcode, msg=msg, name=name, stacktrace=stacktrace))
 
     @staticmethod
     def code() -> str:

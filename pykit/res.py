@@ -26,8 +26,6 @@ from typing import (
 )
 from warnings import warn
 
-from pykit.err import ValErr
-
 __all__ = [
     "Ok",
     "Err",
@@ -778,12 +776,13 @@ def _eject(res: Res[T_co] | Result[T_co, Any]) -> T_co:
     of Res.
 
     If the original err_value is not an Exception, it will be raised as
-    ValErr(str(res.err_value)).
+    TypeError(str(res.err_value)).
     """
     if isinstance(res, Err):
         if isinstance(res.err_value, Exception):
             raise res.err_value
-        raise ValErr(str(res.err_value))
+        # no ValErr to avoid circulars
+        raise TypeError(str(res.err_value))
     return res.ok_value
 
 def _ignore(res: Res | Result):

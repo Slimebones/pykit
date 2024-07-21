@@ -15,13 +15,13 @@ from pykit.res import (
 
 def test_ok_factories() -> None:
     instance = Ok(1)
-    assert instance._value == 1
+    assert instance._value == 1  # noqa: SLF001
     assert instance.is_ok() is True
 
 
 def test_err_factories() -> None:
     instance = Err(2)
-    assert instance._value == 2
+    assert instance._value == 2  # noqa: SLF001
     assert instance.is_err() is True
 
 
@@ -44,16 +44,17 @@ def test_hash() -> None:
 
 def test_repr() -> None:
     """
-    ``repr()`` returns valid code if the wrapped value's ``repr()`` does as well.
+    ``repr()`` returns valid code if the wrapped value's ``repr()`` does as
+    well.
     """
     o = Ok(123)
     n = Err(-1)
 
     assert repr(o) == "Ok(123)"
-    assert o == eval(repr(o))
+    assert o == eval(repr(o)) # noqa: S307, PGH001
 
     assert repr(n) == "Err(-1)"
-    assert n == eval(repr(n))
+    assert n == eval(repr(n)) # noqa: S307, PGH001
 
 
 def test_ok_value() -> None:
@@ -253,10 +254,16 @@ def test_inspect_regular_fn() -> None:
 
 @pytest.mark.asyncio
 async def test_and_then_async() -> None:
-    assert (await (await Ok(2).and_then_async(sq_async)).and_then_async(sq_async)).ok() == 16
-    assert (await (await Ok(2).and_then_async(sq_async)).and_then_async(to_err_async)).err() == 4
+    assert (await (
+        await Ok(2).and_then_async(sq_async)
+    ).and_then_async(sq_async)).ok() == 16
+    assert (await (
+        await Ok(2).and_then_async(sq_async)
+    ).and_then_async(to_err_async)).err() == 4
     assert (
-        await (await Ok(2).and_then_async(to_err_async)).and_then_async(to_err_async)
+        await (
+            await Ok(2).and_then_async(to_err_async)
+        ).and_then_async(to_err_async)
     ).err() == 2
     assert (
         await (await Err(3).and_then_async(sq_async)).and_then_async(sq_async)
