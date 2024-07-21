@@ -5,6 +5,7 @@
 - removed benedict; removed map.py
 - forked rustedpy/result into res.py; updated result API
 - added lock.py to support async locking mechanisms
+- deprecated RandomUtils; added uuid::uuid4()
 
 # 0.8.0
 

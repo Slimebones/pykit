@@ -26,6 +26,8 @@ from typing import (
 )
 from warnings import warn
 
+from pykit.err import ValErr
+
 __all__ = [
     "Ok",
     "Err",
@@ -41,6 +43,7 @@ __all__ = [
     "do_async",
     "throw_err_val",
     "resultify",
+    "valerr"
 ]
 
 
@@ -66,7 +69,7 @@ class Ok(Generic[T_co]):
     def __iter__(self) -> Iterator[T_co]:
         yield self._value
 
-    def __init__(self, value: T_co) -> None:
+    def __init__(self, value: T_co = None) -> None:
         self._value = value
 
     def __repr__(self) -> str:
@@ -791,3 +794,9 @@ def _ignore(res: Res | Result):
 
     Useful to avoid linter errors on intentional behaviour.
     """
+
+def valerr(msg: str) -> Err[ValErr]:
+    """
+    Shortcut alternative to Err(ValErr(msg)).
+    """
+    return Err(ValErr(msg))

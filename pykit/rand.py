@@ -1,8 +1,10 @@
+import typing_extensions
 import uuid
 
 from pykit.cls import Static
 
 
+@typing_extensions.deprecated("use uuid::uuid4() instead")
 class RandomUtils(Static):
     @staticmethod
     def makeid() -> str:
