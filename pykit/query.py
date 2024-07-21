@@ -13,7 +13,7 @@ from pykit.check import check
 from pykit.d import get_recursive
 from pykit.err import NotFoundErr, ValErr
 from pykit.log import log
-from pykit.res import Res, raise_err_val
+from pykit.res import Res, throw_err_val
 
 QueryUpdOperator = Literal[
     "$set", "$unset", "$inc", "$pull", "$pop", "$push", "$mul"]
@@ -30,7 +30,7 @@ T = TypeVar("T")
 class Query(dict[str, Any]):
     def __init__(self, inp = ()):
         super().__init__(inp)
-        raise_err_val(self.check)
+        throw_err_val(self.check)
 
     def get_recursive(self, key: str, default: T | None = None) -> Res[T]:
         return get_recursive(self, key, default)
