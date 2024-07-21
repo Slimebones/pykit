@@ -1,3 +1,4 @@
+from __future__ import annotations
 import functools
 import inspect
 from typing import (
@@ -19,6 +20,8 @@ from typing import (
     Union,
 )
 from warnings import warn
+
+from pykit.err import ValErr
 
 __all__ = [
     "Ok",
@@ -139,7 +142,7 @@ class Ok(Generic[T_co]):
         """
         raise UnwrapErr(self, "Called `Result.unwrap_err()` on an `Ok` value")
 
-    def unwrap_or(self, _default: U) -> T_co:
+    def unwrap_or(self, _default: object) -> T_co:
         """
         Return the value.
         """
@@ -453,7 +456,7 @@ class Err(Generic[E]):
         Same as unwrap, but, instead of UnwrapErr, raises the original err value
         of Res.
         """
-        _eject(self)  # type: ignore
+        _eject(self)
         # shouldn't get to this point
         raise AssertionError
 
@@ -743,16 +746,21 @@ def resultify(
         return Err(err)
     return Ok(res)
 
-def _eject(res: Res[T_co]) -> T_co:
+def _eject(res: Res[T_co] | Result[T_co, Any]) -> T_co:
     """
     Same as unwrap, but, instead of UnwrapErr, raises the original err value
     of Res.
+
+    If the original err_value is not an Exception, it will be raised as
+    ValErr(str(res.err_value)).
     """
     if isinstance(res, Err):
-        raise res.err_value
+        if isinstance(res.err_value, Exception):
+            raise res.err_value
+        raise ValErr(str(res.err_value))
     return res.ok_value
 
-def _ignore(res: Res):
+def _ignore(res: Res | Result):
     """
     Used to signify that the result intentially ignored.
 

@@ -3,7 +3,7 @@ Tools for working with dict-like objects.
 """
 from typing import TypeVar
 
-from result import Err, Ok
+from pykit.res import Err, Ok
 
 from pykit.err import NotFoundErr
 from pykit.res import Res

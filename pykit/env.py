@@ -1,7 +1,7 @@
 import os
 
 import typing_extensions
-from result import Err, Ok
+from pykit.res import Err, Ok
 
 from pykit.cls import Static
 from pykit.err import InpErr, NotFoundErr, ValErr

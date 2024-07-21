@@ -7,7 +7,7 @@ from typing import Any, Iterable, Literal, Self, TypeVar
 
 from pymongo.collection import Collection
 from pymongo.command_cursor import CommandCursor
-from result import Err, Ok
+from pykit.res import Err, Ok
 
 from pykit.check import check
 from pykit.d import get_recursive
