@@ -16,7 +16,7 @@ def get_recursive(d: dict, key: str, default: T | None = None) -> Res[T]:
             nested_res = get_recursive(v, key)
             if (
                     isinstance(nested_res, Err)
-                    and isinstance(nested_res.err_value, NotFoundErr)):
+                    and isinstance(nested_res.errval, NotFoundErr)):
                 continue
             return nested_res
     if default is None:

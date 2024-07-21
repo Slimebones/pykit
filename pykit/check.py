@@ -119,7 +119,7 @@ class check:
         Expects given function to raise given error if function is called with
         given args and kwargs.
 
-        Automatically retrieves result.Err.err_value if the func returns it.
+        Automatically retrieves result.Err.errval if the func returns it.
 
         Args:
             fn:
@@ -140,7 +140,7 @@ class check:
         except errcls:
             return
         else:
-            if isinstance(res, Err) and isinstance(res.err_value, errcls):
+            if isinstance(res, Err) and isinstance(res.errval, errcls):
                 return
             raise CheckErr(
                 f"error {errcls} expected on call of function {func}",

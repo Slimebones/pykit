@@ -1,9 +1,10 @@
 # 0.9.0
 
-- removed fcode, use code() -> str method instead
+- removed fcode; added lightweight analog code.py
 - removed ValueErr, use ValErr instead
 - removed benedict; removed map.py
 - forked rustedpy/result into res.py; updated result API
+- added lock.py to support async locking mechanisms
 
 # 0.8.0
 

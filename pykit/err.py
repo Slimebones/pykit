@@ -3,8 +3,9 @@ from typing import Self
 
 from pydantic import BaseModel
 
-from pykit.obj import get_fully_qualified_name
-from pykit.res import Ok, Res
+from pykit.code import Code
+from pykit.obj import get_fqname
+from pykit.res import Err, Ok, Res, is_err
 
 
 class ErrDto(BaseModel):
@@ -23,8 +24,8 @@ class ErrDto(BaseModel):
     stacktrace: str | None = None
 
     @classmethod
-    def create(cls, err: Exception, errcode: str) -> Res[Self]:
-        name = get_fully_qualified_name(err)
+    def create(cls, err: Exception) -> Res[Self]:
+        name = get_fqname(err)
         msg = ", ".join([str(a) for a in err.args])
         stacktrace = None
         tb = err.__traceback__
@@ -34,8 +35,15 @@ class ErrDto(BaseModel):
             for item in traceback.StackSummary.from_list(
                     extracted_list).format():
                 stacktrace += item
+        errcode_res = Code.get_from_type(type(err))
+        if isinstance(errcode_res, Err):
+            return errcode_res
+
         return Ok(cls(
-            errcode=errcode, msg=msg, name=name, stacktrace=stacktrace))
+            errcode=errcode_res.okval,
+            msg=msg,
+            name=name,
+            stacktrace=stacktrace))
 
     @staticmethod
     def code() -> str:

@@ -1,4 +1,4 @@
-def get_fully_qualified_name(obj: object):
+def get_fqname(obj: object):
     # ref: https://stackoverflow.com/a/2020083/14748231
     klass = obj.__class__
     module = klass.__module__

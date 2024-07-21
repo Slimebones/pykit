@@ -60,7 +60,7 @@ class Ok(Generic[T_co]):
     return value.
     """
 
-    __match_args__ = ("ok_value",)
+    __match_args__ = ("okval",)
     __slots__ = ("_value",)
 
     def __iter__(self) -> Iterator[T_co]:
@@ -104,19 +104,19 @@ class Ok(Generic[T_co]):
         """
         Return the inner value.
 
-        @deprecated Use `ok_value` or `err_value` instead. This method will be
+        @deprecated Use `okval` or `errval` instead. This method will be
         removed in a future version.
         """
         warn(
             "Accessing `.value` on Result type is deprecated, please use "
-            + "`.ok_value` or `.err_value` instead",
+            + "`.okval` or `.errval` instead",
             DeprecationWarning,
             stacklevel=2,
         )
         return self._value
 
     @property
-    def ok_value(self) -> T_co:
+    def okval(self) -> T_co:
         """
         Return the inner value.
         """
@@ -273,7 +273,7 @@ class Err(Generic[E_co]):
     error.
     """
 
-    __match_args__ = ("err_value",)
+    __match_args__ = ("errval",)
     __slots__ = ("_value",)
 
     def __iter__(self) -> Iterator[NoReturn]:
@@ -325,19 +325,19 @@ class Err(Generic[E_co]):
         """
         Return the inner value.
 
-        @deprecated Use `ok_value` or `err_value` instead. This method will be
+        @deprecated Use `okval` or `errval` instead. This method will be
         removed in a future version.
         """
         warn(
             "Accessing `.value` on Result type is deprecated, please use "
-            + "`.ok_value` or '.err_value' instead",
+            + "`.okval` or '.errval' instead",
             DeprecationWarning,
             stacklevel=2,
         )
         return self._value
 
     @property
-    def err_value(self) -> E_co:
+    def errval(self) -> E_co:
         """
         Return the inner value.
         """
@@ -749,11 +749,11 @@ Short version of result.Result, where err value is always an Exception.
 
 def throw_err_val(fn: Callable):
     """
-    Calls a func and raises Err.err_value if func returns it.
+    Calls a func and raises Err.errval if func returns it.
     """
     res = fn()
     if isinstance(res, Err):
-        raise res.err_value
+        raise res.errval
 
 def resultify(
         fn: Callable[[], T_co],
@@ -775,15 +775,15 @@ def _eject(res: Res[T_co] | Result[T_co, Any]) -> T_co:
     Same as unwrap, but, instead of UnwrapErr, raises the original err value
     of Res.
 
-    If the original err_value is not an Exception, it will be raised as
-    TypeError(str(res.err_value)).
+    If the original errval is not an Exception, it will be raised as
+    TypeError(str(res.errval)).
     """
     if isinstance(res, Err):
-        if isinstance(res.err_value, Exception):
-            raise res.err_value
+        if isinstance(res.errval, Exception):
+            raise res.errval
         # no ValErr to avoid circulars
-        raise TypeError(str(res.err_value))
-    return res.ok_value
+        raise TypeError(str(res.errval))
+    return res.okval
 
 def _ignore(res: Res | Result):
     """
