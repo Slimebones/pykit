@@ -1,11 +1,5 @@
-import traceback
-from typing import Self
 
 from pydantic import BaseModel
-
-from pykit.code import Code
-from pykit.obj import get_fqname
-from pykit.res import Err, Ok, Res
 
 
 class ErrDto(BaseModel):
