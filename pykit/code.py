@@ -34,37 +34,37 @@ class Code:
         return code in cls._codes
 
     @classmethod
-    async def get_registered_code_by_id(cls, id: int) -> Res[str]:
+    async def get_regd_code_by_id(cls, id: int) -> Res[str]:
         await cls._lock.wait()
         if id > len(cls._codes) - 1:
-            return Err(ValErr(f"codeid {id} is not registered"))
+            return Err(ValErr(f"codeid {id} is not regd"))
         return Ok(cls._codes[id])
 
     @classmethod
-    async def get_registered_codes(cls) -> Res[list[str]]:
+    async def get_regd_codes(cls) -> Res[list[str]]:
         await cls._lock.wait()
         return Ok(cls._codes.copy())
 
     @classmethod
-    async def get_registered_code_by_type(cls, t: type) -> Res[str]:
+    async def get_regd_code_by_type(cls, t: type) -> Res[str]:
         await cls._lock.wait()
         for c, t_ in cls._code_to_type.items():
             if t_ is t:
                 return Ok(c)
-        return Err(ValErr(f"type {t} is not registered"))
+        return Err(ValErr(f"type {t} is not regd"))
 
     @classmethod
-    async def get_registered_codeid(cls, code: str) -> Res[int]:
+    async def get_regd_codeid(cls, code: str) -> Res[int]:
         await cls._lock.wait()
         if code not in cls._codes:
-            return Err(ValErr(f"code {code} is not registered"))
+            return Err(ValErr(f"code {code} is not regd"))
         return Ok(cls._codes.index(code))
 
     @classmethod
-    async def get_registered_type(cls, code: str) -> Res[type]:
+    async def get_regd_type(cls, code: str) -> Res[type]:
         await cls._lock.wait()
         if code not in cls._code_to_type:
-            return Err(ValErr(f"code {code} is not registered"))
+            return Err(ValErr(f"code {code} is not regd"))
         return Ok(cls._code_to_type[code])
 
     @classmethod

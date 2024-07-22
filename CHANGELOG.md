@@ -2,6 +2,7 @@
 
 - renamed pointer -> ptr
 - fixed Lock incorrect behaviour
+- integrated "reg" abbreviation
 
 # 0.9.2
 
@@ -38,8 +39,8 @@
 
 - env: deprecated EnvUtils, added module-level improved alternatives
 
-- proc: added ProcGroup.proc_deregister_method which defines how processes will be ended (kill or terminate)
-- proc: fixed register(proc_kwargs) no default state
+- proc: added ProcGroup.proc_dereg_method which defines how processes will be ended (kill or terminate)
+- proc: fixed reg(proc_kwargs) no default state
 
 # 0.7.1
 

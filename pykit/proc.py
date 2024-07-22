@@ -32,7 +32,7 @@ class ProcGroup:
         self._procs: dict[int, tuple[Process, PipeConn]] = {}
         self._key_to_pid: dict[str, int] = {}
         self._max_procs = max_procs
-        self.proc_deregister_method: Literal["kill", "terminate"] = "terminate"
+        self.proc_dereg_method: Literal["kill", "terminate"] = "terminate"
 
     def has(self, pid: int) -> bool:
         return pid in self._procs
@@ -40,25 +40,25 @@ class ProcGroup:
     def has_key(self, key: str) -> bool:
         return key in self._key_to_pid
 
-    def _can_register_by_limit(self) -> bool:
+    def _can_reg_by_limit(self) -> bool:
         return \
             self._max_procs < 0 or (len(self._procs) + 1 <= self._max_procs)
 
-    def register(
+    def reg(
             self,
             target: ProcTarget,
             key: str | None = None,
             *,
             proc_kwargs: dict[str, Any] | None = None) -> Res[int]:
         """
-        Registers a new process.
+        Regs a new process.
 
         Process's target can only accept kwargs, args are reserved for
         interfacing uses.
         """
-        if not self._can_register_by_limit():
+        if not self._can_reg_by_limit():
             return Err(ValErr(
-                "cannot register a new process:"
+                "cannot reg a new process:"
                 f" limit {self._max_procs} is exceeded"))
 
         parent_pipe, child_pipe = Pipe()
@@ -74,12 +74,12 @@ class ProcGroup:
         if self.has(proc.pid):
             proc.kill()
             return Err(ValErr(
-                "new process is started with the same pid as registered"
+                "new process is started with the same pid as regd"
                 " one => kill new process"))
 
         if key:
             if key in self._key_to_pid:
-                return Err(ValErr(f"key {key} is already registered"))
+                return Err(ValErr(f"key {key} is already regd"))
             self._key_to_pid[key] = proc.pid
 
         self._procs[proc.pid] = (proc, parent_pipe)
@@ -90,25 +90,25 @@ class ProcGroup:
             return Err(NotFoundErr(f"key {key}"))
         return Ok(self._key_to_pid[key])
 
-    def try_deregister_key(self, key: str) -> Res[bool]:
+    def try_dereg_key(self, key: str) -> Res[bool]:
         pid_res = self.get_pid_by_key(key)
         if isinstance(pid_res, Err):
             return pid_res
-        return self.try_deregister(pid_res.unwrap())
+        return self.try_dereg(pid_res.unwrap())
 
     def _end_proc(self, proc: Process):
-        if self.proc_deregister_method == "kill":
+        if self.proc_dereg_method == "kill":
             proc.kill()
-        elif self.proc_deregister_method == "terminate":
+        elif self.proc_dereg_method == "terminate":
             proc.terminate()
         else:
             log.err(
-                f"unrecoznized {self.proc_deregister_method}"
+                f"unrecoznized {self.proc_dereg_method}"
                 " => use \"terminate\"")
 
-    def try_deregister(self, pid: int) -> Res[bool]:
+    def try_dereg(self, pid: int) -> Res[bool]:
         """
-        Deregisters a process by pid.
+        Deregs a process by pid.
 
         The process is killed if it's still alive.
         """
@@ -184,6 +184,6 @@ class ProcGroup:
             return Err(NotFoundErr(f"proc with pid {pid}"))
         proc, pipe = self._procs[pid]
         if not proc.is_alive():
-            self.try_deregister(pid).unwrap()
+            self.try_dereg(pid).unwrap()
             return Err(ValErr("process is closed"))
         return Ok((proc, pipe))
