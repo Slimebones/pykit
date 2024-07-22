@@ -41,6 +41,14 @@ class Code:
         return Ok(cls._codes[id])
 
     @classmethod
+    async def get_regd_codeid_by_type(cls, t: type) -> Res[int]:
+        code_res = await cls.get_regd_code_by_type(t)
+        if isinstance(code_res, Err):
+            return code_res
+        code = code_res.okval
+        return await cls.get_regd_codeid(code)
+
+    @classmethod
     async def get_regd_codes(cls) -> Res[list[str]]:
         await cls._lock.wait()
         return Ok(cls._codes.copy())

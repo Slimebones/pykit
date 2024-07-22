@@ -3,6 +3,7 @@
 - renamed pointer -> ptr
 - fixed Lock incorrect behaviour
 - integrated "reg" abbreviation
+- added Code.get_regd_codeid_by_type()
 
 # 0.9.2
 
