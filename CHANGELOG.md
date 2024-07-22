@@ -1,6 +1,7 @@
 # 0.10.0
 
 - renamed pointer -> ptr
+- fixed Lock incorrect behaviour
 
 # 0.9.2
 

@@ -19,7 +19,7 @@ class Lock:
         (await self.release(self._owner_token)).eject()
 
     def is_locked(self) -> bool:
-        return self._evt.is_set()
+        return not self._evt.is_set()
 
     async def acquire(self) -> Res[str]:
         await self._evt.wait()
