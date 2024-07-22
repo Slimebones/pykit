@@ -124,7 +124,7 @@ class log:
             track_path = Path(cls.err_track_dir, f"{sid}.log")
             final_msg = msg + f"; $track:{track_path}"
             with track_path.open("w+") as f:
-                f.write(final_msg)
+                f.write(tb)
             log.err(final_msg, v)
             return sid
 
@@ -147,7 +147,7 @@ class log:
             track_path = Path(cls.err_track_dir, f"{sid}.log")
             final_msg = msg + f"; $track:{track_path}"
             async with async_open(track_path, "w+") as f:
-                await f.write(final_msg)
+                await f.write(tb)
             log.err(final_msg, v)
             return sid
 

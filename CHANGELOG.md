@@ -5,6 +5,7 @@
 - integrated "reg" abbreviation
 - added Code.get_regd_codeid_by_type()
 - removed io.py
+- added log.track and log.atrack
 
 # 0.9.2
 
