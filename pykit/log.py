@@ -1,10 +1,17 @@
+from pathlib import Path
 import sys
+import tempfile
 from typing import Any, NoReturn
 
+from aiofile import async_open
 from loguru import logger as _logger
+
+from pykit.err_utils import try_get_err_traceback_str
+from pykit.uuid import uuid4
 
 
 class log:
+    err_track_dir: Path = Path(tempfile.gettempdir(), "pykit_err_track_dir")
     is_debug: bool = False
     std_verbosity: int = 1
     """
@@ -75,3 +82,58 @@ class log:
         log.err(f"FATAL({exit_code}) :: {msg}")
         sys.exit(exit_code)
 
+    @classmethod
+    def track(cls, err: Exception, msg: Any, v: int = 1) -> str | None:
+        """
+        Tracks an err with attached msg.
+
+        The err traceback is written to <log.err_track_dir>/<sid>.log, and the
+        msg is logged with the sid. This allows to find out error's traceback
+        in a separate file by the original log message.
+
+        If cannot retrieve a traceback to retrieve, the log will still be
+        written, but pointed as "$notrack".
+
+        If ``v`` parameter doesn't match current verbosity, nothing will be
+        done.
+
+        Returns tracksid or None.
+        """
+        if cls.std_verbosity < v:
+            return
+
+        cls.err_track_dir.mkdir(parents=True, exist_ok=True)
+        tb = try_get_err_traceback_str(err)
+        if tb:
+            sid = uuid4()
+            track_path = Path(cls.err_track_dir, f"{sid}.log")
+            final_msg = msg + f"; $track:{track_path}"
+            with track_path.open("w+") as f:
+                f.write(final_msg)
+            log.err(final_msg, v)
+            return sid
+
+        final_msg = msg + f"; $notrack"
+        log.err(final_msg, v)
+
+    @classmethod
+    async def atrack(cls, err: Exception, msg: Any, v: int = 1):
+        """
+        Asynchronous version of ``log.track``.
+        """
+        if cls.std_verbosity < v:
+            return
+
+        cls.err_track_dir.mkdir(parents=True, exist_ok=True)
+        tb = try_get_err_traceback_str(err)
+        if tb:
+            sid = uuid4()
+            track_path = Path(cls.err_track_dir, f"{sid}.log")
+            final_msg = msg + f"; $track:{track_path}"
+            async with async_open(track_path, "w+") as f:
+                await f.write(final_msg)
+            log.err(final_msg, v)
+            return sid
+
+        final_msg = msg + f"; $notrack"
+        log.err(final_msg, v)
