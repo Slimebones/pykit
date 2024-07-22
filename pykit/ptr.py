@@ -5,7 +5,7 @@ from pydantic.generics import GenericModel
 from pykit.types import T
 
 
-class Pointer(GenericModel, Generic[T]):
+class Ptr(GenericModel, Generic[T]):
     """
     Points to some target.
     """

@@ -1,3 +1,7 @@
+# 0.10.0
+
+- renamed pointer -> ptr
+
 # 0.9.2
 
 - renamed Res._ignore -> Res.ignore
