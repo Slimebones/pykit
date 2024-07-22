@@ -98,7 +98,11 @@ class log:
         return s
 
     @classmethod
-    def track(cls, err: Exception, msg: Any, v: int = 1) -> str | None:
+    def track(
+            cls,
+            err: Exception,
+            msg: Any = "tracked",
+            v: int = 1) -> str | None:
         """
         Tracks an err with attached msg.
 
@@ -133,7 +137,11 @@ class log:
         return None
 
     @classmethod
-    async def atrack(cls, err: Exception, msg: Any, v: int = 1):
+    async def atrack(
+            cls,
+            err: Exception,
+            msg: Any = "tracked",
+            v: int = 1) -> str | None:
         """
         Asynchronous version of ``log.track``.
         """

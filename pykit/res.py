@@ -27,6 +27,7 @@ from typing import (
 from warnings import warn
 
 from pykit.err import ValErr
+from pykit.log import log
 
 __all__ = [
     "Ok",
@@ -256,6 +257,11 @@ class Ok(Generic[T_co]):
         """
         _ignore(self)
 
+    def track(self):
+        _track(self)
+
+    async def atrack(self):
+        await _atrack(self)
 
 class DoException(Exception):
     """
@@ -484,6 +490,12 @@ class Err(Generic[E_co]):
         Useful to avoid linter errors on intentional behaviour.
         """
         _ignore(self)
+
+    def track(self):
+        _track(self)
+
+    async def atrack(self):
+        await _atrack(self)
 
 
 # define Result as a generic type alias for use
@@ -781,11 +793,10 @@ def _eject(res: Res[T_co] | Result[T_co, Any]) -> T_co:
     If the original errval is not an Exception, it will be raised as
     TypeError(str(res.errval)).
     """
-    if isinstance(res, Err):
-        if isinstance(res.errval, Exception):
-            raise res.errval
-        # no ValErr to avoid circulars
-        raise TypeError(str(res.errval))
+    err = _extract_err(res)
+    if err:
+        raise err
+    assert is_ok(res)
     return res.okval
 
 def _ignore(res: Res | Result):
@@ -794,6 +805,24 @@ def _ignore(res: Res | Result):
 
     Useful to avoid linter errors on intentional behaviour.
     """
+
+def _extract_err(res: Res[T_co] | Result[T_co, Any]) -> Exception | None:
+    if isinstance(res, Err):
+        if isinstance(res.errval, Exception):
+            return res.errval
+        # no ValErr to avoid circulars
+        return TypeError(str(res.errval))
+    return None
+
+def _track(res: Res[T_co] | Result[T_co, Any]):
+    err = _extract_err(res)
+    if err:
+        log.track(err)
+
+async def _atrack(res: Res[T_co] | Result[T_co, Any]):
+    err = _extract_err(res)
+    if err:
+        await log.atrack(err)
 
 def valerr(msg: str) -> Err[ValErr]:
     """
