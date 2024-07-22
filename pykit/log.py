@@ -1,12 +1,12 @@
-from pathlib import Path
 import sys
 import tempfile
+import traceback
+from pathlib import Path
 from typing import Any, NoReturn
 
 from aiofile import async_open
 from loguru import logger as _logger
 
-from pykit.err_utils import try_get_err_traceback_str
 from pykit.uuid import uuid4
 
 
@@ -82,6 +82,21 @@ class log:
         log.err(f"FATAL({exit_code}) :: {msg}")
         sys.exit(exit_code)
 
+    @staticmethod
+    def _try_get_err_traceback_str(err: Exception) -> str | None:
+        """
+        Copy of err_utils.try_get_traceback_str to avoid circulars.
+        """
+        s = None
+        tb = err.__traceback__
+        if tb:
+            extracted_list = traceback.extract_tb(tb)
+            s = ""
+            for item in traceback.StackSummary.from_list(
+                    extracted_list).format():
+                s += item
+        return s
+
     @classmethod
     def track(cls, err: Exception, msg: Any, v: int = 1) -> str | None:
         """
@@ -100,10 +115,10 @@ class log:
         Returns tracksid or None.
         """
         if cls.std_verbosity < v:
-            return
+            return None
 
         cls.err_track_dir.mkdir(parents=True, exist_ok=True)
-        tb = try_get_err_traceback_str(err)
+        tb = cls._try_get_err_traceback_str(err)
         if tb:
             sid = uuid4()
             track_path = Path(cls.err_track_dir, f"{sid}.log")
@@ -113,8 +128,9 @@ class log:
             log.err(final_msg, v)
             return sid
 
-        final_msg = msg + f"; $notrack"
+        final_msg = msg + "; $notrack"
         log.err(final_msg, v)
+        return None
 
     @classmethod
     async def atrack(cls, err: Exception, msg: Any, v: int = 1):
@@ -122,10 +138,10 @@ class log:
         Asynchronous version of ``log.track``.
         """
         if cls.std_verbosity < v:
-            return
+            return None
 
         cls.err_track_dir.mkdir(parents=True, exist_ok=True)
-        tb = try_get_err_traceback_str(err)
+        tb = cls._try_get_err_traceback_str(err)
         if tb:
             sid = uuid4()
             track_path = Path(cls.err_track_dir, f"{sid}.log")
@@ -135,5 +151,6 @@ class log:
             log.err(final_msg, v)
             return sid
 
-        final_msg = msg + f"; $notrack"
+        final_msg = msg + "; $notrack"
         log.err(final_msg, v)
+        return None

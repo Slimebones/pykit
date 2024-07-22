@@ -5,6 +5,7 @@ from pykit.err import ErrDto
 from pykit.obj import get_fqname
 from pykit.res import Err, Ok, Res
 
+
 def try_get_err_traceback_str(err: Exception) -> str | None:
     s = None
     tb = err.__traceback__
