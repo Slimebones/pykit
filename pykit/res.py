@@ -260,10 +260,10 @@ class Ok(Generic[T_co]):
         _ignore(self)
 
     def track(self):
-        _track(self)
+        return
 
     async def atrack(self):
-        await _atrack(self)
+        return
 
 class DoException(Exception):
     """
@@ -515,11 +515,11 @@ class Err(Generic[E_co]):
         """
         _ignore(self)
 
-    def track(self):
-        _track(self)
+    def track(self) -> str | None:
+        return _track(self)
 
-    async def atrack(self):
-        await _atrack(self)
+    async def atrack(self) -> str | None:
+        return await _atrack(self)
 
 
 # define Result as a generic type alias for use
@@ -838,15 +838,17 @@ def _extract_err(res: Res[T_co] | Result[T_co, Any]) -> Exception | None:
         return TypeError(str(res.errval))
     return None
 
-def _track(res: Res[T_co] | Result[T_co, Any]):
+def _track(res: Res[T_co] | Result[T_co, Any]) -> str | None:
     err = _extract_err(res)
     if err:
-        log.track(err)
+        return log.track(err)
+    return None
 
-async def _atrack(res: Res[T_co] | Result[T_co, Any]):
+async def _atrack(res: Res[T_co] | Result[T_co, Any]) -> str | None:
     err = _extract_err(res)
     if err:
-        await log.atrack(err)
+        return await log.atrack(err)
+    return None
 
 def valerr(msg: str) -> Err[ValErr]:
     """
