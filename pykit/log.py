@@ -7,7 +7,6 @@ from typing import Any, NoReturn
 from aiofile import async_open
 from loguru import logger as _logger
 
-from pykit.err_utils import get_msg
 from pykit.obj import get_fqname
 from pykit.uuid import uuid4
 
@@ -131,7 +130,7 @@ class log:
         if file_content:
             final_msg = msg + f"; $track:{track_path}"
         else:
-            file_content = get_fqname(err) + " :: " + get_msg(err)
+            file_content = get_fqname(err) + " :: " + cls._get_msg(err)
             final_msg = msg + "; $notrack"
 
         with track_path.open("w+") as f:
@@ -158,10 +157,14 @@ class log:
         if file_content:
             final_msg = msg + f"; $track:{track_path}"
         else:
-            file_content = get_fqname(err) + " :: " + get_msg(err)
+            file_content = get_fqname(err) + " :: " + cls._get_msg(err)
             final_msg = msg + "; $notrack"
 
         async with async_open(track_path, "w+") as f:
             await f.write(file_content)
         log.err(final_msg, v)
         return sid
+
+    @staticmethod
+    def _get_msg(err: Exception) -> str:
+        return ", ".join([str(a) for a in err.args])
