@@ -7,6 +7,8 @@ from typing import Any, NoReturn
 from aiofile import async_open
 from loguru import logger as _logger
 
+from pykit.err_utils import get_msg
+from pykit.obj import get_fqname
 from pykit.uuid import uuid4
 
 
@@ -111,7 +113,8 @@ class log:
         in a separate file by the original log message.
 
         If cannot retrieve a traceback to retrieve, the log will still be
-        written, but pointed as "$notrack".
+        written, but pointed as "$notrack". The err's basic data will be
+        written to the file.
 
         If ``v`` parameter doesn't match current verbosity, nothing will be
         done.
@@ -122,19 +125,19 @@ class log:
             return None
 
         cls.err_track_dir.mkdir(parents=True, exist_ok=True)
-        tb = cls._try_get_err_traceback_str(err)
-        if tb:
-            sid = uuid4()
-            track_path = Path(cls.err_track_dir, f"{sid}.log")
+        sid = uuid4()
+        track_path = Path(cls.err_track_dir, f"{sid}.log")
+        file_content = cls._try_get_err_traceback_str(err)
+        if file_content:
             final_msg = msg + f"; $track:{track_path}"
-            with track_path.open("w+") as f:
-                f.write(tb)
-            log.err(final_msg, v)
-            return sid
+        else:
+            file_content = get_fqname(err) + " :: " + get_msg(err)
+            final_msg = msg + "; $notrack"
 
-        final_msg = msg + "; $notrack"
+        with track_path.open("w+") as f:
+            f.write(file_content)
         log.err(final_msg, v)
-        return None
+        return sid
 
     @classmethod
     async def atrack(
@@ -149,16 +152,16 @@ class log:
             return None
 
         cls.err_track_dir.mkdir(parents=True, exist_ok=True)
-        tb = cls._try_get_err_traceback_str(err)
-        if tb:
-            sid = uuid4()
-            track_path = Path(cls.err_track_dir, f"{sid}.log")
+        sid = uuid4()
+        track_path = Path(cls.err_track_dir, f"{sid}.log")
+        file_content = cls._try_get_err_traceback_str(err)
+        if file_content:
             final_msg = msg + f"; $track:{track_path}"
-            async with async_open(track_path, "w+") as f:
-                await f.write(tb)
-            log.err(final_msg, v)
-            return sid
+        else:
+            file_content = get_fqname(err) + " :: " + get_msg(err)
+            final_msg = msg + "; $notrack"
 
-        final_msg = msg + "; $notrack"
+        async with async_open(track_path, "w+") as f:
+            await f.write(file_content)
         log.err(final_msg, v)
-        return None
+        return sid

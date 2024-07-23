@@ -1,3 +1,8 @@
+# 0.10.1
+
+- log: track now writes obvious err data if traceback is unavailable
+- res: added traceback to errors initialized with Err()
+
 # 0.10.0
 
 - renamed pointer -> ptr
