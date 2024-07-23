@@ -18,14 +18,13 @@ class Trackable(Trait):
     Provides information for log.track() method.
     """
     def get_track_file_content(self) -> str: ...
-
-    def get_errval(self) -> Exception: ...
+    def get_err(self) -> Exception: ...
 
     @classmethod
     def is_(cls, obj: object) -> TypeGuard[Self]:
         return \
             getattr(obj, "get_track_file_content", None) is not None \
-            and getattr(obj, "get_errval", None) is not None
+            and getattr(obj, "get_err", None) is not None
 
 
 class log:
@@ -126,7 +125,7 @@ class log:
         track_path = Path(cls.err_track_dir, f"{sid}.log")
         if Trackable.is_(err):
             file_content = err.get_track_file_content()
-            err = err.get_errval()
+            err = err.get_err()
         else:
             err = typing.cast(Exception, err)
             file_content = cls._try_get_err_traceback_str(err)

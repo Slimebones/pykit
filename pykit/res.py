@@ -8,6 +8,7 @@ from __future__ import annotations
 import functools
 import inspect
 import traceback
+import typing
 from typing import (
     Any,
     AsyncGenerator,
@@ -28,7 +29,7 @@ from typing import (
 from warnings import warn
 
 from pykit.err import ValErr
-from pykit.log import log
+from pykit.log import Trackable, log
 from pykit.tb import fmt_stack_summary
 
 __all__ = [
@@ -333,7 +334,7 @@ class Err(Generic[E_co]):
         return fmt_stack_summary(self.reversed_stack_summary)
 
     def get_track_file_content(self) -> str:
-        return self.fmted_reversed_stack_summary
+        return self.fmted_stack_summary
 
     def is_ok(self) -> Literal[False]:
         return False
@@ -375,6 +376,12 @@ class Err(Generic[E_co]):
         Return the inner value.
         """
         return self._value
+
+    def get_err(self) -> Exception:
+        errval = self.errval
+        if not isinstance(errval, Exception):
+            errval = Exception(errval)
+        return errval
 
     def expect(self, message: str) -> NoReturn:
         """
@@ -839,15 +846,13 @@ def _extract_err(res: Res[T_co] | Result[T_co, Any]) -> Exception | None:
     return None
 
 def _track(res: Res[T_co] | Result[T_co, Any]) -> str | None:
-    err = _extract_err(res)
-    if err:
-        return log.track(err)
+    if isinstance(res, Err):
+        return log.track(typing.cast(Trackable, res))
     return None
 
 async def _atrack(res: Res[T_co] | Result[T_co, Any]) -> str | None:
-    err = _extract_err(res)
-    if err:
-        return await log.atrack(err)
+    if isinstance(res, Err):
+        return await log.atrack(typing.cast(Trackable, res))
     return None
 
 def valerr(msg: str) -> Err[ValErr]:
