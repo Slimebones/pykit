@@ -2,13 +2,31 @@ import sys
 import tempfile
 import traceback
 from pathlib import Path
-from typing import Any, NoReturn
+from typing import Any, NoReturn, Self, TypeGuard, TypeVar
+import typing
 
 from aiofile import async_open
 from loguru import logger as _logger
 
 from pykit.obj import get_fqname
+from pykit.res import Err
+from pykit.trait import Trait
 from pykit.uuid import uuid4
+
+
+class Trackable(Trait):
+    """
+    Provides information for log.track() method.
+    """
+    def get_track_file_content(self) -> str: ...
+
+    def get_errval(self) -> Exception: ...
+
+    @classmethod
+    def is_(cls, obj: object) -> TypeGuard[Self]:
+        return \
+            getattr(obj, "get_track_file_content", None) is not None \
+            and getattr(obj, "get_errval", None) is not None
 
 
 class log:
@@ -99,9 +117,33 @@ class log:
         return s
 
     @classmethod
+    def _get_track_data(
+            cls,
+            err: Exception | Trackable,
+            msg: Any,
+            v: int = 1) -> tuple[str, Path, str, str]:
+        cls.err_track_dir.mkdir(parents=True, exist_ok=True)
+        sid = uuid4()
+        track_path = Path(cls.err_track_dir, f"{sid}.log")
+        if Trackable.is_(err):
+            file_content = err.get_track_file_content()
+            err = err.get_errval()
+        else:
+            err = typing.cast(Exception, err)
+            file_content = cls._try_get_err_traceback_str(err)
+
+        if file_content:
+            final_msg = msg + f"; $track:{track_path}"
+        else:
+            file_content = get_fqname(err) + " :: " + cls._get_msg(err)
+            final_msg = msg + "; $notrack"
+
+        return sid, track_path, file_content, final_msg
+
+    @classmethod
     def track(
             cls,
-            err: Exception,
+            err: Exception | Trackable,
             msg: Any = "tracked",
             v: int = 1) -> str | None:
         """
@@ -118,20 +160,16 @@ class log:
         If ``v`` parameter doesn't match current verbosity, nothing will be
         done.
 
+        If provided err object is Trackable, the complete track file content
+        will be retrieved from err.get_track_file_content().
+
         Returns tracksid or None.
         """
         if cls.std_verbosity < v:
             return None
 
-        cls.err_track_dir.mkdir(parents=True, exist_ok=True)
-        sid = uuid4()
-        track_path = Path(cls.err_track_dir, f"{sid}.log")
-        file_content = cls._try_get_err_traceback_str(err)
-        if file_content:
-            final_msg = msg + f"; $track:{track_path}"
-        else:
-            file_content = get_fqname(err) + " :: " + cls._get_msg(err)
-            final_msg = msg + "; $notrack"
+        sid, track_path, file_content, final_msg = cls._get_track_data(
+            err, msg, v)
 
         with track_path.open("w+") as f:
             f.write(file_content)
@@ -141,7 +179,7 @@ class log:
     @classmethod
     async def atrack(
             cls,
-            err: Exception,
+            err: Exception | Trackable,
             msg: Any = "tracked",
             v: int = 1) -> str | None:
         """
@@ -150,15 +188,8 @@ class log:
         if cls.std_verbosity < v:
             return None
 
-        cls.err_track_dir.mkdir(parents=True, exist_ok=True)
-        sid = uuid4()
-        track_path = Path(cls.err_track_dir, f"{sid}.log")
-        file_content = cls._try_get_err_traceback_str(err)
-        if file_content:
-            final_msg = msg + f"; $track:{track_path}"
-        else:
-            file_content = get_fqname(err) + " :: " + cls._get_msg(err)
-            final_msg = msg + "; $notrack"
+        sid, track_path, file_content, final_msg = cls._get_track_data(
+            err, msg, v)
 
         async with async_open(track_path, "w+") as f:
             await f.write(file_content)

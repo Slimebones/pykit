@@ -1,6 +1,7 @@
-# 0.10.1
+# 0.11.0
 
 - log: track now writes obvious err data if traceback is unavailable
+- log: track now accepts Res::Err and extracts formatted stacktrace
 - res: added traceback to errors initialized with Err()
 - added tb.py for working with traceback
 

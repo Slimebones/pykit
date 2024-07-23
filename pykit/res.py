@@ -321,8 +321,19 @@ class Err(Generic[E_co]):
         return traceback.StackSummary(self._stack_summary.copy())
 
     @property
+    def reversed_stack_summary(self) -> traceback.StackSummary:
+        return traceback.StackSummary(reversed(self._stack_summary.copy()))
+
+    @property
     def fmted_stack_summary(self) -> str:
         return fmt_stack_summary(self._stack_summary)
+
+    @property
+    def fmted_reversed_stack_summary(self) -> str:
+        return fmt_stack_summary(self.reversed_stack_summary)
+
+    def get_track_file_content(self) -> str:
+        return self.fmted_reversed_stack_summary
 
     def is_ok(self) -> Literal[False]:
         return False
