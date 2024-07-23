@@ -2,6 +2,7 @@
 
 - log: track now writes obvious err data if traceback is unavailable
 - res: added traceback to errors initialized with Err()
+- added tb.py for working with traceback
 
 # 0.10.0
 
