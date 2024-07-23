@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import functools
 import inspect
+import traceback
 from typing import (
     Any,
     AsyncGenerator,
@@ -28,6 +29,7 @@ from warnings import warn
 
 from pykit.err import ValErr
 from pykit.log import log
+from pykit.tb import fmt_stack_summary
 
 __all__ = [
     "Ok",
@@ -283,7 +285,13 @@ class Err(Generic[E_co]):
     """
 
     __match_args__ = ("errval",)
-    __slots__ = ("_value",)
+    __slots__ = ("_value", "_stack_summary")
+
+    def __init__(self, value: E_co) -> None:
+        self._value = value
+        # don't count this frame
+        self._stack_summary: traceback.StackSummary = traceback.StackSummary(
+            traceback.extract_stack()[0:-1])
 
     def __iter__(self) -> Iterator[NoReturn]:
         def _iter() -> Iterator[NoReturn]:
@@ -296,9 +304,6 @@ class Err(Generic[E_co]):
 
         return _iter()
 
-    def __init__(self, value: E_co) -> None:
-        self._value = value
-
     def __repr__(self) -> str:
         return f"Err({self._value!r})"
 
@@ -310,6 +315,14 @@ class Err(Generic[E_co]):
 
     def __hash__(self) -> int:
         return hash((False, self._value))
+
+    @property
+    def stack_summary(self) -> traceback.StackSummary:
+        return traceback.StackSummary(self._stack_summary.copy())
+
+    @property
+    def fmted_stack_summary(self) -> str:
+        return fmt_stack_summary(self._stack_summary)
 
     def is_ok(self) -> Literal[False]:
         return False
