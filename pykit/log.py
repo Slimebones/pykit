@@ -1,15 +1,14 @@
 import sys
 import tempfile
 import traceback
-from pathlib import Path
-from typing import Any, NoReturn, Self, TypeGuard, TypeVar
 import typing
+from pathlib import Path
+from typing import Any, NoReturn, Self, TypeGuard
 
 from aiofile import async_open
 from loguru import logger as _logger
 
 from pykit.obj import get_fqname
-from pykit.res import Err
 from pykit.trait import Trait
 from pykit.uuid import uuid4
 

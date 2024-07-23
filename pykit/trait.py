@@ -1,7 +1,7 @@
 """
 Rust-like trait system.
 """
-from typing import Any, Self, TypeGuard
+from typing import Self, TypeGuard
 
 
 class Trait:
