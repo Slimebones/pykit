@@ -3,7 +3,7 @@ import tempfile
 import traceback
 import typing
 from pathlib import Path
-from typing import Any, NoReturn, Self, TypeGuard
+from typing import Any, NoReturn
 
 from aiofile import async_open
 from loguru import logger as _logger

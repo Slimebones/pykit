@@ -1,5 +1,5 @@
 from pykit.err import ValErr
-from pykit.traceback import create_traceback, get_traceback_str
+from pykit.tb import create_traceback, get_traceback_str
 
 
 def test_create_traceback_depth_0():

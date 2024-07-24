@@ -7,8 +7,6 @@ from __future__ import annotations
 
 import functools
 import inspect
-import traceback
-import typing
 from typing import (
     Any,
     AsyncGenerator,
@@ -30,7 +28,7 @@ from warnings import warn
 
 from pykit.err import ValErr
 from pykit.log import log
-from pykit.traceback import create_traceback, fmt_stack_summary
+from pykit.tb import create_traceback
 
 __all__ = [
     "Ok",
@@ -506,10 +504,12 @@ class Err(Generic[E_co]):
     def track(self) -> str | None:
         if isinstance(self.errval, Exception):
             return log.track(self.errval)
+        return None
 
     async def atrack(self) -> str | None:
         if isinstance(self.errval, Exception):
             return await log.atrack(self.errval)
+        return None
 
 
 # define Result as a generic type alias for use

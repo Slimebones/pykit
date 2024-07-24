@@ -1,7 +1,7 @@
 # 0.11.1
 
-- renamed tb.py -> traceback.py
-- traceback: added create_traceback()
+- tb: added create_traceback()
+- res/Err: now uses tb::create_traceback() upon creation
 
 # 0.11.0
 
