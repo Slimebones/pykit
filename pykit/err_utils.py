@@ -3,7 +3,7 @@ from pykit.code import Code
 from pykit.err import ErrDto
 from pykit.obj import get_fqname
 from pykit.res import Err, Ok, Res
-from pykit.tb import get_traceback_str
+from pykit.traceback import get_traceback_str
 
 
 def get_err_msg(err: Exception) -> str:

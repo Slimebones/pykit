@@ -30,7 +30,7 @@ from warnings import warn
 
 from pykit.err import ValErr
 from pykit.log import Trackable, log
-from pykit.tb import fmt_stack_summary
+from pykit.traceback import fmt_stack_summary
 
 __all__ = [
     "Ok",

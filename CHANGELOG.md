@@ -1,3 +1,7 @@
+# 0.11.1
+
+- renamed tb.py -> traceback.py
+
 # 0.11.0
 
 - log: track now writes obvious err data if traceback is unavailable
