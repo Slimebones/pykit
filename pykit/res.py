@@ -29,8 +29,8 @@ from typing import (
 from warnings import warn
 
 from pykit.err import ValErr
-from pykit.log import Trackable, log
-from pykit.traceback import fmt_stack_summary
+from pykit.log import log
+from pykit.traceback import create_traceback, fmt_stack_summary
 
 __all__ = [
     "Ok",
@@ -290,9 +290,9 @@ class Err(Generic[E_co]):
 
     def __init__(self, value: E_co) -> None:
         self._value = value
-        # don't count this frame
-        self._stack_summary: traceback.StackSummary = traceback.StackSummary(
-            traceback.extract_stack()[0:-1])
+        if isinstance(self._value, Exception):
+            # skip function and this caller frames
+            self._value = create_traceback(self._value, 2)
 
     def __iter__(self) -> Iterator[NoReturn]:
         def _iter() -> Iterator[NoReturn]:
@@ -316,25 +316,6 @@ class Err(Generic[E_co]):
 
     def __hash__(self) -> int:
         return hash((False, self._value))
-
-    @property
-    def stack_summary(self) -> traceback.StackSummary:
-        return traceback.StackSummary(self._stack_summary.copy())
-
-    @property
-    def reversed_stack_summary(self) -> traceback.StackSummary:
-        return traceback.StackSummary(reversed(self._stack_summary.copy()))
-
-    @property
-    def fmted_stack_summary(self) -> str:
-        return fmt_stack_summary(self._stack_summary)
-
-    @property
-    def fmted_reversed_stack_summary(self) -> str:
-        return fmt_stack_summary(self.reversed_stack_summary)
-
-    def get_track_file_content(self) -> str:
-        return self.fmted_stack_summary
 
     def is_ok(self) -> Literal[False]:
         return False
@@ -523,10 +504,12 @@ class Err(Generic[E_co]):
         _ignore(self)
 
     def track(self) -> str | None:
-        return _track(self)
+        if isinstance(self.errval, Exception):
+            return log.track(self.errval)
 
     async def atrack(self) -> str | None:
-        return await _atrack(self)
+        if isinstance(self.errval, Exception):
+            return await log.atrack(self.errval)
 
 
 # define Result as a generic type alias for use
@@ -824,7 +807,7 @@ def _eject(res: Res[T_co] | Result[T_co, Any]) -> T_co:
     If the original errval is not an Exception, it will be raised as
     TypeError(str(res.errval)).
     """
-    err = _extract_err(res)
+    err = extract_err_or(res)
     if err:
         raise err
     assert is_ok(res)
@@ -837,22 +820,18 @@ def _ignore(res: Res | Result):
     Useful to avoid linter errors on intentional behaviour.
     """
 
-def _extract_err(res: Res[T_co] | Result[T_co, Any]) -> Exception | None:
+def extract_err_or(
+        res: Res[T_co] | Result[T_co, Any],
+        default_type: type[Exception] = ValueError) -> Exception | None:
+    """
+    Extracts exception from Err.errval, or None from Ok.
+
+    If Err.errval is not an exception, it's wrapped into ``default_type``.
+    """
     if isinstance(res, Err):
         if isinstance(res.errval, Exception):
             return res.errval
-        # no ValErr to avoid circulars
-        return TypeError(str(res.errval))
-    return None
-
-def _track(res: Res[T_co] | Result[T_co, Any]) -> str | None:
-    if isinstance(res, Err):
-        return log.track(typing.cast(Trackable, res))
-    return None
-
-async def _atrack(res: Res[T_co] | Result[T_co, Any]) -> str | None:
-    if isinstance(res, Err):
-        return await log.atrack(typing.cast(Trackable, res))
+        return default_type(str(res.errval))
     return None
 
 def valerr(msg: str) -> Err[ValErr]:

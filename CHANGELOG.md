@@ -1,6 +1,7 @@
 # 0.11.1
 
 - renamed tb.py -> traceback.py
+- traceback: added create_traceback()
 
 # 0.11.0
 

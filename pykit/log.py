@@ -9,22 +9,7 @@ from aiofile import async_open
 from loguru import logger as _logger
 
 from pykit.obj import get_fqname
-from pykit.trait import Trait
 from pykit.uuid import uuid4
-
-
-class Trackable(Trait):
-    """
-    Provides information for log.track() method.
-    """
-    def get_track_file_content(self) -> str: ...
-    def get_err(self) -> Exception: ...
-
-    @classmethod
-    def is_(cls, obj: object) -> TypeGuard[Self]:
-        return \
-            getattr(obj, "get_track_file_content", None) is not None \
-            and getattr(obj, "get_err", None) is not None
 
 
 class log:
@@ -117,18 +102,15 @@ class log:
     @classmethod
     def _get_track_data(
             cls,
-            err: Exception | Trackable,
+            err: Exception,
             msg: Any,
             v: int = 1) -> tuple[str, Path, str, str]:
         cls.err_track_dir.mkdir(parents=True, exist_ok=True)
         sid = uuid4()
         track_path = Path(cls.err_track_dir, f"{sid}.log")
-        if Trackable.is_(err):
-            file_content = err.get_track_file_content()
-            err = err.get_err()
-        else:
-            err = typing.cast(Exception, err)
-            file_content = cls._try_get_err_traceback_str(err)
+
+        err = typing.cast(Exception, err)
+        file_content = cls._try_get_err_traceback_str(err)
 
         if file_content:
             final_msg = msg + f"; $track:{track_path}"
@@ -141,7 +123,7 @@ class log:
     @classmethod
     def track(
             cls,
-            err: Exception | Trackable,
+            err: Exception,
             msg: Any = "tracked",
             v: int = 1) -> str | None:
         """
@@ -177,7 +159,7 @@ class log:
     @classmethod
     async def atrack(
             cls,
-            err: Exception | Trackable,
+            err: Exception,
             msg: Any = "tracked",
             v: int = 1) -> str | None:
         """
