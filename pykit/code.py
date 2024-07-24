@@ -82,9 +82,10 @@ class Code:
             order: list[str] | None = None) -> Res[None]:
         async with cls._lock:
             for t in types:
+                final_t: type
                 if isinstance(t, Coded):
                     code = t.code
-                    t = t.val
+                    final_t = t.val
                 else:
                     code_res = cls.get_from_type(t)
                     if isinstance(code_res, Err):
@@ -93,6 +94,7 @@ class Code:
                             " => skip")
                         continue
                     code = code_res.okval
+                    final_t = t
 
                 validate_res = cls.validate(code)
                 if isinstance(validate_res, Err):
@@ -101,7 +103,7 @@ class Code:
                         f" {validate_res.errval} => skip")
                     continue
 
-                cls._code_to_type[code] = t
+                cls._code_to_type[code] = final_t
 
             cls._codes = list(cls._code_to_type.keys())
             if order:
