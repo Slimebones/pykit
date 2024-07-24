@@ -121,7 +121,10 @@ class log:
             file_content += "\n"
 
         # add err dscr
-        err_dscr = get_fqname(err) + ": " + cls._get_msg(err)
+        err_msg = cls._get_msg(err)
+        err_dscr = get_fqname(err)
+        if err_msg:
+            err_dscr += ": " + err_msg
         file_content += err_dscr
         final_msg = msg + f"; {err_dscr}" + f"; $track::{track_path}"
 

@@ -15,6 +15,7 @@ from typing import (
     AsyncGenerator,
     Awaitable,
     Callable,
+    Coroutine,
     Final,
     Generator,
     Generic,
@@ -798,6 +799,21 @@ def resultify(
     """
     try:
         res = fn()
+    except errs as err:
+        return Err(err)
+    return Ok(res)
+
+async def aresultify(
+        coro: Coroutine[Any, Any, T_co],
+        errs: tuple[type[Exception], ...] = (Exception,)) -> Res[T_co]:
+    """
+    Calls a func and wraps retval to Res - to Err on thrown exception, Ok
+    otherwise.
+
+    Useful to integrate non-result functions.
+    """
+    try:
+        res = await coro
     except errs as err:
         return Err(err)
     return Ok(res)

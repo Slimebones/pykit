@@ -1,3 +1,10 @@
+# 0.12.1
+
+- code/upd: support for Coded[type] as input
+- res: added aresultify()
+- err_utils: added get_err_dscr()
+- log/track: prettify error description
+
 # 0.12.0
 
 - tb: added create_traceback()
