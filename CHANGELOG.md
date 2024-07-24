@@ -1,4 +1,4 @@
-# 0.11.1
+# 0.12.0
 
 - tb: added create_traceback()
 - res/Err: now uses tb::create_traceback() upon creation
