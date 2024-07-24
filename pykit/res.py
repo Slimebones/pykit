@@ -2,6 +2,9 @@
 Rust-like result for python.
 
 Origins (MIT): https://github.com/rustedpy/result
+
+We primarily use ``Res`` object, but also maintain ``Result`` to conform with
+Rust. ``Res`` is more convenient due to collecting of Exception extended data.
 """
 from __future__ import annotations
 
