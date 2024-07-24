@@ -78,17 +78,21 @@ class Code:
     @classmethod
     async def upd(
             cls,
-            types: Iterable[type],
+            types: Iterable[type | Coded[type]],
             order: list[str] | None = None) -> Res[None]:
         async with cls._lock:
             for t in types:
-                code_res = cls.get_from_type(t)
-                if isinstance(code_res, Err):
-                    log.err(
-                        f"cannot get code for type {t}: {code_res.errval}"
-                        " => skip")
-                    continue
-                code = code_res.okval
+                if isinstance(t, Coded):
+                    code = t.code
+                    t = t.val
+                else:
+                    code_res = cls.get_from_type(t)
+                    if isinstance(code_res, Err):
+                        log.err(
+                            f"cannot get code for type {t}: {code_res.errval}"
+                            " => skip")
+                        continue
+                    code = code_res.okval
 
                 validate_res = cls.validate(code)
                 if isinstance(validate_res, Err):
