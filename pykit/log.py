@@ -138,10 +138,6 @@ class log:
         msg is logged with the sid. This allows to find out error's traceback
         in a separate file by the original log message.
 
-        If cannot retrieve a traceback to retrieve, the log will still be
-        written, but pointed as "$notrack". The err's basic data will be
-        written to the file.
-
         If ``v`` parameter doesn't match current verbosity, nothing will be
         done.
 
