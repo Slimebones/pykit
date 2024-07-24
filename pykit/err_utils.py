@@ -16,11 +16,11 @@ def get_err_dscr(err: Exception) -> str:
         err_dscr += ": " + err_msg
     return err_dscr
 
-def create_err_dto(err: Exception) -> Res[ErrDto]:
+async def create_err_dto(err: Exception) -> Res[ErrDto]:
     name = get_fqname(err)
     msg = get_err_msg(err)
     stacktrace = get_traceback_str(err)
-    errcode_res = Code.get_from_type(type(err))
+    errcode_res = await Code.get_regd_code_by_type(type(err))
     if isinstance(errcode_res, Err):
         return errcode_res
 

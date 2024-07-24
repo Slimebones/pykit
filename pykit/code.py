@@ -69,7 +69,7 @@ class Code:
         return Ok(cls._codes.index(code))
 
     @classmethod
-    async def get_regd_type(cls, code: str) -> Res[type]:
+    async def get_regd_type_by_code(cls, code: str) -> Res[type]:
         await cls._lock.wait()
         if code not in cls._code_to_type:
             return Err(ValErr(f"code {code} is not regd"))

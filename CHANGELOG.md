@@ -1,3 +1,9 @@
+# 0.12.2
+
+- res/vallerr: accepted msg: Any = ""
+- err/ErrDto: made stacktrace optional and disabled by default
+- err_utils/create_err_dto: now tries to get registered code for the type, instead of object's one
+
 # 0.12.1
 
 - code/upd: support for Coded[type] as input

@@ -853,8 +853,8 @@ def extract_err_or(
         return default_type(str(res.errval))
     return None
 
-def valerr(msg: str) -> Err[ValErr]:
+def valerr(msg: Any = "") -> Err[ValErr]:
     """
     Shortcut alternative to Err(ValErr(msg)).
     """
-    return Err(ValErr(msg))
+    return Err(ValErr(str(msg)))
