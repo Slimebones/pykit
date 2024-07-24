@@ -105,6 +105,7 @@ class log:
             err: Exception,
             msg: Any,
             v: int = 1) -> tuple[str, Path, str, str]:
+        msg = str(msg)
         cls.err_track_dir.mkdir(parents=True, exist_ok=True)
         sid = uuid4()
         track_path = Path(cls.err_track_dir, f"{sid}.log")

@@ -261,10 +261,10 @@ class Ok(Generic[T_co]):
         """
         _ignore(self)
 
-    def track(self):
+    def track(self, msg: Any = "tracked"):
         return
 
-    async def atrack(self):
+    async def atrack(self, msg: Any = "tracked"):
         return
 
 class DoException(Exception):
@@ -504,14 +504,14 @@ class Err(Generic[E_co]):
         """
         _ignore(self)
 
-    def track(self) -> str | None:
+    def track(self, msg: Any = "tracked", v: int = 1) -> str | None:
         if isinstance(self.errval, Exception):
-            return log.track(self.errval)
+            return log.track(self.errval, msg, v)
         return None
 
-    async def atrack(self) -> str | None:
+    async def atrack(self, msg: Any = "tracked", v: int = 1) -> str | None:
         if isinstance(self.errval, Exception):
-            return await log.atrack(self.errval)
+            return await log.atrack(self.errval, msg, v)
         return None
 
 

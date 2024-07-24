@@ -5,6 +5,7 @@
 - log/track: removed $notrack completely, the track file is always created
 - log/track: attach error description to track file content
 - log/track: attach error description to logged message
+- res: added msg and verbosity to track and atrack
 
 # 0.11.0
 
