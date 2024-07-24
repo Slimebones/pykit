@@ -121,7 +121,7 @@ class log:
 
         # add err dscr
         file_content += get_fqname(err) + ": " + cls._get_msg(err)
-        final_msg = msg + f"; $track:{track_path}"
+        final_msg = msg + f"; $track::{track_path}"
 
         return sid, track_path, file_content, final_msg
 
