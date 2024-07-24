@@ -112,11 +112,16 @@ class log:
         err = typing.cast(Exception, err)
         file_content = cls._try_get_err_traceback_str(err)
 
-        if file_content:
-            final_msg = msg + f"; $track:{track_path}"
-        else:
-            file_content = get_fqname(err) + " :: " + cls._get_msg(err)
-            final_msg = msg + "; $notrack"
+        if not file_content:
+            file_content = ""
+        # for filled file_content, append newline operator to separate
+        # traceback from err dscr
+        elif not file_content.endswith("\n"):
+            file_content += "\n"
+
+        # add err dscr
+        file_content += get_fqname(err) + ": " + cls._get_msg(err)
+        final_msg = msg + f"; $track:{track_path}"
 
         return sid, track_path, file_content, final_msg
 
