@@ -4,6 +4,7 @@
 - res/Err: now uses tb::create_traceback() upon creation
 - log/track: removed $notrack completely, the track file is always created
 - log/track: attach error description to track file content
+- log/track: attach error description to logged message
 
 # 0.11.0
 

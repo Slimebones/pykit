@@ -120,8 +120,9 @@ class log:
             file_content += "\n"
 
         # add err dscr
-        file_content += get_fqname(err) + ": " + cls._get_msg(err)
-        final_msg = msg + f"; $track::{track_path}"
+        err_dscr = get_fqname(err) + ": " + cls._get_msg(err)
+        file_content += err_dscr
+        final_msg = msg + f"; {err_dscr}" + f"; $track::{track_path}"
 
         return sid, track_path, file_content, final_msg
 
