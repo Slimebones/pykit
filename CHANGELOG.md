@@ -1,3 +1,7 @@
+# 0.12.3
+
+- code: allow semicolons
+
 # 0.12.2
 
 - res/vallerr: accepted msg: Any = ""

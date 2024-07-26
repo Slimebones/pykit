@@ -145,10 +145,10 @@ class Code:
             if i == 0 and not c.isalpha():
                 return Err(ValErr(
                     f"code {code} must start with alpha"))
-            if not c.isalnum() and c != "_":
+            if not c.isalnum() and c != "_" and c != ":":
                 return Err(ValErr(
                     f"code {code} can contain only alnum"
-                    " characters or underscore"))
+                    " characters, underscores or semicolons"))
         if len(code) > CODE_MAX_LEN:
             return Err(ValErr(f"code {code} exceeds maxlen {CODE_MAX_LEN}"))
         return Ok(None)
