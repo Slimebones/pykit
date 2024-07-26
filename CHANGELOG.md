@@ -1,6 +1,6 @@
 # 0.12.3
 
-- code: allow semicolons
+- code: allow semicolons in codes
 
 # 0.12.2
 
