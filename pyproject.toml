@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "slimebones-pykit"
+name = "sb-pykit"
 version = "0.12.3"
 description = "Python toolkit."
 authors = ["ryzhovalex <thed4rkof@gmail.com>"]
