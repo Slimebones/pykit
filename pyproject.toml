@@ -1,10 +1,13 @@
 [tool.poetry]
-name = "pykit"
+name = "slimebones-pykit"
 version = "0.12.3"
 description = "Python toolkit."
 authors = ["ryzhovalex <thed4rkof@gmail.com>"]
 license = "MIT"
 readme = "README.md"
+packages = [
+    { include = "pykit" }
+]
 
 [tool.poetry.dependencies]
 python = "^3.11"
