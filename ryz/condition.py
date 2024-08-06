@@ -1,8 +1,8 @@
 from enum import Enum
 from typing import Generic
 
-from pykit.err import InpErr, UnsupportedErr
-from pykit.types import T
+from ryz.err import InpErr, UnsupportedErr
+from ryz.types import T
 
 
 class ComparisonMark(Enum):

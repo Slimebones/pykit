@@ -1,7 +1,7 @@
 from pathlib import Path
 
-from pykit.err import ValErr
-from pykit.log import log
+from ryz.err import ValErr
+from ryz.log import log
 
 
 def test_track():

@@ -1,8 +1,8 @@
 from pathlib import Path
 
-from pykit.err import ValErr
-from pykit.log import log
-from pykit.res import Err
+from ryz.err import ValErr
+from ryz.log import log
+from ryz.res import Err
 
 
 def test_main():

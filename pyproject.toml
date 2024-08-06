@@ -1,13 +1,10 @@
 [tool.poetry]
-name = "sb-pykit"
-version = "0.12.3"
-description = "Python toolkit."
+name = "ryz"
+version = "0.12.4"
+description = "prelude"
 authors = ["ryzhovalex <thed4rkof@gmail.com>"]
 license = "MIT"
 readme = "README.md"
-packages = [
-    { include = "pykit" }
-]
 
 [tool.poetry.dependencies]
 python = "^3.11"

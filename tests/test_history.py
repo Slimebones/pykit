@@ -1,15 +1,15 @@
 from enum import Enum
 from typing import TYPE_CHECKING
 
-from pykit.check import check
-from pykit.dt import DtUtils
-from pykit.history import (
+from ryz.check import check
+from ryz.dt import DtUtils
+from ryz.history import (
     EmptyHistoryErr,
     History,
 )
 
 if TYPE_CHECKING:
-    from pykit.types import Timestamp
+    from ryz.types import Timestamp
 
 
 class _Color(Enum):

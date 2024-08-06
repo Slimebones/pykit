@@ -1,4 +1,4 @@
-from pykit.fmt import FormatUtils
+from ryz.fmt import FormatUtils
 
 
 def test_kebabify():

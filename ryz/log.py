@@ -8,12 +8,12 @@ from typing import Any, NoReturn
 from aiofile import async_open
 from loguru import logger as _logger
 
-from pykit.obj import get_fqname
-from pykit.uuid import uuid4
+from ryz.obj import get_fqname
+from ryz.uuid import uuid4
 
 
 class log:
-    err_track_dir: Path = Path(tempfile.gettempdir(), "pykit_err_track_dir")
+    err_track_dir: Path = Path(tempfile.gettempdir(), "ryz_err_track_dir")
     is_debug: bool = False
     std_verbosity: int = 1
     """

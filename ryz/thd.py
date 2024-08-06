@@ -6,9 +6,9 @@ import inspect
 import typing
 from typing import Any, Awaitable, Callable, Coroutine, Self
 
-from pykit.err import InpErr, LockErr
-from pykit.log import log
-from pykit.types import T
+from ryz.err import InpErr, LockErr
+from ryz.log import log
+from ryz.types import T
 
 _RollbackFnAndPreResult = tuple[
     Callable[[Any], Awaitable[None] | None],

@@ -6,10 +6,10 @@ archive.
 """
 from typing import Any, Awaitable, Callable
 
-from pykit.check import check
-from pykit.err import InpErr
-from pykit.query import UpdQuery
-from pykit.types import T
+from ryz.check import check
+from ryz.err import InpErr
+from ryz.query import UpdQuery
+from ryz.types import T
 
 
 class MarkErr(Exception):

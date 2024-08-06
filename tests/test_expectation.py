@@ -1,6 +1,6 @@
-from pykit.check import check
-from pykit.condition import ComparisonCondition, ComparisonMark
-from pykit.expectation import (
+from ryz.check import check
+from ryz.condition import ComparisonCondition, ComparisonMark
+from ryz.expectation import (
     ExpectationErr,
     ListExpectation,
     UnsupportedExpectationTypeErr,

@@ -1,7 +1,7 @@
-from pykit.check import check
-from pykit.err import ValErr
-from pykit.keeper import IntKeeper
-from pykit.range import Range
+from ryz.check import check
+from ryz.err import ValErr
+from ryz.keeper import IntKeeper
+from ryz.range import Range
 
 
 def test_int_keeper():

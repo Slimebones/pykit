@@ -2,9 +2,9 @@ from typing import Any, ClassVar, Generic
 
 from pydantic.generics import GenericModel
 
-from pykit.condition import ComparisonCondition, ComparisonMark
-from pykit.condition import ComparisonCondition as _ComparisonCondition
-from pykit.types import T
+from ryz.condition import ComparisonCondition, ComparisonMark
+from ryz.condition import ComparisonCondition as _ComparisonCondition
+from ryz.types import T
 
 
 class ExpectationErr(Exception):

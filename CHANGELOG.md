@@ -1,3 +1,7 @@
+# 0.12.4
+
+- rename package to `ryz`
+
 # 0.12.3
 
 - code: allow semicolons in codes
@@ -118,7 +122,7 @@
 
 # 0.4.13
 
-- Rename package to slimebones-pykit.
+- Rename package to slimebones-ryz.
 
 # 0.4.12
 
@@ -187,7 +191,7 @@
 
 ## Refactor
 
-- Renamed inner package to `pykit` (instead of old `sbpykit`).
+- Renamed inner package to `ryz` (instead of old `sbryz`).
 
 # 0.4.1
 
@@ -205,7 +209,7 @@
 
 ## Refactor
 
-- Merged to pykit.
+- Merged to ryz.
 
 # 0.2.0
 

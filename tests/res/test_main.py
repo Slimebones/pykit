@@ -2,9 +2,9 @@ from __future__ import annotations
 
 import pytest
 
-from pykit.check import check
-from pykit.err import ValErr
-from pykit.res import (
+from ryz.check import check
+from ryz.err import ValErr
+from ryz.res import (
     Err,
     Ok,
     OkErr,

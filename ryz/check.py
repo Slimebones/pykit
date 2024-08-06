@@ -8,8 +8,8 @@ This is a new version of "validation" module.
 """
 from typing import Any, Callable, Coroutine, Iterable, NoReturn
 
-from pykit.res import Err
-from pykit.types import T, TIterable
+from ryz.res import Err
+from ryz.types import T, TIterable
 
 
 class CheckErr(Exception):

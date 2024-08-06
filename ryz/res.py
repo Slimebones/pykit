@@ -30,9 +30,9 @@ from typing import (
 )
 from warnings import warn
 
-from pykit.err import ValErr
-from pykit.log import log
-from pykit.tb import create_traceback
+from ryz.err import ValErr
+from ryz.log import log
+from ryz.tb import create_traceback
 
 __all__ = [
     "Ok",

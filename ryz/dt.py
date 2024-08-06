@@ -2,8 +2,8 @@ import time
 
 import typing_extensions
 
-from pykit.cls import Static
-from pykit.types import Delta, Timestamp
+from ryz.cls import Static
+from ryz.types import Delta, Timestamp
 
 
 @typing_extensions.deprecated("use module \"t\"")

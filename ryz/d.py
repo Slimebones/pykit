@@ -3,8 +3,8 @@ Tools for working with dict-like objects.
 """
 from typing import TypeVar
 
-from pykit.err import NotFoundErr
-from pykit.res import Err, Ok, Res
+from ryz.err import NotFoundErr
+from ryz.res import Err, Ok, Res
 
 T = TypeVar("T")
 

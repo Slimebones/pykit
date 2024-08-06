@@ -1,7 +1,7 @@
 import re
 from typing import Any
 
-from pykit.cls import Static
+from ryz.cls import Static
 
 
 class StringUtils(Static):

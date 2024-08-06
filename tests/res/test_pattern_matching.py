@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from pykit.res import Err, Ok, Result
+from ryz.res import Err, Ok, Result
 
 
 def test_pattern_matching_on_ok_type() -> None:

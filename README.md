@@ -1,3 +1,3 @@
-# ⚙️ pykit
+# ⚙️ ryz
 
 Python toolkit.

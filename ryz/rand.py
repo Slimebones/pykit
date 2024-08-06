@@ -2,7 +2,7 @@ import uuid
 
 import typing_extensions
 
-from pykit.cls import Static
+from ryz.cls import Static
 
 
 @typing_extensions.deprecated("use uuid::uuid4() instead")

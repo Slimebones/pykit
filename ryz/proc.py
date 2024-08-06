@@ -4,9 +4,9 @@ from multiprocessing import Pipe, Process
 from typing import Any, Literal, Protocol
 from xml.dom import NotFoundErr
 
-from pykit.err import ValErr
-from pykit.log import log
-from pykit.res import Err, Ok, Res
+from ryz.err import ValErr
+from ryz.log import log
+from ryz.res import Err, Ok, Res
 
 if sys.platform == "win32":
     from multiprocessing.connection import PipeConnection as PipeConn

@@ -2,9 +2,9 @@ import os
 
 import typing_extensions
 
-from pykit.cls import Static
-from pykit.err import InpErr, NotFoundErr, ValErr
-from pykit.res import Err, Ok, Res
+from ryz.cls import Static
+from ryz.err import InpErr, NotFoundErr, ValErr
+from ryz.res import Err, Ok, Res
 
 
 @typing_extensions.deprecated("use module-level functions")

@@ -1,10 +1,10 @@
-from pykit.check import check
-from pykit.condition import (
+from ryz.check import check
+from ryz.condition import (
     ComparisonCondition,
     ComparisonMark,
     UnsupportedComparisonErr,
 )
-from pykit.err import InpErr
+from ryz.err import InpErr
 
 
 def test_int_equal():

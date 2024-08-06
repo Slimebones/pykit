@@ -1,6 +1,6 @@
 from typing import Never, NoReturn
 
-from pykit.errors.main import LogicError
+from ryz.errors.main import LogicError
 
 
 def never(_: Never) -> NoReturn:

@@ -1,6 +1,6 @@
 from typing import Callable, Generic, Self
 
-from pykit.types import T
+from ryz.types import T
 
 
 class TreeNode(Generic[T]):

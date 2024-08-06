@@ -3,11 +3,11 @@ from typing import Generic, Iterable, TypeVar
 
 from pydantic import BaseModel
 
-from pykit.err import ValErr
-from pykit.lock import Lock
-from pykit.log import log
-from pykit.obj import get_fqname
-from pykit.res import Err, Ok, Res
+from ryz.err import ValErr
+from ryz.lock import Lock
+from ryz.log import log
+from ryz.obj import get_fqname
+from ryz.res import Err, Ok, Res
 
 CODE_MAX_LEN: int = 256
 

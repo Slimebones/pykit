@@ -1,8 +1,8 @@
 import asyncio
 
-from pykit.err import ValErr
-from pykit.rand import RandomUtils
-from pykit.res import Err, Ok, Res
+from ryz.err import ValErr
+from ryz.rand import RandomUtils
+from ryz.res import Err, Ok, Res
 
 
 class Lock:

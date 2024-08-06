@@ -1,4 +1,4 @@
-from pykit.lock import Lock
+from ryz.lock import Lock
 
 
 async def test_with():

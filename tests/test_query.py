@@ -1,8 +1,8 @@
 from pymongo import MongoClient
 
-from pykit.check import check
-from pykit.err import NotFoundErr, ValErr
-from pykit.query import AggQuery, Query, UpdQuery
+from ryz.check import check
+from ryz.err import NotFoundErr, ValErr
+from ryz.query import AggQuery, Query, UpdQuery
 
 
 def test_updq_create_err():
@@ -52,7 +52,7 @@ def test_disallow_err_mode():
 
 def test_agg():
     client = MongoClient("localhost", 9006)
-    db = client.pykit_test
+    db = client.ryz_test
     client.drop_database(db)
 
     collection = db.test_agg

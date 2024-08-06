@@ -1,8 +1,8 @@
 import functools
 from typing import Any, Callable
 
-from pykit.err import NotFoundErr
-from pykit.types import TClass
+from ryz.err import NotFoundErr
+from ryz.types import TClass
 
 
 class Static:

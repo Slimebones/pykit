@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 
-from pykit.cls import Static
+from ryz.cls import Static
 
 
 class PathUtils(Static):

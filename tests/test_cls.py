@@ -1,6 +1,6 @@
 import pytest
 
-from pykit.cls import ClassUtils
+from ryz.cls import ClassUtils
 
 
 def test_bind_first_arg():

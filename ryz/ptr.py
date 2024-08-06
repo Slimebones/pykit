@@ -2,7 +2,7 @@ from typing import Generic
 
 from pydantic.generics import GenericModel
 
-from pykit.types import T
+from ryz.types import T
 
 
 class Ptr(GenericModel, Generic[T]):

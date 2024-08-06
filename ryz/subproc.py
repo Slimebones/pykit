@@ -1,7 +1,7 @@
 import subprocess
 from typing import Callable
 
-from pykit.log import log
+from ryz.log import log
 
 
 class SubprocUtils:

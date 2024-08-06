@@ -1,9 +1,9 @@
 import typing
 from typing import Any, Generic, Self, TypeVar
 
-from pykit.check import check
-from pykit.dt import DtUtils
-from pykit.types import Timestamp
+from ryz.check import check
+from ryz.dt import DtUtils
+from ryz.types import Timestamp
 
 T = TypeVar("T")
 
