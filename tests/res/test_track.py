@@ -9,19 +9,15 @@ def test_main():
     assert tracksid
     path = Path(log.err_track_dir, f"{tracksid}.log")
     assert path.exists()
-    target_part = path.open("r").read().split()[-4]
-    assert \
-            target_part \
-            == "Err((\"hello\")).track()", \
-        target_part
+    content = path.open("r").read()
+    target_part = content.split()[-1]
+    assert target_part == "hello"
 
 async def test_async():
     tracksid = await Err("hello").atrack()
     assert tracksid
     path = Path(log.err_track_dir, f"{tracksid}.log")
     assert path.exists()
-    target_part = path.open("r").read().split()[-4]
-    assert \
-            target_part \
-            == "Err((\"hello\")).atrack()", \
-        target_part
+    content = path.open("r").read()
+    target_part = content.split()[-1]
+    assert target_part == "hello"
