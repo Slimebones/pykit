@@ -66,9 +66,9 @@ def test_repr() -> None:
     assert n == eval(repr(n)) # noqa: S307, PGH001
 
 
-def test_okval() -> None:
+def test_ok() -> None:
     res = Ok("haha")
-    assert res.okval == "haha"
+    assert res.ok == "haha"
 
 
 def test_errval() -> None:
@@ -80,7 +80,7 @@ def test_ok() -> None:
     res = Ok("haha")
     assert res.is_ok() is True
     assert res.is_err() is False
-    assert res.okval == "haha"
+    assert res.ok == "haha"
 
 
 def test_err() -> None:

@@ -1,7 +1,7 @@
 import functools
 from typing import Any, Callable
 
-from ryz.core import NotFoundErr
+from ryz.core import Errcode, panic
 from ryz.types import TClass
 
 
@@ -58,9 +58,7 @@ class ClassUtils(Static):
         )
 
         if out is None:
-            raise NotFoundErr(
-                f"class of supertype {BaseClass} with name {name}",
-            )
+            panic(f"class of supertype {BaseClass} with name {name}")
         else:
             return out
 
