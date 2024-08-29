@@ -1,7 +1,6 @@
 from pathlib import Path
 
 from ryz import log
-from ryz.core import ValErr
 from ryz.core import Err
 
 

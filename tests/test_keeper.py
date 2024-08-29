@@ -1,7 +1,6 @@
-from ryz.check import check
-from ryz.core import ValErr
 from ryz.keeper import IntKeeper
 from ryz.range import Range
+from ryz.core import Err
 
 
 def test_int_keeper():
@@ -13,8 +12,11 @@ def test_int_keeper():
     assert k.recv().unwrap() == 3
     assert k.recv().unwrap() == 4
     assert k.recv().unwrap() == 5
-    check.expect(k.recv, ValErr)
+    r = k.recv()
+    assert isinstance(r, Err)
 
     k.free(3).unwrap()
     assert k.recv().unwrap() == 3
-    check.expect(k.recv, ValErr)
+
+    r = k.recv()
+    assert isinstance(r, Err)

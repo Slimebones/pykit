@@ -145,6 +145,10 @@ class Err(Exception):
         final = code
         if msg:
             final += ": " + msg
+        # since we don't raise, for each err we create traceback dynamically
+        # upon creation, and we skip 2 frames: `create_traceback` function
+        # frame, and this function frame
+        create_traceback(self, 2)
         super().__init__(final)
 
     def __iter__(self) -> Iterator[NoReturn]:

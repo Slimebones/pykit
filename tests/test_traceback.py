@@ -1,12 +1,12 @@
-from ryz.core import ValErr
 from ryz.traceback import create_traceback, get_traceback_str
+from ryz.core import Err
 
 
 def test_create_traceback_depth_0():
     def inner(err: Exception) -> Exception:
         return create_traceback(err, 0)
 
-    err = ValErr("hello")
+    err = Err("hello")
     # use extra function for more informative stack
     new_err = inner(err)
     assert err is not new_err, "created side effects"
@@ -18,7 +18,7 @@ def test_create_traceback_depth_1():
     def inner(err: Exception) -> Exception:
         return create_traceback(err, 1)
 
-    err = ValErr("hello")
+    err = Exception("hello")
     # use extra function for more informative stack
     new_err = inner(err)
     assert err is not new_err, "created side effects"
@@ -31,7 +31,7 @@ def test_create_traceback_depth_2():
     def inner(err: Exception) -> Exception:
         return create_traceback(err, 2)
 
-    err = ValErr("hello")
+    err = Exception("hello")
     # use extra function for more informative stack
     new_err = inner(err)
     assert err is not new_err, "created side effects"
