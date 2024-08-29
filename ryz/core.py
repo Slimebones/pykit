@@ -20,10 +20,10 @@ from typing import (
 from pydantic import BaseModel
 
 from ryz import log
-from ryz.core import Err, ecode
+from ryz import traceback
 from ryz.lock import Lock
 from ryz.obj import get_fqname
-from ryz.traceback import create_traceback
+from ryz.traceback import set
 
 __all__ = [
     "Ok",
@@ -43,6 +43,92 @@ F = TypeVar("F")
 P = ParamSpec("P")
 R = TypeVar("R")
 TBE = TypeVar("TBE", bound=BaseException)
+
+class ecode:
+    Err = "err"
+    Panic = "panic_err"
+    Val = "val_err"
+    NotFound = "not_found_err"
+    AlreadyProcessed = "already_processed_err"
+    Unsupported = "unsupported_err"
+    Lock = "lock_err"
+
+class Err(Exception):
+    def __init__(
+        self, msg: str | None = None, code: str = ecode.Err,
+    ) -> None:
+        if not re.match(r"^[a-z][0-9a-z]*(_[0-9a-z]+)*$", code):
+            panic(f"invalid code {code}")
+        self.code = code
+        self.msg = msg
+        final = code
+        if msg:
+            final += ": " + msg
+        # since we don't raise, for each err we create traceback dynamically
+        # upon creation, and skip this function frame
+        traceback.set(self, 1)
+        super().__init__(final)
+
+    def __hash__(self) -> int:
+        return hash(self.code)
+
+    def is_(self, code: str) -> bool:
+        return self.code == code
+
+    @classmethod
+    def from_native(cls, exc: Exception) -> Self:
+        return cls(";".join(exc.args))
+
+    def is_ok(self) -> Literal[False]:
+        return False
+
+    def is_err(self) -> Literal[True]:
+        return True
+
+    @property
+    def ok(self) -> None:
+        """
+        Return `None`.
+        """
+        return
+
+    @property
+    def err(self) -> Self:
+        """
+        Return the error.
+        """
+        return self
+
+    def unwrap(self) -> NoReturn:
+        """
+        Raises an `UnwrapErr`.
+        """
+        raise self
+
+    def inspect(self, fn: Callable[[T_co], Any]) -> "Res[T_co]":
+        """
+        Calls a function with the contained value if `Ok`. Returns the original
+        result.
+        """
+        return self
+
+    def ignore(self):
+        """
+        Used to signify that the result intentially ignored.
+
+        Useful to avoid linter errors on intentional behaviour.
+        """
+        _ignore(self)
+
+    def track(self, msg: Any = "tracked", v: int = 1) -> str | None:
+        if isinstance(self, Exception):
+            return log.track(self, msg, v)
+        return None
+
+    async def atrack(self, msg: Any = "tracked", v: int = 1) -> str | None:
+        if isinstance(self, Exception):
+            return await log.atrack(self, msg, v)
+        return None
 
 class Ok(Generic[T_co]):
     """
@@ -119,84 +205,6 @@ class Ok(Generic[T_co]):
         return
 
 Res: TypeAlias = Ok[T_co] | Err
-
-class Err(Exception):
-    def __init__(
-        self, msg: str | None = None, code: str = ecode.Err,
-    ) -> None:
-        if not re.match(r"^[a-z][0-9a-z]*(_[0-9a-z]+)*$", code):
-            panic(f"invalid code {code}")
-        self.code = code
-        self.msg = msg
-        final = code
-        if msg:
-            final += ": " + msg
-        # since we don't raise, for each err we create traceback dynamically
-        # upon creation, and we skip 2 frames: `create_traceback` function
-        # frame, and this function frame
-        create_traceback(self, 2)
-        super().__init__(final)
-
-    def __hash__(self) -> int:
-        return hash(self.code)
-
-    def is_(self, code: str) -> bool:
-        return self.code == code
-
-    @classmethod
-    def from_native(cls, exc: Exception) -> Self:
-        return cls(";".join(exc.args))
-
-    def is_ok(self) -> Literal[False]:
-        return False
-
-    def is_err(self) -> Literal[True]:
-        return True
-
-    @property
-    def ok(self) -> None:
-        """
-        Return `None`.
-        """
-        return
-
-    @property
-    def err(self) -> Self:
-        """
-        Return the error.
-        """
-        return self
-
-    def unwrap(self) -> NoReturn:
-        """
-        Raises an `UnwrapErr`.
-        """
-        raise self
-
-    def inspect(self, fn: Callable[[T_co], Any]) -> Res[T_co]:
-        """
-        Calls a function with the contained value if `Ok`. Returns the original
-        result.
-        """
-        return self
-
-    def ignore(self):
-        """
-        Used to signify that the result intentially ignored.
-
-        Useful to avoid linter errors on intentional behaviour.
-        """
-        _ignore(self)
-
-    def track(self, msg: Any = "tracked", v: int = 1) -> str | None:
-        if isinstance(self, Exception):
-            return log.track(self, msg, v)
-        return None
-
-    async def atrack(self, msg: Any = "tracked", v: int = 1) -> str | None:
-        if isinstance(self, Exception):
-            return await log.atrack(self, msg, v)
-        return None
 
 CODE_MAX_LEN: int = 256
 
@@ -429,12 +437,3 @@ async def asecure(coro: Coroutine[Any, Any, Res[T_co]]) -> Res[T_co]:
 
 def panic(msg: str | None = None) -> NoReturn:
     raise Err(msg, ecode.Panic)
-
-class ecode:
-    Err = "err"
-    Panic = "panic_err"
-    Val = "val_err"
-    NotFound = "not_found_err"
-    AlreadyProcessed = "already_processed_err"
-    Unsupported = "unsupported_err"
-    Lock = "lock_err"

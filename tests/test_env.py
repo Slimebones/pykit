@@ -7,20 +7,20 @@ def test_get(
 ):
     assert env.get(
         key="RYZTEST_ENV",
-    ) == "hello"
+    ).unwrap() == "hello"
 
 def test_get_default():
     assert env.get(
         key="RYZTEST_ENV",
         default="wow",
-    ) == "wow"
+    ).unwrap() == "wow"
 
 def test_get_bool_0(
     setenv_ryztest_env_to_0,
 ):
     assert env.get_bool(
         key="RYZTEST_ENV",
-    ) is False
+    ).unwrap() is False
 
 
 def test_get_bool_1(
@@ -28,21 +28,21 @@ def test_get_bool_1(
 ):
     assert env.get_bool(
         key="RYZTEST_ENV",
-    ) is True
+    ).unwrap() is True
 
 
 def test_get_bool_default_0():
     assert env.get_bool(
         key="RYZTEST_ENV",
         default="0",
-    ) is False
+    ).unwrap() is False
 
 
 def test_get_bool_default_1():
     assert env.get_bool(
         key="RYZTEST_ENV",
         default="1",
-    ) is True
+    ).unwrap() is True
 
 
 def test_get_not_found_err():

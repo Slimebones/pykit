@@ -12,7 +12,7 @@ def fmt_stack_summary(summary: traceback.StackSummary) -> str:
     return "".join(
         list(traceback.StackSummary.from_list(summary).format())).strip()
 
-def get_traceback_str(err: Exception) -> str | None:
+def get_as_str(err: Exception) -> str | None:
     s = None
     tb = err.__traceback__
     if tb:
@@ -20,11 +20,11 @@ def get_traceback_str(err: Exception) -> str | None:
         s = fmt_stack_summary(summary)
     return s
 
-TErr = TypeVar("TErr", bound=Exception)
-def create_traceback(
-        err: TErr,
-        skip_frames: int = 1,
-        ignore_existing: bool = False) -> TErr:
+def set(
+    err: Exception,
+    skip_frames: int = 0,
+    ignore_existing: bool = False,
+):
     """
     Creates traceback for an err.
 
@@ -34,17 +34,21 @@ def create_traceback(
     Original err is not affected, modified err is returned. If nothing is done,
     the same err is returned without copying.
 
-    Argument ``skip_frames`` defines how many frames to skip. Default to 1,
-    so this function's frame will be removed.
+    Argument ``skip_frames`` defines how many frames to skip. This function
+    or any nested function frames are automatically skipped.
     """
-    orig_err = err
-    err = copy.deepcopy(orig_err)
     if err.__traceback__ is not None:
         if not ignore_existing:
             # return the same instance, as nothing was done
-            return orig_err
+            return err
         err.__traceback__ = None
 
+    prev_tb: types.TracebackType | None = new(skip_frames + 1)
+
+    err.__traceback__ = prev_tb
+    return err
+
+def new(skip_frames: int = 0) -> types.TracebackType | None:
     current_frame = inspect.currentframe()
     if current_frame is None:
         raise ValueError("unavailable to retrieve current frame")
@@ -56,8 +60,8 @@ def create_traceback(
             raise ValueError(f"cannot skip {skip_frames} frames")
         next_frame = next_frame.f_back
         skip_frames -= 1
-    prev_tb: types.TracebackType | None = None
-    # create traceback
+
+    prev_tb = None
     while next_frame is not None:
         tb = types.TracebackType(
             tb_next=None,
@@ -68,6 +72,4 @@ def create_traceback(
             tb.tb_next = prev_tb
         prev_tb = tb
         next_frame = next_frame.f_back
-
-    err.__traceback__ = prev_tb
-    return err
+    return prev_tb
