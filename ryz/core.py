@@ -19,11 +19,9 @@ from typing import (
 
 from pydantic import BaseModel
 
-from ryz import log
-from ryz import traceback
+from ryz import log, traceback
 from ryz.lock import Lock
 from ryz.obj import get_fqname
-from ryz.traceback import set
 
 __all__ = [
     "Ok",
@@ -59,7 +57,7 @@ class Err(Exception):
         msg: str | None = None,
         code: str = ecode.Err,
         *,
-        skip_frames: int = 0
+        skip_frames: int = 0,
     ) -> None:
         if not re.match(r"^[a-z][0-9a-z]*(_[0-9a-z]+)*$", code):
             panic(f"invalid code {code}")
@@ -390,7 +388,7 @@ class Code:
 
 def resultify(
     fn: Callable[[], T_co],
-    *errs: type[Exception]
+    *errs: type[Exception],
 ) -> Res[T_co]:
     """
     Calls a func and wraps retval to Res - to Err on thrown exception, Ok
@@ -406,7 +404,7 @@ def resultify(
 
 async def aresultify(
     coro: Coroutine[Any, Any, T_co],
-    *errs: type[Exception]
+    *errs: type[Exception],
 ) -> Res[T_co]:
     """
     Calls a func and wraps retval to Res - to Err on thrown exception, Ok

@@ -1,11 +1,9 @@
 """
 Tools for working with traceback.
 """
-import copy
 import inspect
 import traceback
 import types
-from typing import TypeVar
 
 
 def fmt_stack_summary(summary: traceback.StackSummary) -> str:
@@ -37,9 +35,8 @@ def set(
     Argument ``skip_frames`` defines how many frames to skip. This function
     or any nested function frames are automatically skipped.
     """
-    if err.__traceback__ is not None:
-        if ignore_existing:
-            err.__traceback__ = None
+    if err.__traceback__ is not None and ignore_existing:
+        err.__traceback__ = None
 
     # skip 2 frames - this call and this function call
     prev_tb: types.TracebackType | None = new(skip_frames + 2)

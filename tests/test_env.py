@@ -48,7 +48,6 @@ def test_get_bool_default_1():
 def test_get_not_found_err():
     r = env.get("RYZTEST_ENV")
     assert isinstance(r, Err)
-    print(r)
     assert r.is_(ecode.NotFound)
 
 def test_get_bool_inp_err(
