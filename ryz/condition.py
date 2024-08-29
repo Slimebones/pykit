@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import Generic
 
-from ryz.err import InpErr, UnsupportedErr
+from ryz.core import InpErr, UnsupportedErr
 from ryz.types import T
 
 

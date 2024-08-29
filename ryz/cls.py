@@ -1,7 +1,7 @@
 import functools
 from typing import Any, Callable
 
-from ryz.err import NotFoundErr
+from ryz.core import NotFoundErr
 from ryz.types import TClass
 
 

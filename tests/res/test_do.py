@@ -2,18 +2,18 @@ from __future__ import annotations
 
 import pytest
 
-from ryz.res import Err, Ok, Result, do, do_async
+from ryz.core import Err, Ok, Result, do, do_async
 
 
 def test_result_do_general() -> None:
-    def resx(is_suc: bool) -> Result[str, int]:
+    def resx(is_suc: bool) -> Res[str]:
         return Ok("hello") if is_suc else Err(1)
 
-    def resy(is_suc: bool) -> Result[bool, int]:
+    def resy(is_suc: bool) -> Res[bool]:
         return Ok(True) if is_suc else Err(2)
 
-    def _get_output(is_suc1: bool, is_suc2: bool) -> Result[float, int]:
-        out: Result[float, int] = do(
+    def _get_output(is_suc1: bool, is_suc2: bool) -> Res[float]:
+        out: Res[float] = do(
             Ok(len(x) + int(y) + 0.5)
             for x in resx(is_suc1)
             for y in resy(is_suc2)
@@ -27,7 +27,7 @@ def test_result_do_general() -> None:
 
     def _get_output_return_immediately(
         is_suc1: bool, is_suc2: bool,
-    ) -> Result[float, int]:
+    ) -> Res[float]:
         return do(
             Ok(len(x) + int(y) + 0.5)
             for x in resx(is_suc1)
@@ -42,15 +42,15 @@ async def test_result_do_general_with_async_values() -> None:
     # Asyncio works with regular `do()` as long as you await
     # the async calls outside the `do()` expression.
     # This causes the generator to be a regular (not async) generator.
-    async def aget_resx(is_suc: bool) -> Result[str, int]:
+    async def aget_resx(is_suc: bool) -> Res[str]:
         return Ok("hello") if is_suc else Err(1)
 
-    async def aget_resy(is_suc: bool) -> Result[bool, int]:
+    async def aget_resy(is_suc: bool) -> Res[bool]:
         return Ok(True) if is_suc else Err(2)
 
-    async def _aget_output(is_suc1: bool, is_suc2: bool) -> Result[float, int]:
+    async def _aget_output(is_suc1: bool, is_suc2: bool) -> Res[float]:
         resx, resy = await aget_resx(is_suc1), await aget_resy(is_suc2)
-        out: Result[float, int] = do(
+        out: Res[float] = do(
             Ok(len(x) + int(y) + 0.5) for x in resx for y in resy
         )
         return out
@@ -68,16 +68,16 @@ async def test_result_do_async_one_value() -> None:
     For convenience, although this works with regular `do()`, we want to
     support this with `do_async()` as well."""
 
-    async def aget_resx(is_suc: bool) -> Result[str, int]:
+    async def aget_resx(is_suc: bool) -> Res[str]:
         return Ok("hello") if is_suc else Err(1)
 
-    def get_resz(is_suc: bool) -> Result[float, int]:
+    def get_resz(is_suc: bool) -> Res[float]:
         return Ok(0.5) if is_suc else Err(3)
 
     assert await do_async(Ok(len(x)) for x in await aget_resx(True)) == Ok(5)
     assert await do_async(Ok(len(x)) for x in await aget_resx(False)) == Err(1)
 
-    async def _aget_output(is_suc1: bool, is_suc3: bool) -> Result[float, int]:
+    async def _aget_output(is_suc1: bool, is_suc3: bool) -> Res[float]:
         return await do_async(
             Ok(len(x) + z)
             for x in await aget_resx(is_suc1)
@@ -92,19 +92,19 @@ async def test_result_do_async_one_value() -> None:
 
 @pytest.mark.asyncio
 async def test_result_do_async_general() -> None:
-    async def aget_resx(is_suc: bool) -> Result[str, int]:
+    async def aget_resx(is_suc: bool) -> Res[str]:
         return Ok("hello") if is_suc else Err(1)
 
-    async def aget_resy(is_suc: bool) -> Result[bool, int]:
+    async def aget_resy(is_suc: bool) -> Res[bool]:
         return Ok(True) if is_suc else Err(2)
 
-    def get_resz(is_suc: bool) -> Result[float, int]:
+    def get_resz(is_suc: bool) -> Res[float]:
         return Ok(0.5) if is_suc else Err(3)
 
     async def _aget_output(
         is_suc1: bool, is_suc2: bool, is_suc3: bool,
-    ) -> Result[float, int]:
-        out: Result[float, int] = await do_async(
+    ) -> Res[float]:
+        out: Res[float] = await do_async(
             Ok(len(x) + int(y) + z)
             for x in await aget_resx(is_suc1)
             for y in await aget_resy(is_suc2)
@@ -124,7 +124,7 @@ async def test_result_do_async_general() -> None:
 
     async def _aget_output_return_immediately(
         is_suc1: bool, is_suc2: bool, is_suc3: bool,
-    ) -> Result[float, int]:
+    ) -> Res[float]:
         return await do_async(
             Ok(len(x) + int(y) + z)
             for x in await aget_resx(is_suc1)
@@ -137,22 +137,22 @@ async def test_result_do_async_general() -> None:
 
 @pytest.mark.asyncio
 async def test_result_do_async_further_processing() -> None:
-    async def aget_resx(is_suc: bool) -> Result[str, int]:
+    async def aget_resx(is_suc: bool) -> Res[str]:
         return Ok("hello") if is_suc else Err(1)
 
-    async def aget_resy(is_suc: bool) -> Result[bool, int]:
+    async def aget_resy(is_suc: bool) -> Res[bool]:
         return Ok(True) if is_suc else Err(2)
 
-    def get_resz(is_suc: bool) -> Result[float, int]:
+    def get_resz(is_suc: bool) -> Res[float]:
         return Ok(0.5) if is_suc else Err(3)
 
-    async def process_xyz(x: str, y: bool, z: float) -> Result[float, int]:
+    async def process_xyz(x: str, y: bool, z: float) -> Res[float]:
         return Ok(len(x) + int(y) + z)
 
     async def _aget_output(
         is_suc1: bool, is_suc2: bool, is_suc3: bool,
-    ) -> Result[float, int]:
-        out: Result[float, int] = await do_async(
+    ) -> Res[float]:
+        out: Res[float] = await do_async(
             Ok(w)
             for x in await aget_resx(is_suc1)
             for y in await aget_resy(is_suc2)
@@ -183,13 +183,13 @@ async def test_result_do_general_with_async_values_inline_error() -> None:
     their return values are resolved outside the `do()` expression.
     """
 
-    async def aget_resx(is_suc: bool) -> Result[str, int]:
+    async def aget_resx(is_suc: bool) -> Res[str]:
         return Ok("hello") if is_suc else Err(1)
 
-    async def aget_resy(is_suc: bool) -> Result[bool, int]:
+    async def aget_resy(is_suc: bool) -> Res[bool]:
         return Ok(True) if is_suc else Err(2)
 
-    def get_resz(is_suc: bool) -> Result[float, int]:
+    def get_resz(is_suc: bool) -> Res[float]:
         return Ok(0.5) if is_suc else Err(3)
 
     with pytest.raises(TypeError) as excinfo:
@@ -208,13 +208,13 @@ async def test_result_do_general_with_async_values_inline_error() -> None:
 
 @pytest.mark.asyncio
 async def test_result_do_async_swap_order() -> None:
-    def foo() -> Result[int, str]:
+    def foo() -> Res[int]:
         return Ok(1)
 
-    async def bar() -> Result[int, str]:
+    async def bar() -> Res[int]:
         return Ok(2)
 
-    result1: Result[int, str] = await do_async(
+    result1: Res[int] = await do_async(
         Ok(x + y)
         # x first
         for x in foo()
@@ -222,7 +222,7 @@ async def test_result_do_async_swap_order() -> None:
         for y in await bar()
     )
 
-    result2: Result[int, str] = await do_async(
+    result2: Res[int] = await do_async(
         Ok(x + y)
         # y first
         for y in await bar()

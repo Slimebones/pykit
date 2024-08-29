@@ -1,8 +1,8 @@
 import asyncio
 
-from ryz.err import ValErr
+from ryz.core import ValErr
 from ryz.rand import RandomUtils
-from ryz.res import Err, Ok, Res
+from ryz.core import Err, Ok, Res
 
 
 class Lock:

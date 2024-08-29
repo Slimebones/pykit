@@ -4,9 +4,9 @@ Smart data containers.
 
 from typing import Generic, TypeVar
 
-from ryz.err import NotFoundErr, ValErr
+from ryz.core import NotFoundErr, ValErr
 from ryz.range import Range
-from ryz.res import Err, Ok, Res
+from ryz.core import Err, Ok, Res
 
 T = TypeVar("T")
 

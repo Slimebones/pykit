@@ -5,8 +5,8 @@ from typing import Any, Literal, Protocol
 from xml.dom import NotFoundErr
 
 from ryz import log
-from ryz.err import ValErr
-from ryz.res import Err, Ok, Res
+from ryz.core import ValErr
+from ryz.core import Err, Ok, Res
 
 if sys.platform == "win32":
     from multiprocessing.connection import PipeConnection as PipeConn

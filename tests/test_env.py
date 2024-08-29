@@ -1,6 +1,6 @@
 from ryz.check import check
 from ryz.env import EnvUtils
-from ryz.err import InpErr, NotFoundErr
+from ryz.core import InpErr, NotFoundErr
 
 
 def test_get(

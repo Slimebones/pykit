@@ -7,7 +7,7 @@ archive.
 from typing import Any, Awaitable, Callable
 
 from ryz.check import check
-from ryz.err import InpErr
+from ryz.core import InpErr
 from ryz.query import UpdQuery
 from ryz.types import T
 

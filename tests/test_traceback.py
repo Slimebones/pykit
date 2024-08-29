@@ -1,4 +1,4 @@
-from ryz.err import ValErr
+from ryz.core import ValErr
 from ryz.traceback import create_traceback, get_traceback_str
 
 

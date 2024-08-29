@@ -1,7 +1,7 @@
 import traceback
 from pathlib import Path
 
-from ryz.res import Err
+from ryz.core import Err
 
 
 def test_tb():

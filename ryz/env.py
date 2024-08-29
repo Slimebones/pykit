@@ -3,8 +3,8 @@ import os
 import typing_extensions
 
 from ryz.cls import Static
-from ryz.err import InpErr, NotFoundErr, ValErr
-from ryz.res import Err, Ok, Res
+from ryz.core import InpErr, NotFoundErr, ValErr
+from ryz.core import Err, Ok, Res
 
 
 @typing_extensions.deprecated("use module-level functions")

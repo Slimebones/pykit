@@ -8,7 +8,7 @@ This is a new version of "validation" module.
 """
 from typing import Any, Callable, Coroutine, Iterable, NoReturn
 
-from ryz.res import Err
+from ryz.core import Err
 from ryz.types import T, TIterable
 
 

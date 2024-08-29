@@ -1,13 +1,13 @@
 from __future__ import annotations
 
-from ryz.res import Err, Ok, Result
+from ryz.core import Err, Ok, Result
 
 
 def test_pattern_matching_on_ok_type() -> None:
     """
     Pattern matching on ``Ok()`` matches the contained value.
     """
-    o: Result[str, int] = Ok("yay")
+    o: Res[str] = Ok("yay")
     match o:
         case Ok(value):
             reached = True
@@ -20,7 +20,7 @@ def test_pattern_matching_on_err_type() -> None:
     """
     Pattern matching on ``Err()`` matches the contained value.
     """
-    n: Result[int, str] = Err("nay")
+    n: Res[int] = Err("nay")
     match n:
         case Err(value):
             reached = True

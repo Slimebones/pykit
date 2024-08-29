@@ -6,7 +6,7 @@ from pydantic import BaseModel
 from ryz import log
 from ryz.lock import Lock
 from ryz.obj import get_fqname
-from ryz.res import Err, Ok, Res
+from ryz.core import Err, Ok, Res
 
 CODE_MAX_LEN: int = 256
 

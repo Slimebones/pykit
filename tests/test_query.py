@@ -1,7 +1,7 @@
 from pymongo import MongoClient
 
 from ryz.check import check
-from ryz.err import NotFoundErr, ValErr
+from ryz.core import NotFoundErr, ValErr
 from ryz.query import AggQuery, Query, UpdQuery
 
 

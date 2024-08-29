@@ -4,7 +4,7 @@ from ryz.condition import (
     ComparisonMark,
     UnsupportedComparisonErr,
 )
-from ryz.err import InpErr
+from ryz.core import InpErr
 
 
 def test_int_equal():

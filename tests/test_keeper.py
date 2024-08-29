@@ -1,5 +1,5 @@
 from ryz.check import check
-from ryz.err import ValErr
+from ryz.core import ValErr
 from ryz.keeper import IntKeeper
 from ryz.range import Range
 

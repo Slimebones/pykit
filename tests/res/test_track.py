@@ -1,8 +1,8 @@
 from pathlib import Path
 
 from ryz import log
-from ryz.err import ValErr
-from ryz.res import Err
+from ryz.core import ValErr
+from ryz.core import Err
 
 
 def test_main():

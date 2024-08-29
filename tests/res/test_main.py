@@ -3,8 +3,8 @@ from __future__ import annotations
 import pytest
 
 from ryz.check import check
-from ryz.err import ValErr
-from ryz.res import (
+from ryz.core import ValErr
+from ryz.core import (
     Err,
     Ok,
     OkErr,
@@ -401,7 +401,7 @@ def test_as_result_type_checking() -> None:
     def f(a: int) -> int:
         return a
 
-    res: Result[int, ValueError]
+    res: Res[int]
     res = f(123)  # No mypy error here.
     assert res.ok() == 123
 
@@ -429,24 +429,24 @@ async def test_as_async_result() -> None:
     assert isinstance(bad_result.unwrap_err(), ValueError)
 
 
-def sq(i: int) -> Result[int, int]:
+def sq(i: int) -> Res[int]:
     return Ok(i * i)
 
 
-async def sq_async(i: int) -> Result[int, int]:
+async def sq_async(i: int) -> Res[int]:
     return Ok(i * i)
 
 
-def to_err(i: int) -> Result[int, int]:
+def to_err(i: int) -> Res[int]:
     return Err(i)
 
 
-async def to_err_async(i: int) -> Result[int, int]:
+async def to_err_async(i: int) -> Res[int]:
     return Err(i)
 
 
 # Lambda versions of the same functions, just for test/type coverage
-def sq_lambda(i: int) -> Result[int, int]:
+def sq_lambda(i: int) -> Res[int]:
     return Ok(i * i)
-def to_err_lambda(i: int) -> Result[int, int]:
+def to_err_lambda(i: int) -> Res[int]:
     return Err(i)
