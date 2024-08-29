@@ -1,25 +1,20 @@
-
 from pydantic import BaseModel
 
 
-class ErrDto(BaseModel):
+class Error(Exception):
     """
     Represents an error as data transfer object.
 
     "stacktrace" used to comply with other languages structures, for Python
     it's actually a traceback.
     """
-    name: str
-    errcode: str
-    """
-    ErrDto works only with coded errors.
-    """
-    msg: str
-    stacktrace: str | None = None
-
-    @staticmethod
-    def code() -> str:
-        return "err"
+    def __init__(self, code: str = "err", msg: str | None = None) -> None:
+        self.code = code
+        self.msg = msg
+        final = code
+        if msg:
+            final += ": " + msg
+        super().__init__(final)
 
 class ValErr(ValueError):
     @staticmethod

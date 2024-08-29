@@ -1,16 +1,16 @@
 from typing import Generic, Protocol, TypeVar
 
 T_co = TypeVar("T_co", covariant=True)
-class ArbitraryFunc(Protocol, Generic[T_co]):
+class ArbFn(Protocol, Generic[T_co]):
     def __call__(self, *args, **kwargs) -> T_co: ...
 
-class FuncSpec(Generic[T_co]):
+class FnSpec(Generic[T_co]):
     """
     Holds information about some function.
     """
     def __init__(
         self,
-        func: ArbitraryFunc[T_co],
+        func: ArbFn[T_co],
         args: tuple | None = None,
         kwargs: dict | None = None,
     ) -> None:
