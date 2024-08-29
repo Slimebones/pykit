@@ -6,8 +6,8 @@ import inspect
 import typing
 from typing import Any, Awaitable, Callable, Coroutine, Self
 
-from ryz.err import InpErr, LockErr
 from ryz import log
+from ryz.err import InpErr, LockErr
 from ryz.types import T
 
 _RollbackFnAndPreResult = tuple[

@@ -30,8 +30,8 @@ from typing import (
 )
 from warnings import warn
 
-from ryz.err import ValErr
 from ryz import log
+from ryz.err import ValErr
 from ryz.traceback import create_traceback
 
 __all__ = [

@@ -1,3 +1,8 @@
+# 0.13.0
+
+- clean deprecated modules
+- make log functions module-level
+
 # 0.12.4
 
 - rename package to `ryz`

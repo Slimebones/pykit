@@ -11,7 +11,6 @@ from loguru import logger as _logger
 from ryz.obj import get_fqname
 from ryz.uuid import uuid4
 
-
 err_track_dir: Path = Path(tempfile.gettempdir(), "ryz_err_track_dir")
 is_debug: bool = False
 std_verbosity: int = 1
@@ -93,7 +92,7 @@ def _try_get_err_traceback_str(err: Exception) -> str | None:
 def _get_track_data(
     err_: Exception,
     msg: Any,
-    v: int = 1
+    v: int = 1,
 ) -> tuple[str, Path, str, str]:
     msg = str(msg)
     err_track_dir.mkdir(parents=True, exist_ok=True)
@@ -123,7 +122,7 @@ def _get_track_data(
 def track(
     err_: Exception,
     msg: Any = "tracked",
-    v: int = 1
+    v: int = 1,
 ) -> str | None:
     """
     Tracks an err with attached msg.
@@ -154,7 +153,7 @@ def track(
 async def atrack(
     err_: Exception,
     msg: Any = "tracked",
-    v: int = 1
+    v: int = 1,
 ) -> str | None:
     """
     Asynchronous version of ``log.track``.
@@ -163,7 +162,7 @@ async def atrack(
         return None
 
     sid, track_path, file_content, final_msg = _get_track_data(
-        err_, msg, v
+        err_, msg, v,
     )
 
     async with async_open(track_path, "w+") as f:

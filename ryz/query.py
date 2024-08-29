@@ -8,10 +8,10 @@ from typing import Any, Iterable, Literal, Self, TypeVar
 from pymongo.collection import Collection
 from pymongo.command_cursor import CommandCursor
 
+from ryz import log
 from ryz.check import check
 from ryz.dict import get_recursive
 from ryz.err import NotFoundErr, ValErr
-from ryz import log
 from ryz.res import Err, Ok, Res, throw_err_val
 
 QueryUpdOperator = Literal[

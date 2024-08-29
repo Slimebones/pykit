@@ -88,6 +88,7 @@ ignore = [
     "PT",
     "ARG",
     "FBT",
+    "B009"
 ]
 
 [per-file-ignores]
