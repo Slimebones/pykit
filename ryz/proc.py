@@ -5,8 +5,7 @@ from typing import Any, Literal, Protocol
 from xml.dom import NotFoundErr
 
 from ryz import log
-from ryz.core import ValErr
-from ryz.core import Err, Ok, Res
+from ryz.core import Err, Ok, Res, ecode
 
 if sys.platform == "win32":
     from multiprocessing.connection import PipeConnection as PipeConn
@@ -69,8 +68,9 @@ class ProcGroup:
         proc.start()
 
         if proc.pid is None:
-            return Err(SystemError(
-                f"proc {proc} has been started, but the pid is unassigned"))
+            return Err(
+                f"{proc} has been started, but the pid is unassigned"
+            )
         if self.has(proc.pid):
             proc.kill()
             return Err((
@@ -87,7 +87,7 @@ class ProcGroup:
 
     def get_pid_by_key(self, key: str) -> Res[int]:
         if key not in self._key_to_pid:
-            return Err(NotFoundErr(f"key {key}"))
+            return Err(f"key {key}", ecode.NotFound)
         return Ok(self._key_to_pid[key])
 
     def try_dereg_key(self, key: str) -> Res[bool]:
@@ -181,7 +181,7 @@ class ProcGroup:
 
     def _get_proc(self, pid: int) -> Res[tuple[Process, PipeConn]]:
         if not self.has(pid):
-            return Err(NotFoundErr(f"proc with pid {pid}"))
+            return Err(f"proc with pid {pid}", ecode.NotFound)
         proc, pipe = self._procs[pid]
         if not proc.is_alive():
             self.try_dereg(pid).unwrap()

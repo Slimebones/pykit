@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pytest
 
-from ryz.core import Err, Ok, Result, do, do_async
+from ryz.core import Err, Ok
 
 
 def test_result_do_general() -> None:

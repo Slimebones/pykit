@@ -7,7 +7,7 @@ import typing
 from typing import Any, Awaitable, Callable, Coroutine, Self
 
 from ryz import log
-from ryz.core import InpErr, LockErr
+from ryz.core import Err, ecode, panic
 from ryz.types import T
 
 _RollbackFnAndPreResult = tuple[
@@ -38,7 +38,7 @@ class Thd:
             while len(self._rollback_stack) != 0:
                 fn, preresult = self._rollback_stack.pop()
                 if inspect.iscoroutine(fn):
-                    raise InpErr(f"expected corofn, but coroutine {fn}")
+                    panic(f"expected corofn, but coroutine {fn}")
                 try:
                     if inspect.iscoroutinefunction(fn):
                         await fn(preresult)
@@ -57,7 +57,7 @@ class Thd:
         rollback_fn: Callable[[T], Any],
     ) -> T:
         if self._is_queue_locked:
-            raise LockErr("thd queue")
+            panic("thd queue is locked")
         f = fn()
         self._rollback_stack.append((rollback_fn, f))
         return f
@@ -93,7 +93,7 @@ class Thd:
         rollback_corofn: Callable[[T], Awaitable[Any]],
     ) -> T:
         if self._is_queue_locked:
-            raise LockErr("thd queue")
+            Err("thd queue")
         f = await fn
         self._rollback_stack.append((rollback_corofn, f))
         return f
