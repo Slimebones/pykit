@@ -1,7 +1,7 @@
 from pathlib import Path
 
 from ryz.err import ValErr
-from ryz.log import log
+from ryz import log
 
 
 def test_track():

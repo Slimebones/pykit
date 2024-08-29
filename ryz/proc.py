@@ -5,7 +5,7 @@ from typing import Any, Literal, Protocol
 from xml.dom import NotFoundErr
 
 from ryz.err import ValErr
-from ryz.log import log
+from ryz import log
 from ryz.res import Err, Ok, Res
 
 if sys.platform == "win32":

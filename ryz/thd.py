@@ -7,7 +7,7 @@ import typing
 from typing import Any, Awaitable, Callable, Coroutine, Self
 
 from ryz.err import InpErr, LockErr
-from ryz.log import log
+from ryz import log
 from ryz.types import T
 
 _RollbackFnAndPreResult = tuple[
@@ -66,7 +66,7 @@ class Thd:
         self,
         fn: Callable[[], T],
     ) -> T:
-        return self.a(fn, lambda d: d.delete())
+        return self.a(fn, lambda d: getattr(d, "delete")())
 
     def a_delete_arr_index(
         self,
@@ -83,7 +83,7 @@ class Thd:
         fn: Coroutine[Any, Any, T],
     ) -> T:
         async def delete(val: T):
-            val.delete.delete()
+            getattr(val, "delete").delete()
 
         return await self.aa(fn, delete)
 

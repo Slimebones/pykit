@@ -3,7 +3,7 @@ from ryz.code import Code
 from ryz.err import ErrDto
 from ryz.obj import get_fqname
 from ryz.res import Err, Ok, Res
-from ryz.tb import get_traceback_str
+from ryz.traceback import get_traceback_str
 
 
 def get_err_msg(err: Exception) -> str:

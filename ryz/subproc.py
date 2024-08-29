@@ -1,7 +1,7 @@
 import subprocess
 from typing import Callable
 
-from ryz.log import log
+from ryz import log
 
 
 class SubprocUtils:

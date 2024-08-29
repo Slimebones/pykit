@@ -31,8 +31,8 @@ from typing import (
 from warnings import warn
 
 from ryz.err import ValErr
-from ryz.log import log
-from ryz.tb import create_traceback
+from ryz import log
+from ryz.traceback import create_traceback
 
 __all__ = [
     "Ok",
