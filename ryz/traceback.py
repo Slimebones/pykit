@@ -38,15 +38,13 @@ def set(
     or any nested function frames are automatically skipped.
     """
     if err.__traceback__ is not None:
-        if not ignore_existing:
-            # return the same instance, as nothing was done
-            return err
-        err.__traceback__ = None
+        if ignore_existing:
+            err.__traceback__ = None
 
-    prev_tb: types.TracebackType | None = new(skip_frames + 1)
+    # skip 2 frames - this call and this function call
+    prev_tb: types.TracebackType | None = new(skip_frames + 2)
 
     err.__traceback__ = prev_tb
-    return err
 
 def new(skip_frames: int = 0) -> types.TracebackType | None:
     current_frame = inspect.currentframe()

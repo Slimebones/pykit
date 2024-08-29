@@ -55,18 +55,25 @@ class ecode:
 
 class Err(Exception):
     def __init__(
-        self, msg: str | None = None, code: str = ecode.Err,
+        self,
+        msg: str | None = None,
+        code: str = ecode.Err,
+        *,
+        skip_frames: int = 0
     ) -> None:
         if not re.match(r"^[a-z][0-9a-z]*(_[0-9a-z]+)*$", code):
             panic(f"invalid code {code}")
+        if skip_frames < 0:
+            panic(f"`skip_frames` must be positive, got {skip_frames}")
         self.code = code
         self.msg = msg
         final = code
         if msg:
             final += ": " + msg
         # since we don't raise, for each err we create traceback dynamically
-        # upon creation, and skip this function frame
-        traceback.set(self, 1)
+        # upon creation, and skip this function frame, as well as others,
+        # if the caller's code need it
+        traceback.set(self, 1 + skip_frames)
         super().__init__(final)
 
     def __hash__(self) -> int:
@@ -75,9 +82,12 @@ class Err(Exception):
     def is_(self, code: str) -> bool:
         return self.code == code
 
+    def is_any(self, *code: str) -> bool:
+        return self.code in code
+
     @classmethod
     def from_native(cls, exc: Exception) -> Self:
-        return cls(";".join(exc.args))
+        return cls("; ".join(exc.args), skip_frames=1)
 
     def is_ok(self) -> Literal[False]:
         return False
@@ -380,7 +390,7 @@ class Code:
 
 def resultify(
     fn: Callable[[], T_co],
-    errs: tuple[type[Exception], ...] = (Exception,),
+    *errs: type[Exception]
 ) -> Res[T_co]:
     """
     Calls a func and wraps retval to Res - to Err on thrown exception, Ok
@@ -396,7 +406,7 @@ def resultify(
 
 async def aresultify(
     coro: Coroutine[Any, Any, T_co],
-    errs: tuple[type[Exception], ...] = (Exception,),
+    *errs: type[Exception]
 ) -> Res[T_co]:
     """
     Calls a func and wraps retval to Res - to Err on thrown exception, Ok
