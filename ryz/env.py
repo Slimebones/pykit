@@ -1,9 +1,7 @@
 import os
 
-import typing_extensions
-
-from ryz.cls import Static
 from ryz.core import Err, Ok, Res
+
 
 def get(key: str, default: str | None = None) -> Res[str]:
     s = os.environ.get(key, default)
@@ -21,5 +19,5 @@ def get_bool(key: str, default: str | None = None) -> Res[bool]:
             return Ok(True)
         case _:
             return Err(
-                f"key expected to be \"1\" or \"0\", but got {key} which"
+                f"key expected to be \"1\" or \"0\", but got {key} which",
             )

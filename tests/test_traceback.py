@@ -1,5 +1,5 @@
-from ryz.traceback import create_traceback, get_traceback_str
 from ryz.core import Err
+from ryz.traceback import create_traceback, get_traceback_str
 
 
 def test_create_traceback_depth_0():

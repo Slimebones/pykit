@@ -4,8 +4,8 @@ Smart data containers.
 
 from typing import Generic, TypeVar
 
-from ryz.range import Range
 from ryz.core import Err, Ok, Res, ecode
+from ryz.range import Range
 
 T = TypeVar("T")
 
@@ -43,7 +43,7 @@ class IntKeeper(Keeper[int]):
             if possible not in self._given:
                 self._given.add(possible)
                 return Ok(possible)
-        return Err(("no available values"))
+        return Err("no available values")
 
     def free(self, val: int) -> Res[None]:
         if val not in self._given:

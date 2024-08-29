@@ -1,7 +1,7 @@
 import functools
 from typing import Any, Callable
 
-from ryz.core import ecode, panic
+from ryz.core import panic
 from ryz.types import TClass
 
 
@@ -59,6 +59,7 @@ class ClassUtils(Static):
 
         if out is None:
             panic(f"class of supertype {BaseClass} with name {name}")
+            return None
         else:
             return out
 

@@ -1,6 +1,6 @@
+from ryz.core import Err
 from ryz.keeper import IntKeeper
 from ryz.range import Range
-from ryz.core import Err
 
 
 def test_int_keeper():

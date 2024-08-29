@@ -7,7 +7,7 @@ import typing
 from typing import Any, Awaitable, Callable, Coroutine, Self
 
 from ryz import log
-from ryz.core import Err, ecode, panic
+from ryz.core import Err, panic
 from ryz.types import T
 
 _RollbackFnAndPreResult = tuple[

@@ -2,7 +2,6 @@ import asyncio
 import sys
 from multiprocessing import Pipe, Process
 from typing import Any, Literal, Protocol
-from xml.dom import NotFoundErr
 
 from ryz import log
 from ryz.core import Err, Ok, Res, ecode
@@ -56,9 +55,9 @@ class ProcGroup:
         interfacing uses.
         """
         if not self._can_reg_by_limit():
-            return Err((
+            return Err(
                 "cannot reg a new process:"
-                f" limit {self._max_procs} is exceeded"))
+                f" limit {self._max_procs} is exceeded")
 
         parent_pipe, child_pipe = Pipe()
         proc = Process(
@@ -69,17 +68,17 @@ class ProcGroup:
 
         if proc.pid is None:
             return Err(
-                f"{proc} has been started, but the pid is unassigned"
+                f"{proc} has been started, but the pid is unassigned",
             )
         if self.has(proc.pid):
             proc.kill()
-            return Err((
+            return Err(
                 "new process is started with the same pid as regd"
-                " one => kill new process"))
+                " one => kill new process")
 
         if key:
             if key in self._key_to_pid:
-                return Err((f"key {key} is already regd"))
+                return Err(f"key {key} is already regd")
             self._key_to_pid[key] = proc.pid
 
         self._procs[proc.pid] = (proc, parent_pipe)
@@ -185,5 +184,5 @@ class ProcGroup:
         proc, pipe = self._procs[pid]
         if not proc.is_alive():
             self.try_dereg(pid).unwrap()
-            return Err(("process is closed"))
+            return Err("process is closed")
         return Ok((proc, pipe))

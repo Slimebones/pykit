@@ -28,7 +28,7 @@ class Lock:
 
     async def release(self, token: str) -> Res[None]:
         if self._owner_token is not None and token != self._owner_token:
-            return Err(("invalid token to unlock"))
+            return Err("invalid token to unlock")
         self._evt.set()
         self._owner_token = None
         return Ok(None)

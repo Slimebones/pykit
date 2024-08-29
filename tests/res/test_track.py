@@ -5,7 +5,7 @@ from ryz.core import Err
 
 
 def test_main():
-    tracksid = Err(("hello")).track()
+    tracksid = Err("hello").track()
     assert tracksid
     path = Path(log.err_track_dir, f"{tracksid}.log")
     assert path.exists()
@@ -16,7 +16,7 @@ def test_main():
         target_part
 
 async def test_async():
-    tracksid = await Err(("hello")).atrack()
+    tracksid = await Err("hello").atrack()
     assert tracksid
     path = Path(log.err_track_dir, f"{tracksid}.log")
     assert path.exists()
