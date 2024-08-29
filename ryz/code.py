@@ -4,7 +4,6 @@ from typing import Generic, Iterable, TypeVar
 from pydantic import BaseModel
 
 from ryz import log
-from ryz.err import ValErr
 from ryz.lock import Lock
 from ryz.obj import get_fqname
 from ryz.res import Err, Ok, Res
