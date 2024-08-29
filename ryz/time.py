@@ -8,17 +8,9 @@ def utc() -> float:
 def delta(d: float, f: float | None = None) -> float:
     """
     Calculates delta timestamp from "f" (or current moment) adding given delta.
-
-    Delta is always abs, for negative support, use "delta_signed".
-    """
-    return abs(delta_signed(d, f))
-
-def delta_signed(d: float, f: float | None = None) -> float:
-    """
-    Calculates delta timestamp from "f" (or current moment) adding given delta.
     """
     f = f if f is not None else utc()
-    return f - d
+    return f + d
 
 def local() -> timedata:
     return time.localtime()
