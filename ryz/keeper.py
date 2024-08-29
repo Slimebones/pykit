@@ -4,9 +4,8 @@ Smart data containers.
 
 from typing import Generic, TypeVar
 
-from ryz.core import NotFoundErr, ValErr
 from ryz.range import Range
-from ryz.core import Err, Ok, Res
+from ryz.core import Err, Ok, Res, ecode
 
 T = TypeVar("T")
 
@@ -17,8 +16,6 @@ class Keeper(Generic[T]):
     In default implementations is supposed to give unique value each new
     request, and to avoid overflows, supports freeing methods, so previously
     obtained values can be returned to the keeper.
-
-    @abs
     """
     def recv(self) -> Res[T]:
         """
@@ -46,10 +43,10 @@ class IntKeeper(Keeper[int]):
             if possible not in self._given:
                 self._given.add(possible)
                 return Ok(possible)
-        return Err(ValErr("no available values"))
+        return Err(("no available values"))
 
     def free(self, val: int) -> Res[None]:
         if val not in self._given:
-            return Err(NotFoundErr(f"val {val}"))
+            return Err(f"val {val}", ecode.NotFound)
         self._given.remove(val)
         return Ok(None)

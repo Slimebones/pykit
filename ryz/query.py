@@ -126,7 +126,7 @@ class SearchQuery(Query):
     def check(self) -> Res[None]:
         for k in self.keys():
             if k.startswith("$") and k not in ["$sort", "$limit"]:
-                return Err(ValErr(
+                return Err((
                     f"only $sort and $limit are allowed as top-level"
                     f" operators, got {k}"))
         return Ok(None)
@@ -155,7 +155,7 @@ class UpdQuery(Query):
     def check(self) -> Res[None]:
         for k in self.keys():
             if k not in QueryUpdOperators:
-                return Err(ValErr(f"query {self} is incorrect to be updq"))
+                return Err((f"query {self} is incorrect to be updq"))
         return Ok(None)
 
     def get_operator_val(self, key: str) -> Res[dict[str, Any]]:
@@ -172,7 +172,7 @@ class UpdQuery(Query):
         for k, v in self.items():
             if k == key:
                 if not isinstance(v, dict):
-                    return Err(ValErr(
+                    return Err((
                         f"upd operator {k} should have dict val,"
                         f" got {v} instead"))
                 return Ok(v)
@@ -191,22 +191,22 @@ class AggQuery(Query):
         if "pipeline" not in self:
             self["pipeline"] = []
         if len(self) != 1:
-            return Err(ValErr(
+            return Err((
                 f"query {self} is incorrect to be aggq"))
         pipeline = self["pipeline"]
         if not isinstance(pipeline, list):
-            return Err(ValErr(
+            return Err((
                 f"pipeline {pipeline} must be list"))
         for stage in pipeline:
             if not isinstance(stage, dict):
-                return Err(ValErr(
+                return Err((
                     f"stage {stage} must be dict"))
             for k in stage:
                 if not isinstance(k, str):
-                    return Err(ValErr(
+                    return Err((
                         f"stage key {k} must be str"))
                 if not k.startswith("$"):
-                    return Err(ValErr(
+                    return Err((
                         f"query {self} is incorrect to be aggq"))
         return Ok(None)
 
@@ -223,6 +223,6 @@ class CreateQuery(Query):
     def check(self) -> Res[None]:
         for k in self.keys():
             if k.startswith("$"):
-                return Err(ValErr(
+                return Err((
                     f"cannot have top-level operators, got {k}"))
         return Ok(None)

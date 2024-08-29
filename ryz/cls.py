@@ -1,7 +1,7 @@
 import functools
 from typing import Any, Callable
 
-from ryz.core import Errcode, panic
+from ryz.core import ecode, panic
 from ryz.types import TClass
 
 

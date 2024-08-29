@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import Generic
 
-from ryz.core import InpErr, UnsupportedErr
+from ryz.core import panic
 from ryz.types import T
 
 
@@ -114,13 +114,13 @@ class ComparisonCondition(Generic[T]):
             case ComparisonMark.LessEqual:
                 return target <= self._value  # type: ignore
             case _:
-                raise UnsupportedErr(
+                panic(
                     f"compare mark {self._mark}",
                 )
 
     def _check_target_type(self, target: T) -> None:
         if type(target) is not type(self._value):  # noqa: E721
-            raise InpErr(
+            panic(
                 f"target {target} expected to have type {type(self._value)},"
                 f" but got type {type(target)}, which",
             )

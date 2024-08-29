@@ -19,7 +19,7 @@ def test_eject():
     res = Ok(1)
     res.eject()
 
-    res = Err(ValErr("hello"))
+    res = Err(("hello"))
     check.expect(res.eject, ValErr)
 
 def test_ok_factories() -> None:

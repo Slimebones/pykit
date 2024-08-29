@@ -3,6 +3,7 @@
 - clean deprecated modules
 - make log functions module-level
 - rename some unecessary short named modules to longer versions
+- rebuild err handling, res, and unite core things in `core.py`
 
 # 0.12.4
 

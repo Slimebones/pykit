@@ -36,14 +36,14 @@ from typing import (
 from warnings import warn
 
 from ryz import log
-from ryz.core import Errcode, Err
+from ryz.core import ecode, Err
 from ryz.traceback import create_traceback
 
 __all__ = [
     "Ok",
     "Res",
     "Err",
-    "Errcode",
+    "ecode",
     "resultify",
     "aresultify",
     "secure",
@@ -136,7 +136,7 @@ Res: TypeAlias = Ok[T_co] | Err
 
 class Err(Exception):
     def __init__(
-        self, msg: str | None = None, code: str = Errcode.Err
+        self, msg: str | None = None, code: str = ecode.Err
     ) -> None:
         if not re.match(r"^[a-z][0-9a-z]*(_[0-9a-z]+)*$", code):
             panic(f"invalid code {code}")
@@ -160,6 +160,9 @@ class Err(Exception):
 
     def __hash__(self) -> int:
         return hash(self.code)
+
+    def is_(self, code: str) -> bool:
+        return self.code == code
 
     @classmethod
     def from_native(cls, exc: Exception) -> Self:
@@ -272,21 +275,22 @@ class Code:
     async def get_regd_codeid(cls, code: str) -> Res[int]:
         await cls._lock.wait()
         if code not in cls._codes:
-            return Err(ValErr(f"code {code} is not regd"))
+            return Err((f"code {code} is not regd"))
         return Ok(cls._codes.index(code))
 
     @classmethod
     async def get_regd_type_by_code(cls, code: str) -> Res[type]:
         await cls._lock.wait()
         if code not in cls._code_to_type:
-            return Err(ValErr(f"code {code} is not regd"))
+            return Err((f"code {code} is not regd"))
         return Ok(cls._code_to_type[code])
 
     @classmethod
     async def upd(
-            cls,
-            types: Iterable[type | Coded[type]],
-            order: list[str] | None = None) -> Res[None]:
+        cls,
+        types: Iterable[type | Coded[type]],
+        order: list[str] | None = None
+    ) -> Res[None]:
         async with cls._lock:
             for t in types:
                 final_t: type
@@ -297,7 +301,7 @@ class Code:
                     code_res = cls.get_from_type(t)
                     if isinstance(code_res, Err):
                         log.err(
-                            f"cannot get code for type {t}: {code_res.errval}"
+                            f"cannot get code for type {t}: {code_res.err}"
                             " => skip")
                         continue
                     code = code_res.ok
@@ -307,7 +311,7 @@ class Code:
                 if isinstance(validate_res, Err):
                     log.err(
                         f"code {code} is not valid:"
-                        f" {validate_res.errval} => skip")
+                        f" {validate_res.err} => skip")
                     continue
 
                 cls._code_to_type[code] = final_t
@@ -345,19 +349,19 @@ class Code:
     @classmethod
     def validate(cls, code: str) -> Res[None]:
         if not isinstance(code, str):
-            return Err(ValErr(f"code {code} must be str"))
+            return Err((f"code {code} must be str"))
         if code == "":
-            return Err(ValErr("empty code"))
+            return Err(("empty code"))
         for i, c in enumerate(code):
             if i == 0 and not c.isalpha():
-                return Err(ValErr(
+                return Err((
                     f"code {code} must start with alpha"))
             if not c.isalnum() and c != "_" and c != ":":
-                return Err(ValErr(
+                return Err((
                     f"code {code} can contain only alnum"
                     " characters, underscores or semicolons"))
         if len(code) > CODE_MAX_LEN:
-            return Err(ValErr(f"code {code} exceeds maxlen {CODE_MAX_LEN}"))
+            return Err((f"code {code} exceeds maxlen {CODE_MAX_LEN}"))
         return Ok(None)
 
     @classmethod
@@ -367,17 +371,17 @@ class Code:
         else:
             codefn = getattr(t, "code", None)
             if codefn is None:
-                return Err(ValErr(
+                return Err((
                     f"msg data {t} must define \"code() -> str\" method"))
             if not isfunction(codefn):
-                return Err(ValErr(
+                return Err((
                     f"msg data {t} \"code\" attribute must be function,"
                     f" got {codefn}"))
             try:
                 code = codefn()
             except Exception as err:
                 log.catch(err)
-                return Err(ValErr(
+                return Err((
                     f"err {get_fqname(err)} occured during"
                     f" msg data {t} {codefn} method call #~stacktrace"))
 
@@ -445,13 +449,13 @@ async def asecure(coro: Coroutine[Any, Any, Res[T_co]]) -> Res[T_co]:
         return Err.from_native(err)
 
 def panic(msg: str | None = None) -> NoReturn:
-    raise Err(msg, Errcode.Panic)
+    raise Err(msg, ecode.Panic)
 
-class Errcode:
+class ecode:
     Err = "err"
-    Panic = "panic"
-    ValErr = "val_err"
-    NotFoundErr = "not_found_err"
-    AlreadyProcessedErr = "already_processed_err"
-    UnsupportedErr = "unsupported_err"
-    LockErr = "lock_err"
+    Panic = "panic_err"
+    Val = "val_err"
+    NotFound = "not_found_err"
+    AlreadyProcessed = "already_processed_err"
+    Unsupported = "unsupported_err"
+    Lock = "lock_err"

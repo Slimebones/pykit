@@ -57,7 +57,7 @@ class ProcGroup:
         interfacing uses.
         """
         if not self._can_reg_by_limit():
-            return Err(ValErr(
+            return Err((
                 "cannot reg a new process:"
                 f" limit {self._max_procs} is exceeded"))
 
@@ -73,13 +73,13 @@ class ProcGroup:
                 f"proc {proc} has been started, but the pid is unassigned"))
         if self.has(proc.pid):
             proc.kill()
-            return Err(ValErr(
+            return Err((
                 "new process is started with the same pid as regd"
                 " one => kill new process"))
 
         if key:
             if key in self._key_to_pid:
-                return Err(ValErr(f"key {key} is already regd"))
+                return Err((f"key {key} is already regd"))
             self._key_to_pid[key] = proc.pid
 
         self._procs[proc.pid] = (proc, parent_pipe)
@@ -185,5 +185,5 @@ class ProcGroup:
         proc, pipe = self._procs[pid]
         if not proc.is_alive():
             self.try_dereg(pid).unwrap()
-            return Err(ValErr("process is closed"))
+            return Err(("process is closed"))
         return Ok((proc, pipe))
